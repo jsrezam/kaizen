@@ -20,6 +20,25 @@
         [ngClass]="{ show: isExpanded }"
       >
         <ul class="navbar-nav flex-grow">
+
+          <li class="nav-item dropdown">
+              <a class="nav-link menu-item dropdown-toggle" 
+              data-toggle="dropdown"  
+              role="button" 
+              aria-haspopup="true" 
+              aria-expanded="false">Administracion</a>      
+              <div class=" dropdown dropdown-menu">
+                  <a class="dropdown-item menu-item" >Products</a>
+                  <a class="dropdown-item menu-item" [routerLink]="['/categories']" >Categories</a>
+                  <a class="dropdown-item menu-item" >Suppliers</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" >Separated link</a>
+              </div>
+          </li>  
+
+
+
+
           <li
             class="nav-item"
             [routerLinkActive]="['link-active']"

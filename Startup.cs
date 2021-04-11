@@ -1,10 +1,14 @@
+using Kaizen.Core;
+using Kaizen.Persistence;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
 
 namespace Kaizen
 {
@@ -20,6 +24,17 @@ namespace Kaizen
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+
+            services.AddDbContext<KaizenDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("Default"))
+            );
+
+            services.AddAutoMapper(typeof(Startup));
+            services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

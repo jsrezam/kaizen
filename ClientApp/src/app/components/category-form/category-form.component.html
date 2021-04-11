@@ -1,0 +1,23 @@
+<h1>New Category</h1>
+<!-- <p>
+    {{ category | json }}
+</p> -->
+
+<form #f="ngForm" (ngSubmit)="submit()" novalidate>
+  <div class="form-group">
+    <label for="categoryName">Name</label>
+    <input id="categoryName" type="text" class="form-control" [(ngModel)]="category.name" name="categoryName" required
+      #name="ngModel">
+  </div>
+  <div class="alert alert-danger" role="alert" *ngIf="name.touched && !name.valid">
+    Please specify the name.
+  </div>
+  <div>
+    <label for="categoryDescription">Description</label>
+    <textarea class="form-control" id="categoryDescription" rows="3" [(ngModel)]="category.description"
+      name="categoryDescription" #description="ngModel"></textarea>
+  </div>
+  <button class="btn btn-outline-success" [disabled]="!f.valid">Save</button>
+  <button type="button" class="btn btn-outline-primary">Primary</button>
+
+</form>
