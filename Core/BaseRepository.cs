@@ -9,7 +9,7 @@ namespace Kaizen.Core
 {
     public class BaseRepository<T> : IRepository<T> where T : BaseEntity
     {
-        private readonly KaizenDbContext context;
+        protected readonly KaizenDbContext context;
         protected readonly DbSet<T> entites;
 
         public BaseRepository(KaizenDbContext context)

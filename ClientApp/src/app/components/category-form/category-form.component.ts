@@ -32,7 +32,6 @@ export class CategoryFormComponent implements OnInit {
   }
 
   submit() {
-    console.log(this.category.id);
     var result$ = (this.category.id) ? this.categoryService.update(this.category) : this.categoryService.create(this.category);
     result$.subscribe((category: any) => {
       this.toastrService.success("Data was sucessfully saved.", "Success", {

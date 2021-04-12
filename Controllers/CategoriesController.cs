@@ -67,7 +67,7 @@ namespace Kaizen.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCategories(int id)
+        public async Task<IActionResult> GetCategory(int id)
         {
             var category = await unitOfWork.CategoryRepository.GetByIdAsync(id);
             if (category == null)
@@ -78,7 +78,7 @@ namespace Kaizen.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategories(int id)
+        public async Task<IActionResult> DeleteCategory(int id)
         {
             var category = await unitOfWork.CategoryRepository.GetByIdAsync(id);
             if (category == null)

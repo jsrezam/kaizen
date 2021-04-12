@@ -3,9 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Kaizen.Core.Models
 {
-    public class Product
+    public class Product : BaseEntity
     {
-        public int Id { get; set; }
         public int CategoryId { get; set; }
         public Category Category { get; set; }
 
@@ -17,6 +16,6 @@ namespace Kaizen.Core.Models
         [Column(TypeName = "decimal(18, 2)")]
         public decimal UnitPrice { get; set; }
         public int UnitsInStock { get; set; }
-        public bool Discontinued { get; set; }
+        public bool IsDiscontinued { get; set; }
     }
 }

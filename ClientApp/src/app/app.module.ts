@@ -17,6 +17,9 @@ import { CategoryViewComponent } from './components/category-view/category-view.
 import { CategoryListComponent } from './components/category-list/category-list.component';
 import { LoadingComponent } from './shared/loading/loading.component';
 import { PaginationComponent } from './shared/pagination/pagination.component';
+import { ProductFormComponent } from './components/product-form/product-form.component';
+import { ProductListComponent } from './components/product-list/product-list.component';
+import { ProductService } from './services/product.service';
 
 @NgModule({
   declarations: [
@@ -30,6 +33,8 @@ import { PaginationComponent } from './shared/pagination/pagination.component';
     CategoryListComponent,
     LoadingComponent,
     PaginationComponent,
+    ProductFormComponent,
+    ProductListComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -44,10 +49,14 @@ import { PaginationComponent } from './shared/pagination/pagination.component';
       { path: 'categories', component: CategoryListComponent },
       { path: 'categories/new', component: CategoryFormComponent },
       { path: 'categories/edit/:id', component: CategoryFormComponent },
+      { path: 'products', component: ProductListComponent },
+      { path: 'products/new', component: ProductFormComponent },
+      { path: 'products/edit/:id', component: ProductFormComponent },
     ])
   ],
   providers: [
-    CategoryService
+    CategoryService,
+    ProductService
   ],
   bootstrap: [AppComponent]
 })

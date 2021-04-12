@@ -1,60 +1,37 @@
 <header>
-  <nav
-    class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"
-  >
+  <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
     <div class="container">
       <a class="navbar-brand" [routerLink]="['/']">Kaizen</a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target=".navbar-collapse"
-        aria-label="Toggle navigation"
-        [attr.aria-expanded]="isExpanded"
-        (click)="toggle()"
-      >
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
+        aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded" (click)="toggle()">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div
-        class="navbar-collapse collapse d-sm-inline-flex justify-content-end"
-        [ngClass]="{ show: isExpanded }"
-      >
+      <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end" [ngClass]="{ show: isExpanded }">
         <ul class="navbar-nav flex-grow">
 
           <li class="nav-item dropdown">
-              <a class="nav-link menu-item dropdown-toggle" 
-              data-toggle="dropdown"  
-              role="button" 
-              aria-haspopup="true" 
-              aria-expanded="false">Administracion</a>      
-              <div class=" dropdown dropdown-menu">
-                  <a class="dropdown-item menu-item" >Products</a>
-                  <a class="dropdown-item menu-item" [routerLink]="['/categories']" >Categories</a>
-                  <a class="dropdown-item menu-item" >Suppliers</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" >Separated link</a>
-              </div>
-          </li>  
+            <a class="nav-link menu-item dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+              aria-expanded="false">Administracion</a>
+            <div class=" dropdown dropdown-menu">
+              <a class="dropdown-item menu-item" [routerLink]="['/products']">Products</a>
+              <a class="dropdown-item menu-item" [routerLink]="['/categories']">Categories</a>
+              <a class="dropdown-item menu-item">Suppliers</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item">Separated link</a>
+            </div>
+          </li>
 
 
 
 
-          <li
-            class="nav-item"
-            [routerLinkActive]="['link-active']"
-            [routerLinkActiveOptions]="{ exact: true }"
-          >
+          <li class="nav-item" [routerLinkActive]="['link-active']" [routerLinkActiveOptions]="{ exact: true }">
             <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/counter']"
-              >Counter</a
-            >
+            <a class="nav-link text-dark" [routerLink]="['/counter']">Counter</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/fetch-data']"
-              >Fetch data</a
-            >
+            <a class="nav-link text-dark" [routerLink]="['/fetch-data']">Fetch data</a>
           </li>
         </ul>
       </div>

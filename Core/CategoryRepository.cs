@@ -17,8 +17,13 @@ namespace Kaizen.Core
         public async Task<QueryResult<Category>> GetCategoriesAsync(CategoryQuery queryObj)
         {
             var result = new QueryResult<Category>();
-            var query = entites.AsQueryable();
+
+            var query = context.Categories.Include(c => c.Products).AsQueryable();
+
+            // var query = entites.AsQueryable();
             query = query.ApplyFiltering(queryObj);
+
+
 
             var columnsMap = new Dictionary<string, Expression<Func<Category, object>>>()
             {

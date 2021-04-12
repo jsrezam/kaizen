@@ -1,0 +1,65 @@
+<h1>New Product</h1>
+<p>
+  {{ product | json }}
+</p>
+
+<form #f="ngForm" (ngSubmit)="submit()" novalidate>
+  <div class="form-group">
+    <label for="category">Category</label>
+    <select id="category" class="form-control" [(ngModel)]="product.category.id" name="categoryId" required
+      #category="ngModel">
+      <option value=""></option>
+      <option *ngFor="let c of categories" value="{{ c.id }}">{{ c.name }}</option>
+    </select>
+    <div class="alert alert-danger" *ngIf="category.touched && !category.valid">
+      Please specify the category.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="Name">Name</label>
+    <input id="Name" type="text" class="form-control" [(ngModel)]="product.name" name="Name" required #name="ngModel">
+  </div>
+  <div class="alert alert-danger" *ngIf="name.touched && !name.valid">
+    Please specify the product name.
+  </div>
+
+  <div class="form-group">
+    <label for="quantityPerUnit">Quantity Per Unit</label>
+    <input id="quantityPerUnit" type="text" class="form-control" [(ngModel)]="product.quantityPerUnit"
+      name="quantityPerUnit" required #quantityPerUnit="ngModel">
+  </div>
+  <div class="alert alert-danger" *ngIf="quantityPerUnit.touched && !quantityPerUnit.valid">
+    Please specify the quantity per unit.
+  </div>
+
+  <div class="form-group">
+    <label for="unitPrice">Unit Price</label>
+    <input id="unitPrice" type="text" class="form-control" [(ngModel)]="product.unitPrice" name="unitPrice" required
+      #unitPrice="ngModel">
+  </div>
+  <div class="alert alert-danger" *ngIf="unitPrice.touched && !unitPrice.valid">
+    Please specify the unit price.
+  </div>
+
+  <div class="form-group">
+    <label for="unitsInStock">Units In Stock</label>
+    <input id="unitsInStock" type="text" class="form-control" [(ngModel)]="product.unitsInStock" name="unitsInStock"
+      required #unitsInStock="ngModel">
+  </div>
+  <div class="alert alert-danger" *ngIf="unitsInStock.touched && !unitsInStock.valid">
+    Please specify the units in stock.
+  </div>
+
+  <div>
+    <p>Is this product dicontinued?</p>
+    <label for="registered" class="form-check-inline">
+      <input type="radio" name="isDiscontinued" id="registered" [value]="true" [(ngModel)]="product.isDiscontinued"> Yes
+    </label>
+    <label for="notRegistered" class="form-check-inline">
+      <input type="radio" name="isDiscontinued" id="notRegistered" [value]="false" [(ngModel)]="product.isDiscontinued">
+      No
+    </label>
+  </div>
+  <button class="btn btn-outline-success" [disabled]="!f.valid">Save</button>
+</form>

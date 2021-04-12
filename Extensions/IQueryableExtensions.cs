@@ -16,6 +16,14 @@ namespace Kaizen.Extensions
             return query;
         }
 
+        public static IQueryable<Product> ApplyFiltering(this IQueryable<Product> query, ProductQuery queryObj)
+        {
+            if (!string.IsNullOrEmpty(queryObj.Name))
+                query = query.Where(c => c.Name == queryObj.Name);
+
+            return query;
+        }
+
         public static IQueryable<T> ApplyOrdering<T>(this IQueryable<T> query, IQueryObject queryObj, Dictionary<string, Expression<Func<T, object>>> columnsMap)
         {
             if (string.IsNullOrWhiteSpace(queryObj.SortBy) || !columnsMap.ContainsKey(queryObj.SortBy))
