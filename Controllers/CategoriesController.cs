@@ -30,9 +30,6 @@ namespace Kaizen.Controllers
 
             await unitOfWork.CategoryRepository.AddAsync(category);
             await unitOfWork.SaveChangesAsync();
-
-            category = await unitOfWork.CategoryRepository.GetByIdAsync(category.Id);
-
             var result = mapper.Map<Category, CategoryResource>(category);
 
             return Ok(result);
@@ -52,7 +49,7 @@ namespace Kaizen.Controllers
             mapper.Map<CategoryResource, Category>(categoryResource, category);
             unitOfWork.CategoryRepository.Update(category);
             await unitOfWork.SaveChangesAsync();
-            category = await unitOfWork.CategoryRepository.GetByIdAsync(category.Id);
+
             var result = mapper.Map<Category, CategoryResource>(category);
             return Ok(result);
         }

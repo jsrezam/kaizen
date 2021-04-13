@@ -29,8 +29,6 @@ namespace Kaizen.Controllers
             await unitOfWork.ProductRepository.AddAsync(product);
             await unitOfWork.SaveChangesAsync();
 
-            product = await unitOfWork.ProductRepository.GetByIdAsync(product.Id);
-
             var result = mapper.Map<Product, ProductResource>(product);
 
             return Ok(result);
@@ -50,7 +48,7 @@ namespace Kaizen.Controllers
             mapper.Map<ProductResource, Product>(productResource, product);
             unitOfWork.ProductRepository.Update(product);
             await unitOfWork.SaveChangesAsync();
-            product = await unitOfWork.ProductRepository.GetByIdAsync(product.Id);
+
             var result = mapper.Map<Product, ProductResource>(product);
             return Ok(result);
         }

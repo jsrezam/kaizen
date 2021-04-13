@@ -16,7 +16,7 @@ namespace Kaizen.Core
 
         public async Task<Product> GetProductAsync(int id)
         {
-            return await context.Products
+            return await entities
                     .Include(p => p.Category)
                     .SingleOrDefaultAsync(p => p.Id == id);
         }
@@ -25,9 +25,7 @@ namespace Kaizen.Core
         {
             var result = new QueryResult<Product>();
 
-            var query = context.Products.Include(p => p.Category).AsQueryable();
-
-            // var query = entites.AsQueryable();
+            var query = entities.Include(p => p.Category).AsQueryable();
 
             query = query.ApplyFiltering(queryObj);
 

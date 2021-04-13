@@ -9,17 +9,17 @@ namespace Kaizen.Core
 {
     public class BaseRepository<T> : IRepository<T> where T : BaseEntity
     {
-        protected readonly KaizenDbContext context;
-        protected readonly DbSet<T> entites;
+        private readonly KaizenDbContext context;
+        protected readonly DbSet<T> entities;
 
         public BaseRepository(KaizenDbContext context)
         {
             this.context = context;
-            this.entites = context.Set<T>();
+            this.entities = context.Set<T>();
         }
         public async Task AddAsync(T entity)
         {
-            await entites.AddAsync(entity);
+            await entities.AddAsync(entity);
         }
 
         public bool Delete(T entity)
@@ -30,17 +30,17 @@ namespace Kaizen.Core
 
         public IEnumerable<T> GetAll()
         {
-            return entites.AsEnumerable();
+            return entities.AsEnumerable();
         }
 
         public async Task<T> GetByIdAsync(int id)
         {
-            return await entites.FindAsync(id);
+            return await entities.FindAsync(id);
         }
 
         public void Update(T entity)
         {
-            entites.Update(entity);
+            entities.Update(entity);
         }
     }
 }

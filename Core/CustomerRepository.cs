@@ -10,22 +10,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Kaizen.Core
 {
-    public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
+    public class CustomerRepository : BaseRepository<Customer>, ICustomerRepository
     {
-        public CategoryRepository(KaizenDbContext context) : base(context) { }
+        public CustomerRepository(KaizenDbContext context) : base(context) { }
 
-        public async Task<QueryResult<Category>> GetCategoriesAsync(CategoryQuery queryObj)
+        public async Task<QueryResult<Customer>> GetCustomersAsync(CustomerQuery queryObj)
         {
-            var result = new QueryResult<Category>();
-
-            var query = entities.Include(c => c.Products).AsQueryable();
+            var result = new QueryResult<Customer>();
+            var query = entities.Include(c => c.Orders).AsQueryable();
 
             query = query.ApplyFiltering(queryObj);
 
-            var columnsMap = new Dictionary<string, Expression<Func<Category, object>>>()
+            var columnsMap = new Dictionary<string, Expression<Func<Customer, object>>>()
             {
-                ["name"] = c => c.Name,
-                ["description"] = c => c.Description
+                ["name"] = c => c.LastName,
             };
             query = query.ApplyOrdering(queryObj, columnsMap);
 
@@ -35,5 +33,6 @@ namespace Kaizen.Core
 
             return result;
         }
+
     }
 }
