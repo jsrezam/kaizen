@@ -17,12 +17,16 @@ namespace Kaizen.Core
         {
             return await entities
                     .Include(c => c.Employee)
+                    .Include(c => c.Orders)
                     .SingleOrDefaultAsync(c => c.Id == id);
         }
         public async Task<QueryResult<Customer>> GetCustomersAsync(CustomerQuery queryObj)
         {
             var result = new QueryResult<Customer>();
-            var query = entities.Include(c => c.Employee).AsQueryable();
+            var query = entities
+            .Include(c => c.Employee)
+            .Include(c => c.Orders)
+            .AsQueryable();
 
             query = query.ApplyFiltering(queryObj);
 

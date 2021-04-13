@@ -17,7 +17,6 @@ namespace Kaizen.Core
         {
             return await entities
                     .Include(e => e.Customers)
-                    .Include(e => e.Orders)
                     .SingleOrDefaultAsync(e => e.Id == id);
         }
 
@@ -26,7 +25,6 @@ namespace Kaizen.Core
             var result = new QueryResult<Employee>();
 
             var query = entities
-            .Include(e => e.Orders)
             .Include(e => e.Customers)
             .AsQueryable();
 

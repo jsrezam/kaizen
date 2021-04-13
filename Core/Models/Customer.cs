@@ -22,5 +22,11 @@ namespace Kaizen.Core.Models
         public string HomePhone { get; set; }
         public string CellPhone { get; set; }
         public string CompanyName { get; set; }
+
+        public ICollection<Order> Orders { get; set; }
+        public Customer()
+        {
+            this.Orders = new Collection<Order>();
+        }
     }
 }

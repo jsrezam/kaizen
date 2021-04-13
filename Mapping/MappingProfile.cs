@@ -16,10 +16,10 @@ namespace Kaizen.Mapping
             CreateMap(typeof(QueryResult<>), typeof(QueryResultResource<>));
             CreateMap<Category, CategoryViewResource>();
             CreateMap<Employee, EmployeeResource>();
-
             CreateMap<Employee, EmployeeViewResource>();
             CreateMap<Customer, CustomerResource>();
             CreateMap<Customer, CustomerViewResource>();
+            CreateMap<Order, OrderResource>();
 
             // API Resource to Domain
             CreateMap<ProductResource, Product>()
@@ -38,6 +38,8 @@ namespace Kaizen.Mapping
             .ForMember(c => c.Id, opt => opt.Ignore())
             .ForMember(c => c.Employee, opt => opt.Ignore());
             CreateMap<CustomerQueryResource, CustomerQuery>();
+            CreateMap<OrderResource, Order>()
+            .ForMember(o => o.Customer, opt => opt.Ignore());
 
         }
 
