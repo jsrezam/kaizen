@@ -2,8 +2,9 @@ using System;
 
 namespace Kaizen.Controllers.Resources
 {
-    public class EmployeeViewResourse
+    public class EmployeeViewResource
     {
+        public int Id { get; set; }
         public string LastName { get; set; }
         public string FirstName { get; set; }
         public string Title { get; set; }
@@ -17,6 +18,5 @@ namespace Kaizen.Controllers.Resources
         public string CellPhone { get; set; }
         public string Extension { get; set; }
         public string PhotoPath { get; set; }
-
     }
 }

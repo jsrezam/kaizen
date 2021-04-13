@@ -65,7 +65,7 @@ namespace Kaizen.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEmployee(int id)
         {
-            var employee = await unitOfWork.EmployeeRepository.GetByIdAsync(id);
+            var employee = await unitOfWork.EmployeeRepository.GetEmployeeAsync(id);
             if (employee == null)
                 return NotFound();
 

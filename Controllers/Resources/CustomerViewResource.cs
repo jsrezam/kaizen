@@ -1,19 +1,9 @@
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
-
-namespace Kaizen.Core.Models
+namespace Kaizen.Controllers.Resources
 {
-    public class Customer : BaseEntity
+    public class CustomerViewResource
     {
-        public int EmployeeId { get; set; }
-        public Employee Employee { get; set; }
-
-        [Required]
-        [StringLength(255)]
+        public int Id { get; set; }
         public string LastName { get; set; }
-        [Required]
-        [StringLength(255)]
         public string FirstName { get; set; }
         public string Address { get; set; }
         public string City { get; set; }

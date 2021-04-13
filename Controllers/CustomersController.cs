@@ -64,7 +64,7 @@ namespace Kaizen.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCustomer(int id)
         {
-            var customer = await unitOfWork.CustomerRepository.GetByIdAsync(id);
+            var customer = await unitOfWork.CustomerRepository.GetCustomerAsync(id);
             if (customer == null)
                 return NotFound();
 

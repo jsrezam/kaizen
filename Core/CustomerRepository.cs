@@ -13,11 +13,16 @@ namespace Kaizen.Core
     public class CustomerRepository : BaseRepository<Customer>, ICustomerRepository
     {
         public CustomerRepository(KaizenDbContext context) : base(context) { }
-
+        public async Task<Customer> GetCustomerAsync(int id)
+        {
+            return await entities
+                    .Include(c => c.Employee)
+                    .SingleOrDefaultAsync(c => c.Id == id);
+        }
         public async Task<QueryResult<Customer>> GetCustomersAsync(CustomerQuery queryObj)
         {
             var result = new QueryResult<Customer>();
-            var query = entities.Include(c => c.Orders).AsQueryable();
+            var query = entities.Include(c => c.Employee).AsQueryable();
 
             query = query.ApplyFiltering(queryObj);
 
