@@ -72,6 +72,9 @@ namespace Kaizen.Migrations
                     b.Property<string>("HomePhone")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsAssigned")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -149,7 +152,7 @@ namespace Kaizen.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("EmployeeId")
+                    b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("OrderDate")
@@ -163,7 +166,7 @@ namespace Kaizen.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Orders");
                 });
@@ -215,13 +218,13 @@ namespace Kaizen.Migrations
 
             modelBuilder.Entity("Kaizen.Core.Models.Order", b =>
                 {
-                    b.HasOne("Kaizen.Core.Models.Employee", "Employee")
+                    b.HasOne("Kaizen.Core.Models.Customer", "Customer")
                         .WithMany("Orders")
-                        .HasForeignKey("EmployeeId")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Employee");
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Kaizen.Core.Models.Product", b =>
@@ -240,11 +243,14 @@ namespace Kaizen.Migrations
                     b.Navigation("Products");
                 });
 
+            modelBuilder.Entity("Kaizen.Core.Models.Customer", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
             modelBuilder.Entity("Kaizen.Core.Models.Employee", b =>
                 {
                     b.Navigation("Customers");
-
-                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

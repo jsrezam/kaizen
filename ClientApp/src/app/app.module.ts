@@ -20,6 +20,7 @@ import { PaginationComponent } from './shared/pagination/pagination.component';
 import { ProductFormComponent } from './components/product-form/product-form.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { ProductService } from './services/product.service';
+import { AssignCustomersFormComponent } from './components/assign-customers-form/assign-customers-form.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { ProductService } from './services/product.service';
     PaginationComponent,
     ProductFormComponent,
     ProductListComponent,
+    AssignCustomersFormComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

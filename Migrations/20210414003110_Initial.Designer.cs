@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Kaizen.Migrations
 {
     [DbContext(typeof(KaizenDbContext))]
-    [Migration("20210413043516_addCustomer")]
-    partial class addCustomer
+    [Migration("20210414003110_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -63,6 +63,9 @@ namespace Kaizen.Migrations
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -70,6 +73,9 @@ namespace Kaizen.Migrations
 
                     b.Property<string>("HomePhone")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAssigned")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -80,6 +86,8 @@ namespace Kaizen.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("Customers");
                 });
@@ -149,9 +157,6 @@ namespace Kaizen.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
@@ -164,8 +169,6 @@ namespace Kaizen.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("EmployeeId");
 
                     b.ToTable("Orders");
                 });
@@ -204,23 +207,26 @@ namespace Kaizen.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("Kaizen.Core.Models.Customer", b =>
+                {
+                    b.HasOne("Kaizen.Core.Models.Employee", "Employee")
+                        .WithMany("Customers")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
             modelBuilder.Entity("Kaizen.Core.Models.Order", b =>
                 {
-                    b.HasOne("Kaizen.Core.Models.Customer", "customer")
+                    b.HasOne("Kaizen.Core.Models.Customer", "Customer")
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Kaizen.Core.Models.Employee", "Employee")
-                        .WithMany("Orders")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("customer");
-
-                    b.Navigation("Employee");
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Kaizen.Core.Models.Product", b =>
@@ -246,7 +252,7 @@ namespace Kaizen.Migrations
 
             modelBuilder.Entity("Kaizen.Core.Models.Employee", b =>
                 {
-                    b.Navigation("Orders");
+                    b.Navigation("Customers");
                 });
 #pragma warning restore 612, 618
         }
