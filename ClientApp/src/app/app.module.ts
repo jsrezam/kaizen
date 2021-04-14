@@ -21,6 +21,10 @@ import { ProductFormComponent } from './components/product-form/product-form.com
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { ProductService } from './services/product.service';
 import { AssignCustomersFormComponent } from './components/assign-customers-form/assign-customers-form.component';
+import { CustomerService } from './services/customer.service';
+import { EmployeeService } from './services/employee.service';
+import { EmployeeListComponent } from './components/employee-list/employee-list.component';
+import { EmployeeFormComponent } from './components/employee-form/employee-form.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +41,8 @@ import { AssignCustomersFormComponent } from './components/assign-customers-form
     ProductFormComponent,
     ProductListComponent,
     AssignCustomersFormComponent,
+    EmployeeListComponent,
+    EmployeeFormComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -54,11 +60,17 @@ import { AssignCustomersFormComponent } from './components/assign-customers-form
       { path: 'products', component: ProductListComponent },
       { path: 'products/new', component: ProductFormComponent },
       { path: 'products/edit/:id', component: ProductFormComponent },
+      { path: 'employees', component: EmployeeListComponent },
+      { path: 'employees/new', component: EmployeeFormComponent },
+      { path: 'employees/edit/:id', component: EmployeeFormComponent },
+      { path: 'assign-customers', component: AssignCustomersFormComponent },
     ])
   ],
   providers: [
     CategoryService,
-    ProductService
+    ProductService,
+    CustomerService,
+    EmployeeService
   ],
   bootstrap: [AppComponent]
 })

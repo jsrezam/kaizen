@@ -16,6 +16,7 @@ namespace Kaizen.Mapping
             CreateMap(typeof(QueryResult<>), typeof(QueryResultResource<>));
             CreateMap<Category, CategoryViewResource>();
             CreateMap<Employee, EmployeeResource>();
+
             CreateMap<Employee, EmployeeViewResource>();
             CreateMap<Customer, CustomerResource>();
             CreateMap<Customer, CustomerViewResource>();

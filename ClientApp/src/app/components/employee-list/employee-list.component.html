@@ -1,0 +1,39 @@
+<h2>Employees</h2>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th *ngFor="let c of columns" aria-labelledby="tableLabel">
+        <div *ngIf="c.isSortable" (click)="sortBy(c.key)">
+          {{c.title}}
+          <i *ngIf="query.sortBy === c.key" class="fa" [class.fa-sort-asc]="query.isSortAscending"
+            [class.fa-sort-desc]="!query.isSortAscending"></i>
+        </div>
+        <div *ngIf="!c.isSortable">
+          {{c.title}}
+        </div>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let e of queryResult.items">
+      <td>{{ e.id }}</td>
+      <td>{{ e.lastName }}</td>
+      <td>{{ e.firstName }}</td>
+      <td>{{ e.title }}</td>
+      <td>{{ e.birthDate }}</td>
+      <td>{{ e.hireDate }}</td>
+      <td>{{ e.address }}</td>
+      <td>{{ e.city }}</td>
+      <td>{{ e.region }}</td>
+      <td>{{ e.homePhone }}</td>
+      <td>{{ e.cellPhone }}</td>
+      <td>
+        <a class="btn btn-outline-success" [routerLink]="['/employees/edit/', e.id]">Edit</a>
+        <button class="btn btn-outline-danger" type="button" (click)="delete(e.id)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<pagination [total-items]="queryResult.totalItems" [page-size]="query.pageSize" (page-changed)="onPageChage($event)">
+</pagination>

@@ -20,10 +20,10 @@ namespace Kaizen.Controllers.Resources
         public string CellPhone { get; set; }
         public string Extension { get; set; }
         public string PhotoPath { get; set; }
-        public ICollection<CustomerResource> Customers { get; set; }
+        public ICollection<CustomerViewResource> Customers { get; set; }
         public EmployeeResource()
         {
-            this.Customers = new Collection<CustomerResource>();
+            this.Customers = new Collection<CustomerViewResource>();
         }
     }
 }
