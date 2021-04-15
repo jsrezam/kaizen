@@ -2,41 +2,41 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Category } from '../models/category';
-import { environment as env } from '../../environments/environment';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({ providedIn: 'root' })
 export class CategoryService {
-    private readonly categoriesEndpoint = '/api/categories/';
+    private readonly apiUri = environment.apiUrl + '/api/categories/';
 
     constructor(private http: HttpClient) { }
 
     getCategories(filter) {
-        return this.http.get(this.categoriesEndpoint + '?' + this.toQueryString(filter)).pipe(
+        return this.http.get(this.apiUri + '?' + this.toQueryString(filter)).pipe(
             map(res => res)
         );
     }
 
     getCategory(id) {
-        return this.http.get(this.categoriesEndpoint + id).pipe(
+        return this.http.get(this.apiUri + id).pipe(
             map(res => res)
         );
     }
 
     create(category) {
-        return this.http.post(env.dev.apiUrl + this.categoriesEndpoint, category).pipe(
+        return this.http.post(this.apiUri, category).pipe(
             map(res => res)
         );
     }
 
     update(category: Category) {
-        return this.http.put(env.dev.apiUrl + this.categoriesEndpoint + category.id, category).pipe(
+        return this.http.put(this.apiUri + category.id, category).pipe(
             map(res => res)
         );
     }
 
     delete(id) {
-        return this.http.delete(env.dev.apiUrl + this.categoriesEndpoint + id).pipe(
+        return this.http.delete(this.apiUri + id).pipe(
             map(res => res)
         );
     }

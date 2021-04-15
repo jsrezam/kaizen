@@ -1,0 +1,27 @@
+<h1>Sign Up</h1>
+
+<p *ngFor="let e of this.authenticationResponse.errors">
+  <ngb-alert type="danger" [dismissible]="false">
+    <strong>Error!</strong> {{e.description}}
+  </ngb-alert>
+</p>
+
+<form class="form-signin" #f="ngForm" (ngSubmit)="signUp()" novalidate>
+  <div class="form-group">
+    <label for="email" class="sr-only">Email</label>
+    <input class="form-control" id="email" type="inputEmail" [(ngModel)]="userCredentials.email" name="email"
+      #email="ngModel" placeholder="Email address" autofocus>
+    <div class="alert alert-danger" *ngIf="email.touched && !email.valid">
+      Please specify the email address.
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="password" class="sr-only">Password</label>
+    <input class="form-control" id="password" type="password" [(ngModel)]="userCredentials.password" name="password"
+      #password="ngModel" placeholder="Your password">
+    <div class="alert alert-danger" *ngIf="password.touched && !password.valid">
+      Please specify the password.
+    </div>
+  </div>
+  <button class="btn btn-primary" type="submit" [disabled]="!f.valid">Sign Up</button>
+</form>

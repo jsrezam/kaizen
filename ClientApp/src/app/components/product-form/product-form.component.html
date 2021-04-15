@@ -19,7 +19,7 @@
 
   <div class="form-group">
     <label for="Name">Name</label>
-    <input id="Name" type="text" class="form-control" [(ngModel)]="product.name" name="Name" required #name="ngModel">
+    <input id="Name" type="text" class="form-control" [(ngModel)]="product.name" name="name" required #name="ngModel">
   </div>
   <div class="alert alert-danger" *ngIf="name.touched && !name.valid">
     Please specify the product name.

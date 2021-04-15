@@ -1,3 +1,5 @@
+import { AuthGuard } from './services/auth-guard.service';
+import { AuthService } from './services/authService';
 import { CategoryService } from './services/category.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -25,6 +27,11 @@ import { CustomerService } from './services/customer.service';
 import { EmployeeService } from './services/employee.service';
 import { EmployeeListComponent } from './components/employee-list/employee-list.component';
 import { EmployeeFormComponent } from './components/employee-form/employee-form.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { LoginComponent } from './components/login/login.component';
+import { SignupFormComponent } from './components/signup-form/signup-form.component';
+import { LogoutComponent } from './components/logout/logout.component';
+import { NonAuthorizedComponent } from './components/non-authorized/non-authorized.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +50,10 @@ import { EmployeeFormComponent } from './components/employee-form/employee-form.
     AssignCustomersFormComponent,
     EmployeeListComponent,
     EmployeeFormComponent,
+    LoginComponent,
+    SignupFormComponent,
+    LogoutComponent,
+    NonAuthorizedComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -54,23 +65,28 @@ import { EmployeeFormComponent } from './components/employee-form/employee-form.
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
-      { path: 'categories', component: CategoryListComponent },
-      { path: 'categories/new', component: CategoryFormComponent },
-      { path: 'categories/edit/:id', component: CategoryFormComponent },
-      { path: 'products', component: ProductListComponent },
-      { path: 'products/new', component: ProductFormComponent },
-      { path: 'products/edit/:id', component: ProductFormComponent },
-      { path: 'employees', component: EmployeeListComponent },
-      { path: 'employees/new', component: EmployeeFormComponent },
-      { path: 'employees/edit/:id', component: EmployeeFormComponent },
+      { path: 'categories', component: CategoryListComponent, canActivate: [AuthGuard] },
+      { path: 'categories/new', component: CategoryFormComponent, canActivate: [AuthGuard] },
+      { path: 'categories/edit/:id', component: CategoryFormComponent, canActivate: [AuthGuard] },
+      { path: 'products', component: ProductListComponent, canActivate: [AuthGuard] },
+      { path: 'products/new', component: ProductFormComponent, canActivate: [AuthGuard] },
+      { path: 'products/edit/:id', component: ProductFormComponent, canActivate: [AuthGuard] },
+      { path: 'employees', component: EmployeeListComponent, canActivate: [AuthGuard] },
+      { path: 'employees/new', component: EmployeeFormComponent, canActivate: [AuthGuard] },
+      { path: 'employees/edit/:id', component: EmployeeFormComponent, canActivate: [AuthGuard] },
+      { path: 'login', component: LoginComponent },
+      { path: 'sign-up', component: SignupFormComponent },
+      { path: 'non-authorized', component: NonAuthorizedComponent },
       { path: 'assign-customers', component: AssignCustomersFormComponent },
-    ])
+    ]), NgbModule
   ],
   providers: [
     CategoryService,
     ProductService,
     CustomerService,
-    EmployeeService
+    EmployeeService,
+    AuthService,
+    AuthGuard,
   ],
   bootstrap: [AppComponent]
 })

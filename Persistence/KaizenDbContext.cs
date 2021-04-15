@@ -1,14 +1,20 @@
 using Kaizen.Core.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Kaizen.Persistence
 {
-    public class KaizenDbContext : DbContext
+    public class KaizenDbContext : IdentityDbContext
     {
         public KaizenDbContext(DbContextOptions<KaizenDbContext> options)
         : base(options)
         {
 
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
         }
 
 

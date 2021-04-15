@@ -1,0 +1,24 @@
+<h1>Login</h1>
+<form class="form-signin" #f="ngForm" (ngSubmit)="logIn()" novalidate>
+  <div *ngIf="authenticationResponse.errorMessage" class="alert alert-danger">{{authenticationResponse.errorMessage}}
+  </div>
+
+  <div>
+    <label for="email" class="sr-only">Email address</label>
+    <input class="form-control" type="email" id="email" name="email" placeholder="Email address" autofocus
+      [(ngModel)]="this.userCredentials.email" #email="ngModel" required>
+    <div class="alert alert-danger" *ngIf="email.touched && !email.valid">
+      Please specify the email address.
+    </div>
+  </div>
+
+  <div>
+    <label for="password" class="sr-only">Password</label>
+    <input class="form-control" type="password" id="password" name="password" placeholder="Password"
+      [(ngModel)]="this.userCredentials.password" #password="ngModel" required>
+    <div class="alert alert-danger" *ngIf="password.touched && !password.valid">
+      Please specify the password.
+    </div>
+  </div>
+  <button class="btn btn-lg btn-primary btn-block" type="submit" [disabled]="!f.valid">Login</button>
+</form>

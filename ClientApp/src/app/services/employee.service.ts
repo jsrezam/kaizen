@@ -1,41 +1,41 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { environment as env } from '../../environments/environment';
+import { environment } from '../../environments/environment';
 import { Employee } from '../models/employee';
 
 @Injectable({ providedIn: 'root' })
 export class EmployeeService {
-    private readonly employeesEndpoint = '/api/employees/';
+    private readonly apiUri = environment.apiUrl + '/api/employees/';
 
     constructor(private http: HttpClient) { }
 
     getEmployees(filter) {
-        return this.http.get(this.employeesEndpoint + '?' + this.toQueryString(filter)).pipe(
+        return this.http.get(this.apiUri + '?' + this.toQueryString(filter)).pipe(
             map(res => res)
         );
     }
 
     getEmployee(id) {
-        return this.http.get(this.employeesEndpoint + id).pipe(
+        return this.http.get(this.apiUri + id).pipe(
             map(res => res)
         );
     }
 
     create(employee) {
-        return this.http.post(env.dev.apiUrl + this.employeesEndpoint, employee).pipe(
+        return this.http.post(this.apiUri, employee).pipe(
             map(res => res)
         );
     }
 
     update(employee: Employee) {
-        return this.http.put(env.dev.apiUrl + this.employeesEndpoint + employee.id, employee).pipe(
+        return this.http.put(this.apiUri + employee.id, employee).pipe(
             map(res => res)
         );
     }
 
     delete(id) {
-        return this.http.delete(env.dev.apiUrl + this.employeesEndpoint + id).pipe(
+        return this.http.delete(this.apiUri + id).pipe(
             map(res => res)
         );
     }
