@@ -24,10 +24,5 @@ namespace Kaizen.Core.Models
         public string CellPhone { get; set; }
         public string Extension { get; set; }
         public string PhotoPath { get; set; }
-        public ICollection<Customer> Customers { get; set; }
-        public Employee()
-        {
-            this.Customers = new Collection<Customer>();
-        }
     }
 }

@@ -16,7 +16,7 @@ namespace Kaizen.Core
         public async Task<Customer> GetCustomerAsync(int id)
         {
             return await entities
-                    .Include(c => c.Employee)
+                    // .Include(c => c.Employee)
                     .Include(c => c.Orders)
                     .SingleOrDefaultAsync(c => c.Id == id);
         }
@@ -24,7 +24,7 @@ namespace Kaizen.Core
         {
             var result = new QueryResult<Customer>();
             var query = entities
-            .Include(c => c.Employee)
+            // .Include(c => c.Employee)
             .Include(c => c.Orders)
             .AsQueryable();
 

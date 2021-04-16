@@ -6,7 +6,6 @@ namespace Kaizen.Controllers.Resources
     public class CustomerResource
     {
         public int Id { get; set; }
-        public EmployeeViewResource Employee { get; set; }
         public string LastName { get; set; }
         public string FirstName { get; set; }
         public string Address { get; set; }
@@ -18,6 +17,7 @@ namespace Kaizen.Controllers.Resources
         public string CompanyName { get; set; }
         public bool IsAssigned { get; set; }
         public ICollection<OrderResource> Orders { get; set; }
+        public IdentityUserResource User { get; set; }
         public CustomerResource()
         {
             this.Orders = new Collection<OrderResource>();

@@ -1,3 +1,4 @@
+import { Product } from './../../models/product';
 import { Component, OnInit } from '@angular/core';
 import { CustomerService } from 'src/app/services/customer.service';
 import { EmployeeService } from 'src/app/services/employee.service';
@@ -21,10 +22,15 @@ export class AssignCustomersFormComponent implements OnInit {
     { title: 'CellPhone', key: 'cellPhone', isSortable: true },
   ];
 
-  employees: any[];
-  queryResult: any = {};
+  // employees: any[];
+  filteredCustomers: any[];
+  queryResult: any = {
+    items: []
+  };
+
   query: any = {
-    pageSize: this.PAGE_SIZE
+    pageSize: this.PAGE_SIZE,
+    page: 1
   };
 
   constructor(private customerService: CustomerService,
@@ -32,27 +38,36 @@ export class AssignCustomersFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.populateCustomers();
-    this.populateEmployees();
+    //this.populateEmployees();
   }
-
-
-  private populateEmployees() {
-    this.employeeService.getEmployees(null)
-      .subscribe((result: any) => {
-        // this.employees = result
-        console.log(result);
-      });
-  }
+  // private populateEmployees() {
+  //   this.employeeService.getEmployees(null)
+  //     .subscribe((result: any) => {
+  //       // this.employees = result
+  //       console.log(result);
+  //     });
+  // }
   private populateCustomers() {
-    this.customerService.getCustomers(this.query)
+    this.customerService.getCustomers(null)
       .subscribe((result: any) => {
-        this.queryResult = result
+        this.queryResult = result;
+        this.filteredCustomers = this.queryResult.items;
       });
   }
 
   onPageChage(page) {
+    // console.log(page);
     this.query.page = page;
-    this.populateCustomers();
+    //this.populateCustomers();
+  }
+
+  filter(querySearch: string) {
+    console.log(querySearch);
+    // console.log(this.customers)
+    this.filteredCustomers = (querySearch) ?
+      this.queryResult.items.filter(c => c.lastName.toLowerCase().includes(querySearch.toLowerCase())) :
+      this.queryResult.items;
+
   }
 
 }

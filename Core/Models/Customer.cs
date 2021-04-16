@@ -1,14 +1,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace Kaizen.Core.Models
 {
     public class Customer : BaseEntity
     {
-        public int EmployeeId { get; set; }
-        public Employee Employee { get; set; }
-
         [Required]
         [StringLength(255)]
         public string LastName { get; set; }
@@ -22,10 +20,10 @@ namespace Kaizen.Core.Models
         public string HomePhone { get; set; }
         public string CellPhone { get; set; }
         public string CompanyName { get; set; }
-
         public bool IsAssigned { get; set; }
-
         public ICollection<Order> Orders { get; set; }
+        public string UserId { get; set; }
+        public IdentityUser User { get; set; }
         public Customer()
         {
             this.Orders = new Collection<Order>();
