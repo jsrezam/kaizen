@@ -1,6 +1,6 @@
-import { AuthenticationResponse } from './../models/authenticationResponse';
-import { environment } from './../../environments/environment';
-import { UserCredentials } from './../models/userCredentials';
+import { AuthenticationResponse } from '../models/authenticationResponse';
+import { environment } from '../../environments/environment';
+import { UserCredentials } from '../models/userCredentials';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
@@ -63,5 +63,9 @@ export class AuthService {
         }
 
         return true;
+    }
+
+    getToken() {
+        return localStorage.getItem(this.tokenKey);
     }
 }

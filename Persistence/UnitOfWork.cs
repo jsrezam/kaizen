@@ -10,6 +10,8 @@ namespace Kaizen.Persistence
         public IEmployeeRepository _employeeRepository;
         public ICustomerRepository _customerRepository;
         public IOrderRepository _orderRepository;
+        public ICampaignRepository _campaignRepository;
+        public ICampaignDetailRepository _campaignDetailRepository;
         private readonly KaizenDbContext context;
 
         public UnitOfWork(KaizenDbContext context)
@@ -22,6 +24,9 @@ namespace Kaizen.Persistence
         public IEmployeeRepository EmployeeRepository => _employeeRepository ?? new EmployeeRepository(context);
         public ICustomerRepository CustomerRepository => _customerRepository ?? new CustomerRepository(context);
         public IOrderRepository OrderRepository => _orderRepository ?? new OrderRepository(context);
+        public ICampaignRepository CampaignRepository => _campaignRepository ?? new CampaignRepository(context);
+        public ICampaignDetailRepository CampaignDetailRepository => _campaignDetailRepository ?? new CampaignDetailRepository(context);
+
 
         public void Dispose()
         {

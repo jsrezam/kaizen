@@ -1,7 +1,6 @@
 using AutoMapper;
 using Kaizen.Controllers.Resources;
 using Kaizen.Core.Models;
-using Microsoft.AspNetCore.Identity;
 
 namespace Kaizen.Mapping
 {
@@ -16,12 +15,14 @@ namespace Kaizen.Mapping
             CreateMap(typeof(QueryResult<>), typeof(QueryResultResource<>));
             CreateMap<Category, CategoryViewResource>();
             CreateMap<Employee, EmployeeResource>();
-
             CreateMap<Employee, EmployeeViewResource>();
             CreateMap<Customer, CustomerResource>();
             CreateMap<Customer, CustomerViewResource>();
             CreateMap<Order, OrderResource>();
-            CreateMap<IdentityUser, IdentityUserResource>();
+            CreateMap<ApplicationUser, ApplicationUserResource>();
+            CreateMap<Campaign, CampaignResource>();
+            CreateMap<CampaignDetail, CampaignDetailResource>();
+            CreateMap<Campaign, CampaignSaveResource>();
 
             // API Resource to Domain
             CreateMap<ProductResource, Product>()
@@ -37,12 +38,16 @@ namespace Kaizen.Mapping
             CreateMap<EmployeeViewResource, Employee>();
             CreateMap<EmployeeQueryResource, EmployeeQuery>();
             CreateMap<CustomerResource, Customer>()
-            .ForMember(c => c.Id, opt => opt.Ignore())
-            .ForMember(c => c.User, opt => opt.Ignore());
+            .ForMember(c => c.Id, opt => opt.Ignore());
+            // .ForMember(c => c.User, opt => opt.Ignore());
             CreateMap<CustomerQueryResource, CustomerQuery>();
             CreateMap<OrderResource, Order>()
             .ForMember(o => o.Customer, opt => opt.Ignore());
-            CreateMap<IdentityUserResource, IdentityUser>();
+            CreateMap<ApplicationUserResource, ApplicationUser>();
+            CreateMap<CampaignResource, Campaign>();
+            CreateMap<CampaignQueryResource, CampaignQuery>();
+            CreateMap<CampaignSaveResource, Campaign>();
+            CreateMap<CampaignDetailQueryResource, CampaignDetailQuery>();
         }
     }
 }

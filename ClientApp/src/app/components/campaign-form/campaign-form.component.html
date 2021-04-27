@@ -1,0 +1,122 @@
+<h2>New Campaign</h2>
+
+<!-- <p>
+  {{model | json}}
+</p>
+
+<p>
+  {{customers | json}}
+</p> -->
+<p>
+  {{campaign | json}}
+</p>
+
+<p *ngIf="errorMessage">
+  <ngb-alert type="danger" [dismissible]="false">
+    <strong>Error!</strong> {{errorMessage}}
+  </ngb-alert>
+</p>
+
+<p><strong>Assing an employee to new campaign</strong></p>
+<hr class="rounded">
+
+<form #f="ngForm" (ngSubmit)="create()" novalidate>
+  <div class="mb-3">
+    <label for="user">Employee</label>
+    <select id="user" class="form-control" [(ngModel)]="campaign.userId" name="userId" required #user="ngModel">
+      <option value=""></option>
+      <option *ngFor="let u of agentUsers" value="{{ u.id }}">
+        {{u.firstName}} {{ u.lastName }} - {{u.userName}}
+      </option>
+    </select>
+    <div class="alert alert-danger" *ngIf="user.touched && !user.valid">
+      Please specify the employee.
+    </div>
+  </div>
+
+  <hr class="rounded">
+  <p><strong>Select the end of the campaign</strong></p>
+  <hr class="rounded">
+
+  <div class="mb-3">
+    <label for="finishDate" class="form-label">Finish date</label>
+    <div class="input-group">
+      <input class="form-control" placeholder="yyyy-mm-dd" name="finishDate" [(ngModel)]="model" ngbDatepicker
+        #finishDate="ngbDatepicker">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary calendar" (click)="finishDate.toggle()" type="button">
+          <i class="fas fa-calendar-alt fa-fw"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <hr class="rounded">
+  <p><strong>Select the customers in the new campaign</strong></p>
+  <hr class="rounded">
+
+  <div class="mb-3">
+    <label for="columnTable">Search by</label>
+    <select id="columnTable" class="form-control" [(ngModel)]="selectedfilterColumn" name="columnTableKey"
+      #columnTable="ngModel">
+      <!-- <option value=""></option> -->
+      <option *ngFor="let c of columns" value="{{ c.key }}">
+        {{c.title}}
+      </option>
+    </select>
+  </div>
+
+  <div *ngIf="!queryResult.items">
+    <loading></loading>
+  </div>
+  <div *ngIf="queryResult.items">
+    <p>
+      <input #querySearch (keyup)="filter(querySearch.value)" type="text" class="form-control" placeholder="Search...">
+    </p>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th *ngFor="let c of columns" aria-labelledby="tableLabel">
+            <div *ngIf="c.isSortable" (click)="sortBy(c.key)">
+              {{c.title}}
+              <i *ngIf="query.sortBy === c.key" class="fa" [class.fa-sort-asc]="query.isSortAscending"
+                [class.fa-sort-desc]="!query.isSortAscending"></i>
+            </div>
+            <div *ngIf="!c.isSortable">
+              {{c.title}}
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- <tr *ngFor="let c of queryResult.items"> -->
+        <tr
+          *ngFor="let c of filteredCustomers | slice: (this.query.page-1) * query.pageSize : this.query.page * query.pageSize">
+          <td>
+            <input style="text-align: center; vertical-align: middle; margin-left:auto; margin-right:auto;"
+              type="checkbox" class="form-check-input" [(ngModel)]="c.isSelected" [ngModelOptions]="{standalone: true}"
+              #isChecked="ngModel" name="isChecked">
+          </td>
+          <!-- <td>{{ c.id }}</td> -->
+          <td>{{ c.lastName }}</td>
+          <td>{{ c.firstName }}</td>
+          <td>{{ c.address }}</td>
+          <td>{{ c.city }}</td>
+          <td>{{ c.region }}</td>
+          <td>{{ c.homePhone }}</td>
+          <td>{{ c.cellPhone }}</td>
+          <!-- <td>
+                  <a class="btn btn-outline-success" [routerLink]="['/products/edit/', p.id]">Edit</a>
+                  <button class="btn btn-outline-danger" type="button" (click)="delete(p.id)">Delete</button>
+                </td> -->
+        </tr>
+      </tbody>
+    </table>
+    <pagination [total-items]="queryResult.totalItems" [page-size]="query.pageSize"
+      (page-changed)="onPageChage($event)">
+    </pagination>
+  </div>
+  <div>
+    <button type="submit" class="btn btn-primary" [disabled]="!f.valid">Create</button>
+  </div>
+</form>

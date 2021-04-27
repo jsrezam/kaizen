@@ -1,0 +1,69 @@
+<h2>Campaign Details</h2>
+
+<p>
+  {{campaign|json}}
+</p>
+
+<div *ngIf="!user">
+  <loading></loading>
+</div>
+<div *ngIf="user">
+  <div class="row align-items-center profile-header">
+    <div class="col-md-2 mb-3">
+      <img src="https://cdn4.iconfinder.com/data/icons/superheroes/512/batman-512.png" alt="User's profile picture"
+        class="rounded-circle img-fluid profile-picture">
+    </div>
+    <div class="col-md text-center text-md-left">
+      <h2>{{ user.firstName }} {{ user.lastName }}</h2>
+      <p>{{ user.email }}</p>
+      <p>{{ user.identificationCard }}</p>
+      <p><strong>Campaign: {{campaign.id}}</strong> </p>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!queryResult.items">
+  <loading></loading>
+</div>
+<div *ngIf="queryResult.items">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th *ngFor="let c of columns" aria-labelledby="tableLabel">
+          <div *ngIf="c.isSortable" (click)="sortBy(c.key)">
+            {{c.title}}
+            <i *ngIf="query.sortBy === c.key" class="fa" [class.fa-sort-asc]="query.isSortAscending"
+              [class.fa-sort-desc]="!query.isSortAscending"></i>
+          </div>
+          <div *ngIf="!c.isSortable">
+            {{c.title}}
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cd of queryResult.items">
+        <td>{{ cd.id }}</td>
+        <td>{{ cd.customer.firstName }}</td>
+        <td>{{ cd.customer.lastName }}</td>
+        <td>{{ cd.callsNumber }}</td>
+        <td>{{ cd.callDuration }}</td>
+        <td>
+          <div *ngIf="cd.status === 'NotCalled'">
+            <p class="fa fa-times"> Not Called</p>
+          </div>
+          <div *ngIf="cd.status === 'Called'">
+            <p class="fa fa-check"> Called</p>
+          </div>
+        </td>
+
+        <!-- <td>
+          <a class="btn btn-outline-success" [routerLink]="['/products/edit/', p.id]">Edit</a>
+          <button class="btn btn-outline-danger" type="button" (click)="delete(p.id)">Delete</button>
+        </td> -->
+      </tr>
+    </tbody>
+  </table>
+  <pagination [total-items]="queryResult.totalItems" [page-size]="query.pageSize" (page-changed)="onPageChage($event)">
+  </pagination>
+</div>

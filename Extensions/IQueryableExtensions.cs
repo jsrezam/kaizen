@@ -30,11 +30,24 @@ namespace Kaizen.Extensions
 
             return query;
         }
-
         public static IQueryable<Customer> ApplyFiltering(this IQueryable<Customer> query, CustomerQuery queryObj)
         {
             if (!string.IsNullOrEmpty(queryObj.LastName))
                 query = query.Where(c => c.LastName == queryObj.LastName);
+
+            return query;
+        }
+        public static IQueryable<Campaign> ApplyFiltering(this IQueryable<Campaign> query, CampaignQuery queryObj)
+        {
+            if (queryObj.FinishDate != null)
+                query = query.Where(c => c.FinishDate == queryObj.FinishDate);
+
+            return query;
+        }
+        public static IQueryable<CampaignDetail> ApplyFiltering(this IQueryable<CampaignDetail> query, CampaignDetailQuery queryObj)
+        {
+            if (!string.IsNullOrEmpty(queryObj.Status))
+                query = query.Where(c => c.Status == queryObj.Status);
 
             return query;
         }

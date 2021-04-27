@@ -20,13 +20,12 @@ namespace Kaizen.Core.Models
         public string HomePhone { get; set; }
         public string CellPhone { get; set; }
         public string CompanyName { get; set; }
-        public bool IsAssigned { get; set; }
         public ICollection<Order> Orders { get; set; }
-        public string UserId { get; set; }
-        public IdentityUser User { get; set; }
+        public ICollection<CampaignDetail> CampaignDetails { get; set; }
         public Customer()
         {
             this.Orders = new Collection<Order>();
+            this.CampaignDetails = new Collection<CampaignDetail>();
         }
     }
 }

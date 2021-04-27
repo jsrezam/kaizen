@@ -11,6 +11,8 @@ namespace Kaizen.Core
         IEmployeeRepository EmployeeRepository { get; }
         ICustomerRepository CustomerRepository { get; }
         IOrderRepository OrderRepository { get; }
+        ICampaignRepository CampaignRepository { get; }
+        ICampaignDetailRepository CampaignDetailRepository { get; }
 
         Task SaveChangesAsync();
     }

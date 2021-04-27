@@ -1,10 +1,10 @@
 import { AuthGuard } from './services/auth-guard.service';
-import { AuthService } from './services/authService';
+import { AuthService } from './services/auth.service';
 import { CategoryService } from './services/category.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -26,12 +26,19 @@ import { AssignCustomersFormComponent } from './components/assign-customers-form
 import { CustomerService } from './services/customer.service';
 import { EmployeeService } from './services/employee.service';
 import { EmployeeListComponent } from './components/employee-list/employee-list.component';
-import { EmployeeFormComponent } from './components/employee-form/employee-form.component';
+// import { EmployeeFormComponent } from './components/employee-form/employee-form.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LoginComponent } from './components/login/login.component';
 import { SignupFormComponent } from './components/signup-form/signup-form.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { NonAuthorizedComponent } from './components/non-authorized/non-authorized.component';
+import { CampaignFormComponent } from './components/campaign-form/campaign-form.component';
+import { CampaignListComponent } from './components/campaign-list/campaign-list.component';
+import { UserService } from './services/user.service';
+import { SecurityInterceptorService } from './services/security-interceptor.service';
+import { CampaignService } from './services/campaign.service';
+import { CampaignDetailComponent } from './components/campaign-detail/campaign-detail.component';
+import { CampaignDetailService } from './services/campaignDetail.service';
 
 @NgModule({
   declarations: [
@@ -49,11 +56,14 @@ import { NonAuthorizedComponent } from './components/non-authorized/non-authoriz
     ProductListComponent,
     AssignCustomersFormComponent,
     EmployeeListComponent,
-    EmployeeFormComponent,
+    // EmployeeFormComponent,
     LoginComponent,
     SignupFormComponent,
     LogoutComponent,
     NonAuthorizedComponent,
+    CampaignFormComponent,
+    CampaignListComponent,
+    CampaignDetailComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -72,11 +82,14 @@ import { NonAuthorizedComponent } from './components/non-authorized/non-authoriz
       { path: 'products/new', component: ProductFormComponent, canActivate: [AuthGuard] },
       { path: 'products/edit/:id', component: ProductFormComponent, canActivate: [AuthGuard] },
       { path: 'employees', component: EmployeeListComponent, canActivate: [AuthGuard] },
-      { path: 'employees/new', component: EmployeeFormComponent, canActivate: [AuthGuard] },
-      { path: 'employees/edit/:id', component: EmployeeFormComponent, canActivate: [AuthGuard] },
+      // { path: 'employees/new', component: EmployeeFormComponent, canActivate: [AuthGuard] },
+      // { path: 'employees/edit/:id', component: EmployeeFormComponent, canActivate: [AuthGuard] },
       { path: 'login', component: LoginComponent },
       { path: 'sign-up', component: SignupFormComponent },
       { path: 'non-authorized', component: NonAuthorizedComponent },
+      { path: 'campaigns', component: CampaignListComponent },
+      { path: 'campaigns/new', component: CampaignFormComponent },
+      { path: 'campaigns-detail/:id', component: CampaignDetailComponent },
       { path: 'assign-customers', component: AssignCustomersFormComponent },
     ]), NgbModule
   ],
@@ -85,8 +98,12 @@ import { NonAuthorizedComponent } from './components/non-authorized/non-authoriz
     ProductService,
     CustomerService,
     EmployeeService,
+    UserService,
     AuthService,
     AuthGuard,
+    CampaignService,
+    CampaignDetailService,
+    { provide: HTTP_INTERCEPTORS, useClass: SecurityInterceptorService, multi: true }
   ],
   bootstrap: [AppComponent]
 })

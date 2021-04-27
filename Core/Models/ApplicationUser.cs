@@ -1,16 +1,15 @@
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 
 namespace Kaizen.Core.Models
 {
-    public class ApplicationUser
+    public class ApplicationUser : IdentityUser
     {
-        // public ICollection<Customer> Customers { get; set; }
-
-        // public ApplicationUser()
-        // {
-        //     this.Customers = new Collection<Customer>();
-        // }
+        [StringLength(255)]
+        public string LastName { get; set; }
+        [StringLength(255)]
+        public string FirstName { get; set; }
+        [StringLength(255)]
+        public string IdentificationCard { get; set; }
     }
 }

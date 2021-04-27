@@ -23,7 +23,7 @@ export class ProductFormComponent implements OnInit {
     private productService: ProductService,
     private toastrService: ToastrService) {
 
-    route.params.subscribe(p => {
+    this.route.params.subscribe(p => {
       this.product.id = +p['id'] || 0;
     });
   }

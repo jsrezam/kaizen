@@ -1,8 +1,10 @@
+
 import { Router } from '@angular/router';
-import { AuthService } from './../../services/authService';
+import { AuthService } from '../../services/auth.service';
 import { AuthenticationResponse } from './../../models/authenticationResponse';
 import { UserCredentials } from './../../models/userCredentials';
 import { Component } from '@angular/core';
+import { parseErrorsAPI } from 'src/app/Utilities/Utilities';
 
 
 @Component({
@@ -19,11 +21,17 @@ export class SignupFormComponent {
     , private router: Router) { }
 
   signUp() {
+
+    if (this.userCredentials.password !== this.userCredentials.confirmPassword) {
+      this.authenticationResponse.errors = [{ description: "The password must be match" }];
+      return;
+    }
+
     this.authService.signUp(this.userCredentials)
       .subscribe((response: any) => {
         this.router.navigate(['/login']);
       }, (err) => {
-        this.authenticationResponse.errors = [...err.error]
+        this.authenticationResponse.errors = parseErrorsAPI(err);
       });
   }
 }

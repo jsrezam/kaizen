@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Kaizen.Core
 {
-    // public interface IUserRespository : IRepository<IdentityUser>
-    // {
+    public interface IUserRepository
+    {
 
-    // }
+    }
 }

@@ -1,0 +1,82 @@
+<p>
+  {{queryResult | json}}
+</p>
+
+<h2>Campaigns</h2>
+<hr class="rounded">
+
+<p>
+  <a [routerLink]="['/campaigns/new']" class="btn btn-primary">New Campaign</a>
+</p>
+
+<hr class="rounded">
+<p><strong>Select one employee to see their campaigns</strong></p>
+<hr class="rounded">
+
+<div class="mb-3">
+  <label for="user">Employee</label>
+  <select id="user" class="form-control" (change)="onUserChange()" [(ngModel)]="employee.id" name="userId" required
+    #user="ngModel">
+    <option value=""></option>
+    <option *ngFor="let u of agentUsers" value="{{ u.id }}">
+      {{u.firstName}} {{ u.lastName }} - {{u.userName}}
+    </option>
+  </select>
+  <div class="alert alert-danger" *ngIf="user.touched && !user.valid">
+    Please specify the employee.
+  </div>
+</div>
+
+<hr class="rounded">
+<p><strong>Employee campaigns</strong></p>
+<hr class="rounded">
+
+<div *ngIf="employee.id && !queryResult.items">
+  <loading></loading>
+</div>
+<div *ngIf="queryResult.items">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th *ngFor="let c of columns" aria-labelledby="tableLabel">
+          <div *ngIf="c.isSortable" (click)="sortBy(c.key)">
+            {{c.title}}
+            <i *ngIf="query.sortBy === c.key" class="fa" [class.fa-sort-asc]="query.isSortAscending"
+              [class.fa-sort-desc]="!query.isSortAscending"></i>
+          </div>
+          <div *ngIf="!c.isSortable">
+            {{c.title}}
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of queryResult.items">
+        <td>{{ c.id }}</td>
+        <!-- <td>{{ c.userId }}</td> -->
+        <td>{{ c.startDate }}</td>
+        <td>{{ c.finishDate }}</td>
+        <td *ngIf="c.isActive"> Active </td>
+        <td *ngIf="!c.isActive"> Inactive </td>
+        <td>
+          <div class="progress">
+            <div class="progress-bar" [class.bg-danger]="c.progress <= 25"
+              [class.bg-warning]="c.progress > 25 && c.progress <= 75"
+              [class.bg-info]="c.progress > 75 && c.progress <= 99.99" [class.bg-success]="c.progress === 100"
+              role="progressbar" [style.width]="c.progress + '%'">
+              <span class="sr-only">{{c.progress}}%</span>
+            </div>
+          </div>
+        </td>
+        <td>
+          <a class="btn btn-outline-success" [routerLink]="['/campaigns-detail/', c.id]">View Detail</a>
+          <button class="btn btn-outline-danger" [disabled]="!c.isActive" type="button"
+            (click)="inactivate(c)">Inactivate</button>
+          <p *ngIf="isExpired(c.finishDate)" class="fa fa-clock-o"></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <pagination [total-items]="queryResult.totalItems" [page-size]="query.pageSize" (page-changed)="onPageChage($event)">
+  </pagination>
+</div>

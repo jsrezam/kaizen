@@ -10,6 +10,7 @@ namespace Kaizen.Core
         IEnumerable<T> GetAll();
         Task<T> GetByIdAsync(int id);
         Task AddAsync(T entity);
+        Task AddRangeAsync(IEnumerable<T> entity);
         void Update(T entity);
         bool Delete(T entity);
     }

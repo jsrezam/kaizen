@@ -1,4 +1,5 @@
-<h1>Sign Up</h1>
+<h1>Sign up</h1>
+<hr class="rounded">
 
 <p *ngFor="let e of this.authenticationResponse.errors">
   <ngb-alert type="danger" [dismissible]="false">
@@ -6,22 +7,80 @@
   </ngb-alert>
 </p>
 
-<form class="form-signin" #f="ngForm" (ngSubmit)="signUp()" novalidate>
-  <div class="form-group">
-    <label for="email" class="sr-only">Email</label>
-    <input class="form-control" id="email" type="inputEmail" [(ngModel)]="userCredentials.email" name="email"
-      #email="ngModel" placeholder="Email address" autofocus>
-    <div class="alert alert-danger" *ngIf="email.touched && !email.valid">
-      Please specify the email address.
+<form class="form-signup" #f="ngForm" (ngSubmit)="signUp()" novalidate>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <h2>Basics</h2>
+        <hr class="rounded">
+
+        <div>
+          <label for="lastName" class="sr-only">Last name</label>
+          <input class="form-control" id="lastName" type="text" [(ngModel)]="userCredentials.lastName" name="lastName"
+            #lastName="ngModel" placeholder="Your last name" autofocus required>
+          <div class="alert alert-danger" *ngIf="lastName.touched && !lastName.valid">
+            Please specify the last name.
+          </div>
+        </div>
+
+        <div>
+          <label for="firstName" class="sr-only">First mame</label>
+          <input class="form-control" id="firstName" type="text" [(ngModel)]="userCredentials.firstName"
+            name="firstName" #firstName="ngModel" placeholder="Your first name" required>
+          <div class="alert alert-danger" *ngIf="firstName.touched && !firstName.valid">
+            Please specify the first name.
+          </div>
+        </div>
+
+        <div>
+          <label for="identificationCard" class="sr-only">Identification Card</label>
+          <input class="form-control" id="identificationCard" type="text"
+            [(ngModel)]="userCredentials.identificationCard" name="identificationCard" #identificationCard="ngModel"
+            placeholder="Your identification card" required>
+          <div class="alert alert-danger" *ngIf="identificationCard.touched && !identificationCard.valid">
+            Please specify the identification card.
+          </div>
+        </div>
+
+        <div>
+          <label for="phoneNumber" class="sr-only">Phone Number</label>
+          <input class="form-control" id="phoneNumber" type="text" [(ngModel)]="userCredentials.phoneNumber"
+            name="phoneNumber" #phoneNumber="ngModel" placeholder="Your phone number" required>
+          <div class="alert alert-danger" *ngIf="phoneNumber.touched && !phoneNumber.valid">
+            Please specify the phone number.
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <h2>Credentials</h2>
+        <hr class="rounded">
+
+        <div>
+          <label for="email" class="sr-only">Email</label>
+          <input class="form-control" id="email" type="email" [(ngModel)]="userCredentials.email" name="email"
+            #email="ngModel" placeholder="Email address" required>
+          <div class="alert alert-danger" *ngIf="email.touched && !email.valid">
+            Please specify the email address.
+          </div>
+        </div>
+        <div>
+          <label for="password" class="sr-only">Password</label>
+          <input class="form-control" id="password" type="password" [(ngModel)]="userCredentials.password"
+            name="password" #password="ngModel" placeholder="Your password" required>
+          <div class="alert alert-danger" *ngIf="password.touched && !password.valid">
+            Please specify the password.
+          </div>
+        </div>
+        <div>
+          <label for="confirmPassword" class="sr-only">Password</label>
+          <input class="form-control" id="confirmPassword" type="password" [(ngModel)]="userCredentials.confirmPassword"
+            name="confirmPassword" #confirmPassword="ngModel" placeholder="Confirm your password" required>
+          <div class="alert alert-danger" *ngIf="confirmPassword.touched && !confirmPassword.valid">
+            Please confirm your password.
+          </div>
+        </div>
+        <button class="btn btn-primary" type="submit" [disabled]="!f.valid">Sign Up</button>
+      </div>
     </div>
   </div>
-  <div class="form-group">
-    <label for="password" class="sr-only">Password</label>
-    <input class="form-control" id="password" type="password" [(ngModel)]="userCredentials.password" name="password"
-      #password="ngModel" placeholder="Your password">
-    <div class="alert alert-danger" *ngIf="password.touched && !password.valid">
-      Please specify the password.
-    </div>
-  </div>
-  <button class="btn btn-primary" type="submit" [disabled]="!f.valid">Sign Up</button>
 </form>

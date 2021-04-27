@@ -21,6 +21,10 @@ namespace Kaizen.Core
         {
             await entities.AddAsync(entity);
         }
+        public async Task AddRangeAsync(IEnumerable<T> entity)
+        {
+            await entities.AddRangeAsync(entity);
+        }
 
         public bool Delete(T entity)
         {
