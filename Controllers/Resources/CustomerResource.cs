@@ -15,10 +15,5 @@ namespace Kaizen.Controllers.Resources
         public string HomePhone { get; set; }
         public string CellPhone { get; set; }
         public string CompanyName { get; set; }
-        public ICollection<OrderResource> Orders { get; set; }
-        public CustomerResource()
-        {
-            this.Orders = new Collection<OrderResource>();
-        }
     }
 }

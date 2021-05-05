@@ -42,5 +42,30 @@ namespace Kaizen.Core
 
             return result;
         }
+
+        public async Task<QueryResult<Product>> GetValidProductsAsync(ProductQuery queryObj)
+        {
+            var result = new QueryResult<Product>();
+
+            var query = entities
+            .Include(p => p.Category)
+            .Where(p => p.UnitsInStock > 0)
+            .AsQueryable();
+
+            query = query.ApplyFiltering(queryObj, isExact: false);
+
+            var columnsMap = new Dictionary<string, Expression<Func<Product, object>>>()
+            {
+                ["category.name"] = p => p.Name
+            };
+            query = query.ApplyOrdering(queryObj, columnsMap);
+
+            result.TotalItems = await query.CountAsync();
+
+            query = query.ApplyPaging(queryObj);
+            result.Items = await query.ToListAsync();
+
+            return result;
+        }
     }
 }

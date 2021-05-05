@@ -17,14 +17,14 @@ export class CampaignService {
         );
     }
 
-    getCampaign(id) {
-        return this.http.get(this.apiUri + id).pipe(
+    getUserCampaigns(filter, id) {
+        return this.http.get(this.apiUri + "user/" + id + '?' + toQueryString(filter)).pipe(
             map(res => res)
         );
     }
 
-    getUserCampaigns(filter, id) {
-        return this.http.get(this.apiUri + "user/" + id + '?' + toQueryString(filter)).pipe(
+    _getUserCampaigns(filter) {
+        return this.http.get(this.apiUri + "user" + '?' + toQueryString(filter)).pipe(
             map(res => res)
         );
     }

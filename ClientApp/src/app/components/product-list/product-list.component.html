@@ -26,9 +26,9 @@
         <td>{{ p.id }}</td>
         <td>{{ p.category.name }}</td>
         <td>{{ p.name }}</td>
-        <td>{{ p.quantityPerUnit }}</td>
         <td>{{ p.unitPrice | currency }}</td>
         <td>{{ p.unitsInStock }}</td>
+        <td>{{ p.unitsOnOrder }}</td>
         <td>{{ p.isDiscontinued }}</td>
         <td>
           <a class="btn btn-outline-success" [routerLink]="['/products/edit/', p.id]">Edit</a>

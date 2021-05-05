@@ -14,7 +14,7 @@ export class UserService {
         );
     }
 
-    getUser(id) {
+    getUserByEmail(id) {
         return this.http.get(this.apiUri + id).pipe(
             map(res => res)
         );

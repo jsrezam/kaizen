@@ -12,7 +12,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { CategoryFormComponent } from './components/category-form/category-form.component';
 import { CategoryViewComponent } from './components/category-view/category-view.component';
@@ -39,13 +38,15 @@ import { SecurityInterceptorService } from './services/security-interceptor.serv
 import { CampaignService } from './services/campaign.service';
 import { CampaignDetailComponent } from './components/campaign-detail/campaign-detail.component';
 import { CampaignDetailService } from './services/campaignDetail.service';
+import { UserCampaignListComponent } from './components/user-campaign-list/user-campaign-list.component';
+import { UserCampaignDetailComponent } from './components/user-campaign-detail/user-campaign-detail.component';
+import { OrderFormComponent } from './components/order-form/order-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
     FetchDataComponent,
     CategoryFormComponent,
     CategoryViewComponent,
@@ -64,6 +65,9 @@ import { CampaignDetailService } from './services/campaignDetail.service';
     CampaignFormComponent,
     CampaignListComponent,
     CampaignDetailComponent,
+    UserCampaignListComponent,
+    UserCampaignDetailComponent,
+    OrderFormComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -73,7 +77,6 @@ import { CampaignDetailService } from './services/campaignDetail.service';
     ToastrModule.forRoot(), // ToastrModule added
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'categories', component: CategoryListComponent, canActivate: [AuthGuard] },
       { path: 'categories/new', component: CategoryFormComponent, canActivate: [AuthGuard] },
@@ -90,6 +93,12 @@ import { CampaignDetailService } from './services/campaignDetail.service';
       { path: 'campaigns', component: CampaignListComponent },
       { path: 'campaigns/new', component: CampaignFormComponent },
       { path: 'campaigns-detail/:id', component: CampaignDetailComponent },
+
+      { path: 'usr-campaigns', component: UserCampaignListComponent },
+      { path: 'usr-campaigns-detail/:id', component: UserCampaignDetailComponent },
+
+      { path: 'orders/new', component: OrderFormComponent },
+
       { path: 'assign-customers', component: AssignCustomersFormComponent },
     ]), NgbModule
   ],

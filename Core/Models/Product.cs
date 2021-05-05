@@ -7,15 +7,13 @@ namespace Kaizen.Core.Models
     {
         public int CategoryId { get; set; }
         public Category Category { get; set; }
-
         [Required]
         [StringLength(255)]
         public string Name { get; set; }
-        public int QuantityPerUnit { get; set; }
-
         [Column(TypeName = "decimal(18, 2)")]
         public decimal UnitPrice { get; set; }
         public int UnitsInStock { get; set; }
+        public int UnitsOnOrder { get; set; }
         public bool IsDiscontinued { get; set; }
     }
 }

@@ -1,8 +1,10 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using Kaizen.Controllers;
 using Kaizen.Core;
 using Kaizen.Core.Models;
+using Kaizen.Core.Services;
 using Kaizen.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -40,6 +42,10 @@ namespace Kaizen
             services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<ICallLogService, CallLogService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IProductService, ProductService>();
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<KaizenDbContext>()
@@ -47,6 +53,8 @@ namespace Kaizen
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = false,
@@ -57,7 +65,14 @@ namespace Kaizen
                             Encoding.UTF8.GetBytes(Configuration["KeyJwt"])
                         ),
                         ClockSkew = TimeSpan.Zero
-                    });
+                    };
+                });
+
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(Policies.RequireAdminRole, policy => policy.RequireClaim("role", "admin"));
+            });
 
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory

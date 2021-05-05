@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Kaizen.Controllers.Resources;
-using Kaizen.Core;
 using Kaizen.Core.Models;
+using Kaizen.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kaizen.Controllers
@@ -11,10 +11,11 @@ namespace Kaizen.Controllers
     public class ProductsController : Controller
     {
         private readonly IMapper mapper;
-        private readonly IUnitOfWork unitOfWork;
-        public ProductsController(IMapper mapper, IUnitOfWork unitOfWork)
+        private readonly IProductService productService;
+
+        public ProductsController(IMapper mapper, IProductService productService)
         {
-            this.unitOfWork = unitOfWork;
+            this.productService = productService;
             this.mapper = mapper;
         }
 
@@ -25,10 +26,7 @@ namespace Kaizen.Controllers
                 return BadRequest(ModelState);
 
             var product = mapper.Map<ProductResource, Product>(productResource);
-
-            await unitOfWork.ProductRepository.AddAsync(product);
-            await unitOfWork.SaveChangesAsync();
-
+            await productService.CreateProductAsync(product);
             var result = mapper.Map<Product, ProductResource>(product);
 
             return Ok(result);
@@ -40,14 +38,13 @@ namespace Kaizen.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var product = await unitOfWork.ProductRepository.GetByIdAsync(id);
+            var product = await productService.GetProductAsync(id);
 
             if (product == null)
                 return NotFound();
 
             mapper.Map<ProductResource, Product>(productResource, product);
-            unitOfWork.ProductRepository.Update(product);
-            await unitOfWork.SaveChangesAsync();
+            await productService.UpdateProductAsync(product);
 
             var result = mapper.Map<Product, ProductResource>(product);
             return Ok(result);
@@ -57,7 +54,16 @@ namespace Kaizen.Controllers
         public async Task<IActionResult> GetProducts(ProductQueryResource productQueryResource)
         {
             var productQuery = mapper.Map<ProductQueryResource, ProductQuery>(productQueryResource);
-            var queryResult = await unitOfWork.ProductRepository.GetProductsAsync(productQuery);
+            var queryResult = await productService.GetProductsAsync(productQuery);
+            var resultQuery = mapper.Map<QueryResult<Product>, QueryResultResource<ProductResource>>(queryResult);
+            return Ok(resultQuery);
+        }
+
+        [HttpGet("validated")]
+        public async Task<IActionResult> GetValidProducts(ProductQueryResource productQueryResource)
+        {
+            var productQuery = mapper.Map<ProductQueryResource, ProductQuery>(productQueryResource);
+            var queryResult = await productService.GetValidProducts(productQuery);
             var resultQuery = mapper.Map<QueryResult<Product>, QueryResultResource<ProductResource>>(queryResult);
             return Ok(resultQuery);
         }
@@ -65,7 +71,7 @@ namespace Kaizen.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProduct(int id)
         {
-            var product = await unitOfWork.ProductRepository.GetProductAsync(id);
+            var product = await productService.GetProductAsync(id);
             if (product == null)
                 return NotFound();
 
@@ -76,11 +82,12 @@ namespace Kaizen.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var product = await unitOfWork.ProductRepository.GetByIdAsync(id);
+            var product = await productService.GetProductAsync(id);
+
             if (product == null)
                 return NotFound();
-            var result = unitOfWork.ProductRepository.Delete(product);
-            await unitOfWork.SaveChangesAsync();
+
+            var result = productService.DeleteProductAsync(product);
             return Ok(result);
         }
     }

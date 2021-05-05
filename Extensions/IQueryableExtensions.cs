@@ -16,11 +16,20 @@ namespace Kaizen.Extensions
             return query;
         }
 
-        public static IQueryable<Product> ApplyFiltering(this IQueryable<Product> query, ProductQuery queryObj)
+        public static IQueryable<Product> ApplyFiltering(this IQueryable<Product> query, ProductQuery queryObj, bool isExact = true)
         {
-            if (!string.IsNullOrEmpty(queryObj.Name))
-                query = query.Where(c => c.Name == queryObj.Name);
+            if (queryObj.CategoryId.HasValue)
+                query = query.Where(c => c.CategoryId == queryObj.CategoryId);
 
+            if (isExact)
+            {
+                if (!string.IsNullOrEmpty(queryObj.Name))
+                    query = query.Where(c => c.Name.Equals(queryObj.Name));
+                return query;
+            }
+
+            if (!string.IsNullOrEmpty(queryObj.Name))
+                query = query.Where(c => c.Name.Contains(queryObj.Name));
             return query;
         }
         public static IQueryable<Employee> ApplyFiltering(this IQueryable<Employee> query, EmployeeQuery queryObj)
@@ -32,9 +41,12 @@ namespace Kaizen.Extensions
         }
         public static IQueryable<Customer> ApplyFiltering(this IQueryable<Customer> query, CustomerQuery queryObj)
         {
+            if (!string.IsNullOrEmpty(queryObj.FirstName))
+                query = query.Where(c => c.FirstName == queryObj.FirstName);
             if (!string.IsNullOrEmpty(queryObj.LastName))
                 query = query.Where(c => c.LastName == queryObj.LastName);
-
+            if (!string.IsNullOrEmpty(queryObj.CellPhone))
+                query = query.Where(c => c.CellPhone == queryObj.CellPhone);
             return query;
         }
         public static IQueryable<Campaign> ApplyFiltering(this IQueryable<Campaign> query, CampaignQuery queryObj)

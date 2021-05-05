@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Identity;
 
 namespace Kaizen.Core.Models
 {
@@ -20,11 +19,9 @@ namespace Kaizen.Core.Models
         public string HomePhone { get; set; }
         public string CellPhone { get; set; }
         public string CompanyName { get; set; }
-        public ICollection<Order> Orders { get; set; }
         public ICollection<CampaignDetail> CampaignDetails { get; set; }
         public Customer()
         {
-            this.Orders = new Collection<Order>();
             this.CampaignDetails = new Collection<CampaignDetail>();
         }
     }

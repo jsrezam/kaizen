@@ -45,6 +45,33 @@ namespace Kaizen.Core
 
             return result;
         }
+        public async Task<QueryResult<Campaign>> _GetUserCampaignsAsync(string userId, CampaignQuery queryObj)
+        {
+            var result = new QueryResult<Campaign>();
+
+            var query = entities
+            .Include(c => c.CampaignDetails)
+                .ThenInclude(cd => cd.Customer)
+            .Where(c => c.UserId.Equals(userId)
+            && c.IsActive
+            && c.FinishDate > DateTime.UtcNow)
+            .OrderByDescending(c => c.Id)
+            .AsQueryable();
+
+            query = query.ApplyFiltering(queryObj);
+
+            var columnsMap = new Dictionary<string, Expression<Func<Campaign, object>>>()
+            {
+                ["finishDate"] = c => c.FinishDate,
+            };
+            query = query.ApplyOrdering(queryObj, columnsMap);
+
+            result.TotalItems = await query.CountAsync();
+            query = query.ApplyPaging(queryObj);
+            result.Items = await query.ToListAsync();
+
+            return result;
+        }
         public async Task<QueryResult<Campaign>> GetCampaignsAsync(CampaignQuery queryObj)
         {
             var result = new QueryResult<Campaign>();

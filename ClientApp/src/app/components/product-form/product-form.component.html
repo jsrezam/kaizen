@@ -26,15 +26,6 @@
   </div>
 
   <div class="form-group">
-    <label for="quantityPerUnit">Quantity Per Unit</label>
-    <input id="quantityPerUnit" type="text" class="form-control" [(ngModel)]="product.quantityPerUnit"
-      name="quantityPerUnit" required #quantityPerUnit="ngModel">
-  </div>
-  <div class="alert alert-danger" *ngIf="quantityPerUnit.touched && !quantityPerUnit.valid">
-    Please specify the quantity per unit.
-  </div>
-
-  <div class="form-group">
     <label for="unitPrice">Unit Price</label>
     <input id="unitPrice" type="text" class="form-control" [(ngModel)]="product.unitPrice" name="unitPrice" required
       #unitPrice="ngModel">
@@ -51,6 +42,15 @@
   <div class="alert alert-danger" *ngIf="unitsInStock.touched && !unitsInStock.valid">
     Please specify the units in stock.
   </div>
+
+  <!-- <div class="form-group">
+    <label for="unitsOnOrder">Quantity Per Unit</label>
+    <input id="unitsOnOrder" type="text" class="form-control" [(ngModel)]="product.unitsOnOrder" name="unitsOnOrder"
+      required #unitsOnOrder="ngModel">
+  </div>
+  <div class="alert alert-danger" *ngIf="unitsOnOrder.touched && !unitsOnOrder.valid">
+    Please specify the units on order.
+  </div> -->
 
   <div>
     <p>Is this product dicontinued?</p>

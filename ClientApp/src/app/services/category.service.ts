@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Category } from '../models/category';
 import { environment } from '../../environments/environment';
+import { toQueryString } from '../Utilities/Utilities';
 
 
 @Injectable({ providedIn: 'root' })
@@ -12,7 +13,7 @@ export class CategoryService {
     constructor(private http: HttpClient) { }
 
     getCategories(filter) {
-        return this.http.get(this.apiUri + '?' + this.toQueryString(filter)).pipe(
+        return this.http.get(this.apiUri + '?' + toQueryString(filter)).pipe(
             map(res => res)
         );
     }
@@ -39,16 +40,6 @@ export class CategoryService {
         return this.http.delete(this.apiUri + id).pipe(
             map(res => res)
         );
-    }
-
-    toQueryString(obj) {
-        let parts = [];
-        for (let property in obj) {
-            let value = obj[property];
-            if (value != null && value != undefined)
-                parts.push(encodeURIComponent(property) + '=' + encodeURIComponent(value));
-        }
-        return parts.join('&');
     }
 
 }

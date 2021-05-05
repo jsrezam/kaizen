@@ -21,6 +21,7 @@ namespace Kaizen
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseUrls("http://localhost:5000", "http://192.168.1.49:5000", "https://localhost:5001", "https://192.168.1.49:5001");
                 });
     }
 }

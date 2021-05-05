@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Kaizen.Controllers.Resources;
 using Kaizen.Core.Models;
+using Kaizen.Core.Services;
 using Kaizen.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -19,28 +20,18 @@ namespace Kaizen.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IMapper mapper;
         private readonly KaizenDbContext context;
-        public UsersController(IMapper mapper, UserManager<ApplicationUser> userManager, KaizenDbContext context
+        private readonly IUserService userService;
+        public UsersController(IMapper mapper, UserManager<ApplicationUser> userManager, KaizenDbContext context, IUserService userService
         )
         {
+            this.userService = userService;
             this.context = context;
             this.mapper = mapper;
             this.userManager = userManager;
         }
 
-        [HttpGet("customersByUser")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> GetCustomersByUser()
-        {
-            var email = HttpContext.User.Claims
-            .FirstOrDefault(x => x.Type.Equals("email")).Value;
-
-            var user = await userManager.FindByEmailAsync(email);
-
-            return Ok(null);
-        }
-
         [HttpGet("agents")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.RequireAdminRole)]
         public async Task<IActionResult> GetAgents()
         {
 
@@ -59,26 +50,19 @@ namespace Kaizen.Controllers
             return Ok(result);
         }
 
-        [HttpGet]
+        [HttpGet("{email}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> GetUsers()
+        public async Task<IActionResult> GetUserByEmail(string email)
         {
-            var users = await userManager.Users.ToListAsync();
-            var result = mapper.Map<IEnumerable<ApplicationUser>, IEnumerable<ApplicationUserResource>>(users);
-            return Ok(result);
-        }
+            var user = await userService.GetUserByEmailAsync(email);
+            if (user == null)
+                return NotFound();
 
-        [HttpGet("{id}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> GetUser(string id)
-        {
-            var user = await userManager.FindByIdAsync(id);
-            var result = mapper.Map<ApplicationUser, ApplicationUserResource>(user);
-            return Ok(result);
+            return Ok(user);
         }
 
         [HttpGet("campaign/{campaignId}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.RequireAdminRole)]
         public async Task<IActionResult> GetUserByCampaign(int campaignId)
         {
             var campaign = context.Campaigns.SingleOrDefault(c => c.Id == campaignId);

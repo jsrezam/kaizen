@@ -1,0 +1,127 @@
+<h2>New Order</h2>
+
+<p>
+  {{productQuery|json}}
+</p>
+
+<div *ngIf="isInCustomerPage">
+
+  <p><strong>Select your customer</strong></p>
+  <hr class="rounded">
+
+  <div class="mb-3">
+    <label for="selectSearchCustomer">Search by</label>
+    <select id="selectSearchCustomer" class="form-control" [(ngModel)]="searchFieldCustomer"
+      name="selectSearchCustomerKey" #selectSearchCustomer="ngModel">
+      <option *ngFor="let c of customerColumns" value="{{ c.key }}">
+        {{c.title}}
+      </option>
+    </select>
+  </div>
+
+  <p>
+    <input #queryCustomerSearch type="text" class="form-control" placeholder="Search...">
+  </p>
+  <p>
+    <button type="button" class="btn btn-primary" (click)="customerSearch(queryCustomerSearch.value)">Search</button>
+  </p>
+
+  <div *ngIf="!customer && queryResult.totalItems === 0" class="alert alert-warning" role="alert">
+    The client you are trying to find is not in any of your valid campaigns
+  </div>
+
+  <div *ngIf="queryResult.totalItems > 0">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th *ngFor="let c of columns" aria-labelledby="tableLabel">
+            <div *ngIf="c.isSortable" (click)="sortBy(c.key)">
+              {{c.title}}
+              <i *ngIf="query.sortBy === c.key" class="fa" [class.fa-sort-asc]="query.isSortAscending"
+                [class.fa-sort-desc]="!query.isSortAscending"></i>
+            </div>
+            <div *ngIf="!c.isSortable">
+              {{c.title}}
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cus of queryResult.items">
+          <td>{{ cus.firstName }}</td>
+          <td>{{ cus.lastName }}</td>
+          <td>{{ cus.cellPhone }}</td>
+          <td>
+            <!-- <a class="btn btn-outline-success" [routerLink]="['/products/edit/', p.id]">Edit</a> -->
+            <button class="btn btn-outline-danger" type="button" (click)="selectCustomer(cus)">Select</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination [total-items]="queryResult.totalItems" [page-size]="query.pageSize"
+      (page-changed)="onPageChage($event)">
+    </pagination>
+  </div>
+
+  <div *ngIf="customer">
+    <p><strong>Selected Customer:</strong></p>
+
+    <div class="row align-items-center profile-header">
+      <div class="col-md-2 mb-3">
+        <img src="https://cdn4.iconfinder.com/data/icons/superheroes/512/batman-512.png"
+          alt="customer's profile picture" class="rounded-circle img-fluid profile-picture">
+      </div>
+      <div class="col-md text-center text-md-left">
+        <h2>{{ customer.firstName }} {{ customer.lastName }}</h2>
+        <p>{{ customer.city }} {{ customer.region }} {{ customer.country }}</p>
+        <p>{{ customer.cellPhone }}</p>
+      </div>
+    </div>
+    <button class="btn btn-outline-danger" type="button" (click)="NextPage()">Next</button>
+  </div>
+</div>
+
+
+
+
+
+
+
+<div *ngIf="!isInCustomerPage">
+  <p><strong>Select customer's products</strong></p>
+  <hr class="rounded">
+
+  <div class="mb-3">
+    <div>
+      <label for="selectSearchProduct">Search by</label>
+      <select id="selectSearchProduct" class="form-control" [(ngModel)]="searchFieldProduct"
+        name="selectSearchProductKey" #selectSearchProduct="ngModel" (change)="onFilterChange()">
+        <option *ngFor="let p of productColumns" value="{{ p.key }}">
+          {{p.title}}
+        </option>
+      </select>
+    </div>
+
+    <div *ngIf="searchFieldProduct === 'category'">
+      <label for="selectSearchCategory">Category</label>
+      <select id="selectSearchCategory" class="form-control" [(ngModel)]="productQuery.categoryId"
+        name="selectSearchCategoryKey" #selectSearchCategory="ngModel">
+        <option *ngFor="let category of categoryQueryResult.items" value="{{ category.id }}">
+          {{category.name}}
+        </option>
+      </select>
+    </div>
+
+
+  </div>
+
+  <p>
+    <input #queryProductSearch type="text" class="form-control" placeholder="Search...">
+  </p>
+  <p>
+    <button type="button" class="btn btn-primary" (click)="productSearch(queryProductSearch.value)">Search</button>
+  </p>
+
+
+  <button class="btn btn-outline-danger" type="button" (click)="PreviousPage()">Previous</button>
+</div>

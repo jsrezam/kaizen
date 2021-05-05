@@ -41,13 +41,14 @@ namespace Kaizen.Mapping
             .ForMember(c => c.Id, opt => opt.Ignore());
             // .ForMember(c => c.User, opt => opt.Ignore());
             CreateMap<CustomerQueryResource, CustomerQuery>();
-            CreateMap<OrderResource, Order>()
-            .ForMember(o => o.Customer, opt => opt.Ignore());
+            CreateMap<OrderResource, Order>();
+            // .ForMember(o => o.Customer, opt => opt.Ignore());
             CreateMap<ApplicationUserResource, ApplicationUser>();
             CreateMap<CampaignResource, Campaign>();
             CreateMap<CampaignQueryResource, CampaignQuery>();
             CreateMap<CampaignSaveResource, Campaign>();
             CreateMap<CampaignDetailQueryResource, CampaignDetailQuery>();
+            CreateMap<CallLogResource, CallLog>();
         }
     }
 }

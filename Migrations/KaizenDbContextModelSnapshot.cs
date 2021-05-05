@@ -129,10 +129,10 @@ namespace Kaizen.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<decimal>("CallDuration")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<string>("CallDuration")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CallsNumber")
+                    b.Property<int>("CallTimes")
                         .HasColumnType("int");
 
                     b.Property<int>("CampaignId")
@@ -278,7 +278,7 @@ namespace Kaizen.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CustomerId")
+                    b.Property<int>("CampaignDetailId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("OrderDate")
@@ -292,7 +292,7 @@ namespace Kaizen.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("CampaignDetailId");
 
                     b.ToTable("Orders");
                 });
@@ -315,13 +315,13 @@ namespace Kaizen.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int>("QuantityPerUnit")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("UnitPrice")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("UnitsInStock")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UnitsOnOrder")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -479,22 +479,24 @@ namespace Kaizen.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Kaizen.Core.Models.Customer", null)
-                        .WithMany("CampaignDetails")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Kaizen.Core.Models.Order", b =>
-                {
                     b.HasOne("Kaizen.Core.Models.Customer", "Customer")
-                        .WithMany("Orders")
+                        .WithMany("CampaignDetails")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("Kaizen.Core.Models.Order", b =>
+                {
+                    b.HasOne("Kaizen.Core.Models.CampaignDetail", "CampaignDetail")
+                        .WithMany("Orders")
+                        .HasForeignKey("CampaignDetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CampaignDetail");
                 });
 
             modelBuilder.Entity("Kaizen.Core.Models.Product", b =>
@@ -564,6 +566,11 @@ namespace Kaizen.Migrations
                     b.Navigation("CampaignDetails");
                 });
 
+            modelBuilder.Entity("Kaizen.Core.Models.CampaignDetail", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
             modelBuilder.Entity("Kaizen.Core.Models.Category", b =>
                 {
                     b.Navigation("Products");
@@ -572,8 +579,6 @@ namespace Kaizen.Migrations
             modelBuilder.Entity("Kaizen.Core.Models.Customer", b =>
                 {
                     b.Navigation("CampaignDetails");
-
-                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

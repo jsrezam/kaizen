@@ -7,5 +7,6 @@ namespace Kaizen.Core
     {
         Task<QueryResult<Product>> GetProductsAsync(ProductQuery queryObj);
         Task<Product> GetProductAsync(int id);
+        Task<QueryResult<Product>> GetValidProductsAsync(ProductQuery queryObj);
     }
 }

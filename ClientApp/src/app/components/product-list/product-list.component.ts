@@ -12,9 +12,9 @@ export class ProductListComponent implements OnInit {
     { title: 'Id' },
     { title: 'Category', key: 'category.name', isSortable: true },
     { title: 'Name', key: 'name', isSortable: true },
-    { title: 'QuantityPerUnit', key: 'quantityPerUnit', isSortable: true },
-    { title: 'UnitPrice', key: 'unitPrice', isSortable: true },
-    { title: 'UnitsInStock', key: 'unitsInStock', isSortable: true },
+    { title: 'Unit Price', key: 'unitPrice', isSortable: true },
+    { title: 'Stock', key: 'unitsInStock', isSortable: true },
+    { title: 'Units on order', key: 'unitsOnOrder', isSortable: true },
     { title: 'Discontinued', key: 'discontinued', isSortable: true },
   ];
 
