@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Product } from '../models/product';
+import { toQueryString } from '../Utilities/Utilities';
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {
@@ -11,7 +12,13 @@ export class ProductService {
     constructor(private http: HttpClient) { }
 
     getProducts(filter) {
-        return this.http.get(this.apiUri + '?' + this.toQueryString(filter)).pipe(
+        return this.http.get(this.apiUri + '?' + toQueryString(filter)).pipe(
+            map(res => res)
+        );
+    }
+
+    getValidProducts(filter) {
+        return this.http.get(this.apiUri + 'validated' + '?' + toQueryString(filter)).pipe(
             map(res => res)
         );
     }
@@ -38,16 +45,6 @@ export class ProductService {
         return this.http.delete(this.apiUri + id).pipe(
             map(res => res)
         );
-    }
-
-    toQueryString(obj) {
-        let parts = [];
-        for (let property in obj) {
-            let value = obj[property];
-            if (value != null && value != undefined)
-                parts.push(encodeURIComponent(property) + '=' + encodeURIComponent(value));
-        }
-        return parts.join('&');
     }
 
 }

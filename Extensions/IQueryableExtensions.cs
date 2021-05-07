@@ -18,6 +18,9 @@ namespace Kaizen.Extensions
 
         public static IQueryable<Product> ApplyFiltering(this IQueryable<Product> query, ProductQuery queryObj, bool isExact = true)
         {
+            if (queryObj.Id.HasValue)
+                query = query.Where(c => c.Id == queryObj.Id);
+
             if (queryObj.CategoryId.HasValue)
                 query = query.Where(c => c.CategoryId == queryObj.CategoryId);
 

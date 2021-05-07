@@ -4,6 +4,7 @@ import { CustomerService } from './../../services/customer.service';
 import { Customer } from './../../models/customer';
 import { Component, OnInit } from '@angular/core';
 
+
 @Component({
   selector: 'app-order-form',
   templateUrl: './order-form.component.html',
@@ -24,19 +25,25 @@ export class OrderFormComponent implements OnInit {
   };
   categoryQueryResult: any = {};
   customerColumns = [
-    { title: 'First Name', key: 'firstName', isSortable: true },
-    { title: 'Last Name', key: 'lastName', isSortable: true },
-    { title: 'Cell Phone', key: 'cellPhone', isSortable: true }
+    { title: 'First Name', key: 'firstName', isSortable: false },
+    { title: 'Last Name', key: 'lastName', isSortable: false },
+    { title: 'Cell Phone', key: 'cellPhone', isSortable: false }
   ];
   productColumns = [
-    { title: 'Product Id' },
-    { title: 'Category', key: 'category', isSortable: true },
-    { title: 'Name', key: 'name', isSortable: true },
-    { title: 'Unit Price', key: 'unitPrice', isSortable: true }
+    { title: 'Product Id', key: 'id', isSortable: false, show: true },
+    { title: 'Category', key: 'category', isSortable: false, show: true },
+    { title: 'Name', key: 'name', isSortable: false, show: true },
+    { title: 'Unit Price', key: 'unitPrice', isSortable: false, show: false }
   ];
 
   customer: any;
+
   isInCustomerPage: boolean = true;
+  isInProductsPage: boolean = false;
+  isInCheckoutPage: boolean = false;
+
+  cart: any[] = [];
+
   constructor(private customerService: CustomerService,
     private categoryService: CategoryService,
     private productService: ProductService
@@ -54,9 +61,9 @@ export class OrderFormComponent implements OnInit {
   }
 
   private populateProduct() {
-    this.productService.getProduct(this.productQuery)
+    this.productService.getValidProducts(this.productQuery)
       .subscribe((result: any) => {
-        this.productQuery = result;
+        this.productQueryResult = result;
       });
   }
   private populateUserCustomers() {
@@ -88,26 +95,23 @@ export class OrderFormComponent implements OnInit {
 
   productSearch(productQuerySearch) {
 
-    if (productQuerySearch === "")
-      return;
-
     if (this.productQuery.categoryId) {
-
+      if (productQuerySearch !== "") {
+        this.productQuery.name = productQuerySearch;
+      }
     }
 
+    switch (this.searchFieldProduct) {
+      case "id":
+        this.productQuery.id = productQuerySearch
+        break;
+      case "name":
+        this.productQuery.name = productQuerySearch
+        break;
+    }
 
-    // switch (this.searchFieldCustomer) {
-    //   case "category":
-    //     this.productQuery.category = productQuerySearch
-    //     break;
-    //   case "name":
-    //     this.productQuery.lastName = productQuerySearch
-    //     break;
-    //   case "unitPrice":
-    //     this.productQuery.cellPhone = productQuerySearch
-    //     break;
-    // }
-    //this.populateProduct();
+    this.populateProduct();
+    this.resetProductFilter();
   }
 
   resetProductFilter() {
@@ -115,8 +119,8 @@ export class OrderFormComponent implements OnInit {
       page: 1,
       pageSize: this.PAGE_SIZE
     };
-    // this.customer = null;
   }
+
   resetCustomerFilter() {
     this.query = {
       page: 1,
@@ -135,19 +139,71 @@ export class OrderFormComponent implements OnInit {
     this.populateUserCustomers();
   }
 
+  onPageChageProduct(page) {
+    this.productQuery.page = page;
+    this.populateProduct();
+  }
+
   onFilterChange() {
-    if (this.searchFieldProduct !== "category")
-      this.productQuery.categoryId = null;
+    this.resetProductFilter();
     this.populateCategories();
   }
 
-  NextPage() {
+  goProductsPage() {
     this.isInCustomerPage = false;
+    this.isInProductsPage = true;
+    this.isInCheckoutPage = false;
   }
 
-  PreviousPage() {
+  goCustomerPage() {
     this.isInCustomerPage = true;
+    this.isInProductsPage = false;
+    this.isInCheckoutPage = false;
   }
 
+  goCheckoutPage() {
+    this.isInCustomerPage = false;
+    this.isInProductsPage = false;
+    this.isInCheckoutPage = true;
+  }
+
+  filterProductColumns() {
+    return this.productColumns.filter(pc => pc.show);
+  }
+
+  addToOrder(product) {
+    var productInCart = this.cart.find(p => p.id === product.id)
+
+    if (!productInCart) {
+      product.quantity = 1;
+      product.totalPrice = product.quantity * product.unitPrice;
+      this.cart.push(product);
+    } else {
+      productInCart.quantity++;
+      productInCart.totalPrice = productInCart.quantity * productInCart.unitPrice;
+      let index = this.cart.indexOf(product);
+      this.cart[index] = productInCart;
+    }
+  }
+
+  reduceQuantityCartItem(product) {
+    product.quantity--;
+    product.totalPrice = product.quantity * product.unitPrice;
+    if (product.quantity === 0) {
+      let index = this.cart.indexOf(product);
+      this.cart.splice(index, 1);
+    }
+  }
+
+  removeCartItem(product) {
+    let index = this.cart.indexOf(product);
+    this.cart.splice(index, 1);
+  }
+
+  getTotalOrderPrice() {
+    if (this.cart.length === 0)
+      return 0;
+    return this.cart.map(item => item.totalPrice).reduce((prev, next) => { return prev + next });
+  }
 
 }
