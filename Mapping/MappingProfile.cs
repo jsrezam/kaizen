@@ -1,6 +1,7 @@
 using AutoMapper;
 using Kaizen.Controllers.Resources;
 using Kaizen.Core.Models;
+using Kaizen.Core.Models.ViewModels;
 
 namespace Kaizen.Mapping
 {
@@ -23,6 +24,14 @@ namespace Kaizen.Mapping
             CreateMap<Campaign, CampaignResource>();
             CreateMap<CampaignDetail, CampaignDetailResource>();
             CreateMap<Campaign, CampaignSaveResource>();
+            CreateMap<AgentCustomer, AgentCustomerResource>()
+            .AfterMap((ac, acr) =>
+            {
+                acr.Customer.CampaignId = acr.CampaignId;
+                acr.Customer.CampaignDetailId = acr.CampaignDetailId;
+                acr.CampaignId = 0;
+                acr.CampaignDetailId = 0;
+            });
 
             // API Resource to Domain
             CreateMap<ProductResource, Product>()
@@ -39,16 +48,15 @@ namespace Kaizen.Mapping
             CreateMap<EmployeeQueryResource, EmployeeQuery>();
             CreateMap<CustomerResource, Customer>()
             .ForMember(c => c.Id, opt => opt.Ignore());
-            // .ForMember(c => c.User, opt => opt.Ignore());
             CreateMap<CustomerQueryResource, CustomerQuery>();
             CreateMap<OrderResource, Order>();
-            // .ForMember(o => o.Customer, opt => opt.Ignore());
             CreateMap<ApplicationUserResource, ApplicationUser>();
             CreateMap<CampaignResource, Campaign>();
             CreateMap<CampaignQueryResource, CampaignQuery>();
             CreateMap<CampaignSaveResource, Campaign>();
             CreateMap<CampaignDetailQueryResource, CampaignDetailQuery>();
             CreateMap<CallLogResource, CallLog>();
+            CreateMap<OrderSaveResource, Order>();
         }
     }
 }

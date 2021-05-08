@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,5 +17,10 @@ namespace Kaizen.Core.Models
         public int UnitsInStock { get; set; }
         public int UnitsOnOrder { get; set; }
         public bool IsDiscontinued { get; set; }
+        public ICollection<OrderDetail> OrderDetails { get; set; }
+        public Product()
+        {
+            this.OrderDetails = new Collection<OrderDetail>();
+        }
     }
 }

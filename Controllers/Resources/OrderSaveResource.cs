@@ -2,19 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Kaizen.Core.Models
+namespace Kaizen.Controllers.Resources
 {
-    public class Order : BaseEntity
+    public class OrderSaveResource
     {
         public int CampaignDetailId { get; set; }
-        public CampaignDetail CampaignDetail { get; set; }
         public DateTime OrderDate { get; set; }
         public DateTime RequiredDate { get; set; }
         public DateTime ShippedDate { get; set; }
-        public ICollection<OrderDetail> OrderDetails { get; set; }
-        public Order()
+        public ICollection<OrderDetailResource> OrderDetails { get; set; }
+        public OrderSaveResource()
         {
-            this.OrderDetails = new Collection<OrderDetail>();
+            this.OrderDetails = new Collection<OrderDetailResource>();
         }
     }
 }

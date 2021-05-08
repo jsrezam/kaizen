@@ -206,4 +206,10 @@ export class OrderFormComponent implements OnInit {
     return this.cart.map(item => item.totalPrice).reduce((prev, next) => { return prev + next });
   }
 
+  creatOrder() {
+    if (confirm("Are you sure?")) {
+      console.log("true");
+    }
+  }
+
 }

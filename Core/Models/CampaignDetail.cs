@@ -6,6 +6,7 @@ namespace Kaizen.Core.Models
     public class CampaignDetail : BaseEntity
     {
         public int CampaignId { get; set; }
+        public Campaign Campaign { get; set; }
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }
         public int CallTimes { get; set; }

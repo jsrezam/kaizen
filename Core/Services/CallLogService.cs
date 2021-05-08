@@ -16,7 +16,7 @@ namespace Kaizen.Core.Services
         }
         public async Task SynchronizeTodayCalls(string userId, IEnumerable<CallLog> callLogs)
         {
-            var queryResult = await unitOfWork.CampaignRepository._GetUserCampaignsAsync(userId, new CampaignQuery());
+            var queryResult = await unitOfWork.CampaignRepository.GetAgentCampaignsAsync(userId, new CampaignQuery());
 
             if (queryResult.TotalItems == 0)
                 return;

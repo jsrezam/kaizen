@@ -8,6 +8,6 @@ namespace Kaizen.Core
         Task<Campaign> GetCampaignAsync(int campaignId);
         Task<QueryResult<Campaign>> GetCampaignsAsync(CampaignQuery queryObj);
         Task<QueryResult<Campaign>> GetUserCampaignsAsync(string userId, CampaignQuery queryObj);
-        Task<QueryResult<Campaign>> _GetUserCampaignsAsync(string userId, CampaignQuery queryObj);
+        Task<QueryResult<Campaign>> GetAgentCampaignsAsync(string userId, CampaignQuery queryObj);
     }
 }

@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Kaizen.Controllers.Resources;
-using Kaizen.Core;
 using Kaizen.Core.Models;
+using Kaizen.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kaizen.Controllers
@@ -11,29 +11,25 @@ namespace Kaizen.Controllers
     public class OrdersController : Controller
     {
         private readonly IMapper mapper;
-        private readonly IUnitOfWork unitOfWork;
-        public OrdersController(IMapper mapper, IUnitOfWork unitOfWork)
-        {
-            this.unitOfWork = unitOfWork;
-            this.mapper = mapper;
+        private readonly IOrderService orderService;
 
+        public OrdersController(IMapper mapper, IOrderService orderService)
+        {
+            this.orderService = orderService;
+            this.mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrder([FromBody] OrderResource orderResource)
+        public async Task<IActionResult> CreateOrder([FromBody] OrderSaveResource orderSaveResource)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var order = mapper.Map<OrderResource, Order>(orderResource);
+            var order = mapper.Map<OrderSaveResource, Order>(orderSaveResource);
 
-            await unitOfWork.OrderRepository.AddAsync(order);
-            await unitOfWork.SaveChangesAsync();
-            var result = mapper.Map<Order, OrderResource>(order);
-
-            return Ok(result);
+            await orderService.CreateOrder(order);
+            await orderService.SaveOrderDetail(order.Id, orderSaveResource.OrderDetails);
+            return Ok();
         }
-
-
     }
 }

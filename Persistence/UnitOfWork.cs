@@ -1,5 +1,7 @@
 using System.Threading.Tasks;
 using Kaizen.Core;
+using Kaizen.Core.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Kaizen.Persistence
 {
@@ -9,14 +11,21 @@ namespace Kaizen.Persistence
         public IProductRepository _productRepository;
         public IEmployeeRepository _employeeRepository;
         public ICustomerRepository _customerRepository;
-        public IOrderRepository _orderRepository;
         public ICampaignRepository _campaignRepository;
         public ICampaignDetailRepository _campaignDetailRepository;
         public ICallLogRepository _callLogRepository;
+        public IOrderRepository _orderRepository;
+        public IOrderDetailRepository _orderDetailRepository;
+        public IUserRepository _userRepository;
+
+
         private readonly KaizenDbContext context;
 
-        public UnitOfWork(KaizenDbContext context)
+        private readonly UserManager<ApplicationUser> userManager;
+
+        public UnitOfWork(KaizenDbContext context, UserManager<ApplicationUser> userManager)
         {
+            this.userManager = userManager;
             this.context = context;
         }
 
@@ -24,10 +33,12 @@ namespace Kaizen.Persistence
         public IProductRepository ProductRepository => _productRepository ?? new ProductRepository(context);
         public IEmployeeRepository EmployeeRepository => _employeeRepository ?? new EmployeeRepository(context);
         public ICustomerRepository CustomerRepository => _customerRepository ?? new CustomerRepository(context);
-        public IOrderRepository OrderRepository => _orderRepository ?? new OrderRepository(context);
         public ICampaignRepository CampaignRepository => _campaignRepository ?? new CampaignRepository(context);
         public ICampaignDetailRepository CampaignDetailRepository => _campaignDetailRepository ?? new CampaignDetailRepository(context);
         public ICallLogRepository CallLogRepository => _callLogRepository ?? new CallLogRepository(context);
+        public IOrderRepository OrderRepository => _orderRepository ?? new OrderRepository(context);
+        public IOrderDetailRepository OrderDetailRepository => _orderDetailRepository ?? new OrderDetailRepository(context);
+        public IUserRepository userRepository => _userRepository ?? new UserRepository(context, userManager);
 
 
         public void Dispose()

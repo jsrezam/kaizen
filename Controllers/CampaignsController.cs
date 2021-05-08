@@ -78,7 +78,7 @@ namespace Kaizen.Controllers
             var user = await userManager.FindByEmailAsync(userEmail);
 
             var campaignQuery = mapper.Map<CampaignQueryResource, CampaignQuery>(campaignQueryResource);
-            var userCampaignsQuery = await unitOfWork.CampaignRepository._GetUserCampaignsAsync(user.Id, campaignQuery);
+            var userCampaignsQuery = await unitOfWork.CampaignRepository.GetAgentCampaignsAsync(user.Id, campaignQuery);
             var resultQuery = mapper.Map<QueryResult<Campaign>, QueryResultResource<CampaignResource>>(userCampaignsQuery);
             resultQuery.Items = await AddProgressToCampaignsAsync(resultQuery.Items);
 

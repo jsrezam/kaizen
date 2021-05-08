@@ -15,5 +15,12 @@ namespace Kaizen.Controllers.Resources
         public string HomePhone { get; set; }
         public string CellPhone { get; set; }
         public string CompanyName { get; set; }
+        public int CampaignId { get; set; }
+        public int CampaignDetailId { get; set; }
+        // public ICollection<CampaignDetailResource> CampaignDetails { get; set; }
+        // public CustomerResource()
+        // {
+        //     this.CampaignDetails = new Collection<CampaignDetailResource>();
+        // }
     }
 }

@@ -71,11 +71,11 @@
       </thead>
       <tbody>
         <tr *ngFor="let cus of queryResult.items">
-          <td>{{ cus.firstName }}</td>
-          <td>{{ cus.lastName }}</td>
-          <td>{{ cus.cellPhone }}</td>
+          <td>{{ cus.customer.firstName }}</td>
+          <td>{{ cus.customer.lastName }}</td>
+          <td>{{ cus.customer.cellPhone }}</td>
           <td>
-            <button class="btn btn-outline-danger" type="button" (click)="selectCustomer(cus)">Select</button>
+            <button class="btn btn-outline-danger" type="button" (click)="selectCustomer(cus.customer)">Select</button>
           </td>
         </tr>
       </tbody>
@@ -86,19 +86,33 @@
   </div>
 
   <div *ngIf="customer">
+    <hr class="mb-4">
     <p><strong>Selected Customer:</strong></p>
+    <hr class="mb-4">
 
-    <div class="row align-items-center profile-header">
-      <div class="col-md-2 mb-3">
-        <img src="https://cdn4.iconfinder.com/data/icons/superheroes/512/batman-512.png"
-          alt="customer's profile picture" class="rounded-circle img-fluid profile-picture">
-      </div>
-      <div class="col-md text-center text-md-left">
-        <h2>{{ customer.firstName }} {{ customer.lastName }}</h2>
-        <p>{{ customer.city }} - {{ customer.region }} - {{ customer.country }}</p>
-        <p>{{ customer.cellPhone }}</p>
+    <div class="container mt-5 d-flex justify-content-center">
+      <div class="profileCard p-3">
+        <div class="d-flex align-items-center">
+          <div class="image">
+            <img src="https://cdn4.iconfinder.com/data/icons/superheroes/512/batman-512.png"
+              alt="customer's profile picture" class="rounded-circle img-fluid profile-picture">
+          </div>
+          <div class="ml-3 w-100">
+            <h4 class="mb-0 mt-0">{{ customer.firstName }} {{ customer.lastName }}</h4>
+            <span>{{ customer.cellPhone }}</span>
+            <div class="p-2 mt-2 bg-primary d-flex justify-content-between rounded text-white stats">
+              <div class="d-flex flex-column"> <span class="showCampaign">Campaign</span>
+                <span class="number1">{{customer.campaignId}}</span>
+              </div>
+              <div class="d-flex flex-column"> <span class="showCampaignDetail">Campaign Detail</span>
+                <span class="number2">{{customer.campaignDetailId}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+
   </div>
 </div>
 
@@ -217,7 +231,7 @@
 </div>
 
 <div class="row" *ngIf="isInCheckoutPage">
-  <div class="col-md-4 order-md-2 mb-4">
+  <div class="col-md-6 order-md-2 mb-4">
     <h4 class="d-flex justify-content-between align-items-center mb-3">
       <span class="text-muted">Customer's Cart</span>
       <span class="badge badge-secondary badge-pill"> {{cart.length}}</span>
@@ -239,21 +253,33 @@
       </li>
     </ul>
   </div>
-  <div class="col-md-8 order-md-1">
+  <div class="col-md-6 order-md-1">
 
+    <hr class="mb-4">
     <h4>
       <span class="text-muted">Customer Info:</span>
     </h4>
+    <hr class="mb-4">
 
     <div class="row align-items-center profile-header">
-      <div class="col-md-2 mb-3">
+      <div class="col-md-4 mb-3">
         <img src="https://cdn4.iconfinder.com/data/icons/superheroes/512/batman-512.png"
           alt="customer's profile picture" class="rounded-circle img-fluid profile-picture">
       </div>
       <div class="col-md text-center text-md-left">
         <h2>{{ customer.firstName }} {{ customer.lastName }}</h2>
-        <p> Ubication: {{ customer.city }} - {{ customer.region }} - {{ customer.country }}</p>
-        <p> CellPhone: {{ customer.cellPhone }}</p>
+        <div>
+          <h6 class="my-0">Ubication</h6>
+          <small class="text-muted">{{ customer.city }} - {{ customer.region }} - {{ customer.country }}</small>
+        </div>
+        <div>
+          <h6 class="my-0">CellPhone</h6>
+          <small class="text-muted">{{ customer.cellPhone }}</small>
+        </div>
+        <div class="text-success">
+          <h6 class="my-0">Campaign Id: {{customer.campaignId}} </h6>
+          <small>Campaign Detail Id: {{customer.campaignDetailId}} </small>
+        </div>
       </div>
     </div>
   </div>
