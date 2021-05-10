@@ -11,18 +11,19 @@ namespace Kaizen.Controllers
     public class CampaignDetailsController : Controller
     {
         private readonly IMapper mapper;
-        private readonly IUnitOfWork unitOfWork;
-        public CampaignDetailsController(IMapper mapper, IUnitOfWork unitOfWork)
+        private readonly ICampaignDetailService campaignDetailService;
+
+        public CampaignDetailsController(IMapper mapper, ICampaignDetailService campaignDetailService)
         {
-            this.unitOfWork = unitOfWork;
+            this.campaignDetailService = campaignDetailService;
             this.mapper = mapper;
         }
 
         [HttpGet("{campaignId}")]
-        public async Task<IActionResult> GetCampaignDetail(int campaignId, CampaignDetailQueryDto campaignDetailQueryResource)
+        public async Task<IActionResult> GetCampaignDetailByCampaignAsync(int campaignId, CampaignDetailQueryDto campaignDetailQueryResource)
         {
             var productQuery = mapper.Map<CampaignDetailQueryDto, CampaignDetailQuery>(campaignDetailQueryResource);
-            var queryResult = await unitOfWork.CampaignDetailRepository.GetCampaignDetailAsync(campaignId, productQuery);
+            var queryResult = await campaignDetailService.GetCampaignDetailByCampaignAsync(campaignId, productQuery);
             var resultQuery = mapper.Map<QueryResult<CampaignDetail>, QueryResultDto<CampaignDetailDto>>(queryResult);
             return Ok(resultQuery);
         }
