@@ -14,6 +14,7 @@ namespace Kaizen.Core.Interfaces
         IOrderRepository OrderRepository { get; }
         IOrderDetailRepository OrderDetailRepository { get; }
         IUserRepository userRepository { get; }
+        IAccountRepository accountRepository { get; }
 
         Task SaveChangesAsync();
     }

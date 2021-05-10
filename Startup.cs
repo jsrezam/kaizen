@@ -50,6 +50,7 @@ namespace Kaizen
             services.AddScoped<ICampaignService, CampaignService>();
             services.AddScoped<ICampaignDetailService, CampaignDetailService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IAccountService, AccountService>();
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<KaizenDbContext>()

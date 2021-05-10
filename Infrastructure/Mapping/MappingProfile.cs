@@ -52,6 +52,12 @@ namespace Kaizen.Infrastructure.Mapping
             CreateMap<CallLogDto, CallLog>();
             CreateMap<OrderSaveDto, Order>();
             CreateMap<OrderDetailDto, OrderDetail>();
+            CreateMap<UserCredentialsDto, ApplicationUser>()
+            .AfterMap((ucd, au) =>
+            {
+                au.Email = ucd.UserName;
+            })
+            ;
         }
     }
 }

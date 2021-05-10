@@ -44,15 +44,5 @@ namespace Kaizen.Core
             return await userManager.FindByIdAsync(userId);
         }
 
-        // public async Task<IEnumerable<ApplicationUser>> GetUsersByAgent(string agentId)
-        // {
-        //     var userCampaigns = await (from u in context.Users
-        //                   join cp in context.Campaigns on u.Id equals cp.UserId
-        //                   where u.Id.Equals(agentId) && cp.IsActive && cp.FinishDate > DateTime.UtcNow
-        //                   select new Campaign
-        //                   {
-        //                       CampaignDetails = cp.CampaignDetails                              
-        //                   }).ToListAsync();
-        // }
     }
 }

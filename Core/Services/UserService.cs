@@ -2,15 +2,18 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Kaizen.Core.Interfaces;
 using Kaizen.Core.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace Kaizen.Core.Services
 {
     public class UserService : IUserService
     {
         private readonly IUnitOfWork unitOfWork;
+        private readonly IConfiguration configuration;
 
-        public UserService(IUnitOfWork unitOfWork)
+        public UserService(IUnitOfWork unitOfWork, IConfiguration configuration)
         {
+            this.configuration = configuration;
             this.unitOfWork = unitOfWork;
         }
 

@@ -18,14 +18,16 @@ namespace Kaizen.Infrastructure.Repositories
         public IOrderRepository _orderRepository;
         public IOrderDetailRepository _orderDetailRepository;
         public IUserRepository _userRepository;
+        public IAccountRepository _accountRepository;
 
 
         private readonly KaizenDbContext context;
-
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
 
-        public UnitOfWork(KaizenDbContext context, UserManager<ApplicationUser> userManager)
+        public UnitOfWork(KaizenDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
+            this.signInManager = signInManager;
             this.userManager = userManager;
             this.context = context;
         }
@@ -39,6 +41,7 @@ namespace Kaizen.Infrastructure.Repositories
         public IOrderRepository OrderRepository => _orderRepository ?? new OrderRepository(context);
         public IOrderDetailRepository OrderDetailRepository => _orderDetailRepository ?? new OrderDetailRepository(context);
         public IUserRepository userRepository => _userRepository ?? new UserRepository(context, userManager);
+        public IAccountRepository accountRepository => _accountRepository ?? new AccountRepository(context, userManager, signInManager);
 
 
         public void Dispose()

@@ -9,5 +9,6 @@ namespace Kaizen.Core.Interfaces
         Task<ApplicationUser> GetUserByEmailAsync(string email);
         Task<IEnumerable<ApplicationUser>> GetAgentUsersAsync();
         Task<ApplicationUser> GetUserByCampaignAsync(int campaignId);
+
     }
 }

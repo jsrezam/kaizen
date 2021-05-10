@@ -1,4 +1,5 @@
 export interface UserCredentials {
+    userName?: string
     lastName?: string
     firstName?: string
     identificationCard?: string

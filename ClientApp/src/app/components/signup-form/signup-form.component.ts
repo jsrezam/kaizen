@@ -5,6 +5,7 @@ import { AuthenticationResponse } from './../../models/authenticationResponse';
 import { UserCredentials } from './../../models/userCredentials';
 import { Component } from '@angular/core';
 import { parseErrorsAPI } from 'src/app/Utilities/Utilities';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -17,8 +18,9 @@ export class SignupFormComponent {
   userCredentials: UserCredentials = {}
   authenticationResponse: AuthenticationResponse = {};
 
-  constructor(private authService: AuthService
-    , private router: Router) { }
+  constructor(private authService: AuthService,
+    private router: Router,
+    private toastrService: ToastrService) { }
 
   signUp() {
 
@@ -27,8 +29,11 @@ export class SignupFormComponent {
       return;
     }
 
+    this.userCredentials.email = this.userCredentials.userName;
+
     this.authService.signUp(this.userCredentials)
       .subscribe((response: any) => {
+        this.toastrService.success("Now, you are signed up !", "Success");
         this.router.navigate(['/login']);
       }, (err) => {
         this.authenticationResponse.errors = parseErrorsAPI(err);
