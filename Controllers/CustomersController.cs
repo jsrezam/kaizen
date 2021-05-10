@@ -7,7 +7,6 @@ using Kaizen.Core.Models;
 using Kaizen.Core.Models.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kaizen.Controllers
@@ -18,11 +17,11 @@ namespace Kaizen.Controllers
     {
         private readonly IMapper mapper;
         private readonly ICustomerService customerService;
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly IUserService userService;
 
-        public CustomersController(IMapper mapper, ICustomerService customerService, UserManager<ApplicationUser> userManager)
+        public CustomersController(IMapper mapper, ICustomerService customerService, IUserService userService)
         {
-            this.userManager = userManager;
+            this.userService = userService;
             this.customerService = customerService;
             this.mapper = mapper;
         }
@@ -39,12 +38,11 @@ namespace Kaizen.Controllers
         [HttpGet("userCustomers")]
         public async Task<IActionResult> GetAgentCustomersAsync(CustomerQueryDto customerQueryResource)
         {
-            var userEmail = HttpContext.User.Claims
-            .FirstOrDefault(x => x.Type.Equals("email")).Value;
-            var user = await userManager.FindByEmailAsync(userEmail);
+            var loggedAgentEmail = HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("email")).Value;
+            var agent = await userService.GetUserByEmailAsync(loggedAgentEmail);
 
             var customerQuery = mapper.Map<CustomerQueryDto, CustomerQuery>(customerQueryResource);
-            var queryResult = await customerService.GetAgentCustomersAsync(user.Id, customerQuery);
+            var queryResult = await customerService.GetAgentCustomersAsync(agent.Id, customerQuery);
             var resultQuery = mapper.Map<QueryResult<AgentCustomer>, QueryResultDto<AgentCustomerDto>>(queryResult);
             return Ok(resultQuery);
         }
