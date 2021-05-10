@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Kaizen.Controllers;
 using Kaizen.Controllers.Resources;
-using Kaizen.Controllers.Utilities;
+using Kaizen.Controllers.Enumerations;
 using Kaizen.Core.Models;
+using Kaizen.Core.Interfaces;
 
 namespace Kaizen.Core.Services
 {

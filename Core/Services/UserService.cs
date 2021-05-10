@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Kaizen.Core.Interfaces;
 using Kaizen.Core.Models;
-using Kaizen.Persistence;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace Kaizen.Core.Services
 {

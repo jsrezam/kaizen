@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Kaizen.Controllers.Resources;
 using Kaizen.Core;
+using Kaizen.Core.Interfaces;
 using Kaizen.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 

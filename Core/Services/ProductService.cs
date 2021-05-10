@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Kaizen.Core.Interfaces;
 using Kaizen.Core.Models;
 
 namespace Kaizen.Core.Services

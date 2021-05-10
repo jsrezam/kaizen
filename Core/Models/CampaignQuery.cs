@@ -1,5 +1,5 @@
 using System;
-using Kaizen.Extensions;
+using Kaizen.Infrastructure.Extensions;
 
 namespace Kaizen.Core.Models
 {

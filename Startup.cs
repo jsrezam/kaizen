@@ -1,12 +1,12 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using Kaizen.Controllers;
 using Kaizen.Controllers.Utilities;
-using Kaizen.Core;
+using Kaizen.Core.Interfaces;
 using Kaizen.Core.Models;
 using Kaizen.Core.Services;
-using Kaizen.Persistence;
+using Kaizen.Infrastructure.Persistence;
+using Kaizen.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

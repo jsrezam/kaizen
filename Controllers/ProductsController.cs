@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Kaizen.Controllers.Resources;
+using Kaizen.Core.Interfaces;
 using Kaizen.Core.Models;
-using Kaizen.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kaizen.Controllers

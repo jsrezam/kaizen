@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Kaizen.Core.Models;
 using Kaizen.Core.Models.ViewModels;
+using Kaizen.Core.Interfaces;
 
 namespace Kaizen.Core.Services
 {
