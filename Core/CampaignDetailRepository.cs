@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Kaizen.Controllers;
+using Kaizen.Controllers.Utilities;
 using Kaizen.Core.Models;
 using Kaizen.Extensions;
 using Kaizen.Persistence;

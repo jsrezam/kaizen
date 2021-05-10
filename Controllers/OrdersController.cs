@@ -28,7 +28,7 @@ namespace Kaizen.Controllers
             var order = mapper.Map<OrderSaveResource, Order>(orderSaveResource);
 
             await orderService.CreateOrder(order);
-            await orderService.SaveOrderDetail(order.Id, orderSaveResource.OrderDetails);
+            // await orderService.SaveOrderDetail(order.Id, orderSaveResource.OrderDetails);
             return Ok();
         }
     }

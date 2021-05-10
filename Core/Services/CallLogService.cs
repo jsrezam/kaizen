@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Kaizen.Controllers;
+using Kaizen.Controllers.Utilities;
 using Kaizen.Core.Models;
 
 namespace Kaizen.Core.Services
@@ -16,7 +17,7 @@ namespace Kaizen.Core.Services
         }
         public async Task SynchronizeTodayCalls(string userId, IEnumerable<CallLog> callLogs)
         {
-            var queryResult = await unitOfWork.CampaignRepository.GetAgentCampaignsAsync(userId, new CampaignQuery());
+            var queryResult = await unitOfWork.CampaignRepository.GetAgentValidCampaignsAsync(userId, new CampaignQuery());
 
             if (queryResult.TotalItems == 0)
                 return;

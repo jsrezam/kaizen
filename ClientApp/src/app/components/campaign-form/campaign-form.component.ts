@@ -1,6 +1,5 @@
 import { CampaignService } from './../../services/campaign.service';
 import { Component, OnInit } from '@angular/core';
-import { CampaignSave } from 'src/app/models/campaignSave';
 import { CustomerService } from 'src/app/services/customer.service';
 import { UserService } from 'src/app/services/user.service';
 import { ToastrService } from 'ngx-toastr';
@@ -16,7 +15,7 @@ export class CampaignFormComponent implements OnInit {
 
   errorMessage: string;
   agentUsers: any[] = [];
-  campaign: CampaignSave = {};
+  campaignSave: any = {};
   model: any = {};
   filteredCustomers: any[];
   queryResult: any = {
@@ -31,7 +30,6 @@ export class CampaignFormComponent implements OnInit {
 
   columns = [
     { title: '' },
-    // { title: 'Id' },
     { title: 'LastName', key: 'lastName', isSortable: true },
     { title: 'FirstName', key: 'firstName', isSortable: false },
     { title: 'Address', key: 'address', isSortable: false },
@@ -65,14 +63,11 @@ export class CampaignFormComponent implements OnInit {
   }
 
   onPageChage(page) {
-    // console.log(page);
     this.query.page = page;
-    //this.populateCustomers();
   }
 
   filter(querySearch: string) {
     console.log(this.selectedfilterColumn);
-    // console.log(this.customers)
 
     switch (this.selectedfilterColumn) {
       case "lastName":
@@ -118,12 +113,12 @@ export class CampaignFormComponent implements OnInit {
 
   create() {
     if (this.validateForm()) {
-      this.campaign.startDate = new Date();
-      this.campaign.finishDate = new Date(`${this.model.year}-${this.model.month}-${this.model.day}`);
-      this.campaign.isActive = true;
-      this.campaign.customers = this.filteredCustomers.filter(c => c.isSelected);
-      console.log(this.campaign);
-      this.campaignService.createCampaign(this.campaign)
+      this.campaignSave.startDate = new Date();
+      this.campaignSave.finishDate = new Date(`${this.model.year}-${this.model.month}-${this.model.day}`);
+      this.campaignSave.isActive = true;
+      this.campaignSave.customers = this.filteredCustomers.filter(c => c.isSelected);
+      console.log(this.campaignSave);
+      this.campaignService.createCampaign(this.campaignSave)
         .subscribe((result: any) => {
           this.toastrService.success("Data was sucessfully saved.", "Success");
         });

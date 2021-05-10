@@ -1,4 +1,3 @@
-import { Campaign } from './../models/campaign';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
@@ -17,19 +16,19 @@ export class CampaignService {
         );
     }
 
-    getUserCampaigns(filter, id) {
-        return this.http.get(this.apiUri + "user/" + id + '?' + toQueryString(filter)).pipe(
+    getAgentCampaigns(filter, id) {
+        return this.http.get(this.apiUri + "agents/" + id + '?' + toQueryString(filter)).pipe(
             map(res => res)
         );
     }
 
-    _getUserCampaigns(filter) {
-        return this.http.get(this.apiUri + "user" + '?' + toQueryString(filter)).pipe(
+    getAgentValidCampaigns(filter) {
+        return this.http.get(this.apiUri + "agents/valids" + '?' + toQueryString(filter)).pipe(
             map(res => res)
         );
     }
 
-    inactivateCampaign(campaign: Campaign) {
+    inactivateCampaign(campaign) {
         return this.http.put(this.apiUri + campaign.id, campaign).pipe(
             map(res => res)
         );

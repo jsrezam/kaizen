@@ -35,13 +35,6 @@ namespace Kaizen.Extensions
                 query = query.Where(c => c.Name.Contains(queryObj.Name));
             return query;
         }
-        public static IQueryable<Employee> ApplyFiltering(this IQueryable<Employee> query, EmployeeQuery queryObj)
-        {
-            if (!string.IsNullOrEmpty(queryObj.LastName))
-                query = query.Where(c => c.LastName == queryObj.LastName);
-
-            return query;
-        }
         public static IQueryable<Customer> ApplyFiltering(this IQueryable<Customer> query, CustomerQuery queryObj)
         {
             if (!string.IsNullOrEmpty(queryObj.FirstName))

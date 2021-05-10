@@ -2,10 +2,13 @@
 
 <!-- <p>
   Customer: {{customer|json}}
-</p>
-<p>
+</p> -->
+<!-- <p>
   Products: {{cart|json}}
 </p> -->
+<p>
+  {{order|json}}
+</p>
 
 <hr class="rounded">
 <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -249,7 +252,7 @@
         <strong>${{getTotalOrderPrice()}}</strong>
       </li>
       <li class="list-group-item d-flex justify-content-between">
-        <button class="btn btn-primary btn-lg btn-block">Create order</button>
+        <button class="btn btn-primary btn-lg btn-block" (click)="creatOrder()">Create order</button>
       </li>
     </ul>
   </div>

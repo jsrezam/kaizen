@@ -21,18 +21,18 @@ namespace Kaizen.Core.Services
             await unitOfWork.OrderRepository.AddAsync(order);
             await unitOfWork.SaveChangesAsync();
         }
-        public async Task SaveOrderDetail(int orderId, IEnumerable<OrderDetailResource> orderDetailResource)
-        {
-            await unitOfWork.OrderDetailRepository
-            .AddRangeAsync((from orderDetail in orderDetailResource
-                            select new OrderDetail
-                            {
-                                OrderId = orderId,
-                                ProductId = orderDetail.ProductId,
-                                Quantity = orderDetail.Quantity,
-                                UnitPrice = orderDetail.UnitPrice
-                            }).ToList());
-            await unitOfWork.SaveChangesAsync();
-        }
+        // public async Task SaveOrderDetail(int orderId, IEnumerable<OrderDetailResource> orderDetailsResource)
+        // {
+        //     await unitOfWork.OrderDetailRepository
+        //     .AddRangeAsync((from orderDetailResource in orderDetailsResource
+        //                     select new OrderDetail
+        //                     {
+        //                         OrderId = orderId,
+        //                         ProductId = orderDetailResource.ProductId,
+        //                         Quantity = orderDetailResource.Quantity,
+        //                         UnitPrice = orderDetailResource.UnitPrice
+        //                     }).AsEnumerable());
+        //     await unitOfWork.SaveChangesAsync();
+        // }
     }
 }

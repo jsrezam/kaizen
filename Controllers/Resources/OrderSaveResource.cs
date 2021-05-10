@@ -4,7 +4,8 @@ using System.Collections.ObjectModel;
 
 namespace Kaizen.Controllers.Resources
 {
-    public class OrderSaveResource
+    public class
+    OrderSaveResource
     {
         public int CampaignDetailId { get; set; }
         public DateTime OrderDate { get; set; }

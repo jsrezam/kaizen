@@ -1,28 +1,22 @@
-import { AuthService } from './../../services/auth.service';
 import { Component, OnInit } from '@angular/core';
-import { Campaign } from 'src/app/models/campaign';
-import { Employee } from 'src/app/models/employee';
 import { CampaignService } from 'src/app/services/campaign.service';
-import { UserService } from 'src/app/services/user.service';
 
 @Component({
-  selector: 'app-user-campaign-list',
-  templateUrl: './user-campaign-list.component.html',
-  styleUrls: ['./user-campaign-list.component.css']
+  selector: 'app-agent-campaign-list',
+  templateUrl: './agent-campaign-list.component.html',
+  styleUrls: ['./agent-campaign-list.component.css']
 })
-export class UserCampaignListComponent implements OnInit {
+export class AgentCampaignListComponent implements OnInit {
 
   private readonly PAGE_SIZE = 3;
-  // agentUsers: any[] = [];
-  employee: Employee = {};
-  campaign: Campaign = {};
+  agent: any = {};
+  campaign: any = {};
   queryResult: any = {};
   query: any = {
     pageSize: this.PAGE_SIZE
   };
   columns = [
     { title: 'Campaign' },
-    // { title: 'UserId', key: 'userId', isSortable: false },
     { title: 'Start Date', key: 'startDate', isSortable: false },
     { title: 'Finish Date', key: 'finishDate', isSortable: false },
     { title: 'State', key: 'isActive', isSortable: false },
@@ -30,16 +24,14 @@ export class UserCampaignListComponent implements OnInit {
   ];
 
   constructor(
-    private authService: AuthService,
-    private userService: UserService,
     private campaignService: CampaignService) { }
 
   ngOnInit(): void {
-    this.populateUserCampaigns();
+    this.populateAgentValidCampaigns();
   }
 
-  private populateUserCampaigns() {
-    this.campaignService._getUserCampaigns(this.query)
+  private populateAgentValidCampaigns() {
+    this.campaignService.getAgentValidCampaigns(this.query)
       .subscribe((result: any) => {
         this.queryResult = result
       });
@@ -52,12 +44,12 @@ export class UserCampaignListComponent implements OnInit {
       this.query.sortBy = columnName;
       this.query.isSortAscending = true;
     }
-    this.populateUserCampaigns();
+    this.populateAgentValidCampaigns();
   }
 
   onPageChage(page) {
     this.query.page = page;
-    this.populateUserCampaigns();
+    this.populateAgentValidCampaigns();
   }
 
   isExpired(finishDate) {

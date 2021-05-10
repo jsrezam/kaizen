@@ -6,7 +6,7 @@ namespace Kaizen.Core.Services
 {
     public interface IUserService
     {
-        Task<ApplicationUser> GetUserByEmailAsync(string userId);
+        Task<ApplicationUser> GetUserByEmailAsync(string email);
         Task<IEnumerable<ApplicationUser>> GetAgentUsersAsync();
         Task<ApplicationUser> GetUserByCampaignAsync(int campaignId);
     }

@@ -2,6 +2,7 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Kaizen.Controllers;
+using Kaizen.Controllers.Utilities;
 using Kaizen.Core;
 using Kaizen.Core.Models;
 using Kaizen.Core.Services;
@@ -47,6 +48,7 @@ namespace Kaizen
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<ICampaignService, CampaignService>();
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<KaizenDbContext>()

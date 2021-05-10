@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import { Product } from '../models/product';
 import { toQueryString } from '../Utilities/Utilities';
 
 @Injectable({ providedIn: 'root' })
@@ -35,7 +34,7 @@ export class ProductService {
         );
     }
 
-    update(product: Product) {
+    update(product) {
         return this.http.put(this.apiUri + product.id, product).pipe(
             map(res => res)
         );

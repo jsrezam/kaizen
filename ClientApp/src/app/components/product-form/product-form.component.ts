@@ -1,6 +1,5 @@
 import { CategoryService } from 'src/app/services/category.service';
 import { ProductService } from './../../services/product.service';
-import { Product } from './../../models/product';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -13,7 +12,7 @@ import { forkJoin } from 'rxjs';
 })
 export class ProductFormComponent implements OnInit {
   categories: any[];
-  product: Product = {
+  product: any = {
     category: {}
   }
   constructor(

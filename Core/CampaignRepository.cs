@@ -22,7 +22,7 @@ namespace Kaizen.Core
                 .ThenInclude(cd => cd.Customer)
             .SingleOrDefaultAsync(p => p.Id == campaignId);
         }
-        public async Task<QueryResult<Campaign>> GetUserCampaignsAsync(string userId, CampaignQuery queryObj)
+        public async Task<QueryResult<Campaign>> GetAgentCampaignsAsync(string userId, CampaignQuery queryObj)
         {
             var result = new QueryResult<Campaign>();
 
@@ -45,7 +45,7 @@ namespace Kaizen.Core
 
             return result;
         }
-        public async Task<QueryResult<Campaign>> GetAgentCampaignsAsync(string userId, CampaignQuery queryObj)
+        public async Task<QueryResult<Campaign>> GetAgentValidCampaignsAsync(string userId, CampaignQuery queryObj)
         {
             var result = new QueryResult<Campaign>();
 

@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { Category } from '../models/category';
 import { environment } from '../../environments/environment';
 import { toQueryString } from '../Utilities/Utilities';
 
@@ -30,7 +29,7 @@ export class CategoryService {
         );
     }
 
-    update(category: Category) {
+    update(category) {
         return this.http.put(this.apiUri + category.id, category).pipe(
             map(res => res)
         );

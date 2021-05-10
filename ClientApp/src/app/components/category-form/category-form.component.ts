@@ -1,5 +1,4 @@
 import { CategoryService } from './../../services/category.service';
-import { Category } from './../../models/category';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -10,7 +9,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./category-form.component.css']
 })
 export class CategoryFormComponent implements OnInit {
-  category: Category = {};
+  category: any = {};
 
   constructor(
     private route: ActivatedRoute, //Read routes parameters
@@ -26,8 +25,8 @@ export class CategoryFormComponent implements OnInit {
   ngOnInit(): void {
     if (this.category.id)
       this.categoryService.getCategory(this.category.id)
-        .subscribe((category: Category) => {
-          this.category = category
+        .subscribe((resp) => {
+          this.category = resp
         });
   }
 

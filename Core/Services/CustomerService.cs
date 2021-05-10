@@ -20,11 +20,7 @@ namespace Kaizen.Core.Services
         {
             var result = new QueryResult<AgentCustomer>();
 
-            var userCampaigns = await unitOfWork.CampaignRepository.GetAgentCampaignsAsync(agentId, new CampaignQuery());
-
-            // var query = (from userCampaign in userCampaigns.Items
-            //              from CampaignDetail in userCampaign.CampaignDetails
-            //              select CampaignDetail.Customer).AsQueryable();
+            var userCampaigns = await unitOfWork.CampaignRepository.GetAgentValidCampaignsAsync(agentId, new CampaignQuery());
 
             var query = (from userCampaign in userCampaigns.Items
                          from CampaignDetail in userCampaign.CampaignDetails

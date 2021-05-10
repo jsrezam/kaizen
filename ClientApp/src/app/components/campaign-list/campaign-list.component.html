@@ -10,12 +10,12 @@
 </p>
 
 <hr class="rounded">
-<p><strong>Select one employee to see their campaigns</strong></p>
+<p><strong>Select one agent to see their campaigns</strong></p>
 <hr class="rounded">
 
 <div class="mb-3">
-  <label for="user">Employee</label>
-  <select id="user" class="form-control" (change)="onUserChange()" [(ngModel)]="employee.id" name="userId" required
+  <label for="user">Agents:</label>
+  <select id="user" class="form-control" (change)="onUserChange()" [(ngModel)]="agent.id" name="userId" required
     #user="ngModel">
     <option value=""></option>
     <option *ngFor="let u of agentUsers" value="{{ u.id }}">
@@ -23,15 +23,15 @@
     </option>
   </select>
   <div class="alert alert-danger" *ngIf="user.touched && !user.valid">
-    Please specify the employee.
+    Please specify the agent.
   </div>
 </div>
 
 <hr class="rounded">
-<p><strong>Employee campaigns</strong></p>
+<p><strong>Agent campaigns:</strong></p>
 <hr class="rounded">
 
-<div *ngIf="employee.id && !queryResult.items">
+<div *ngIf="agent.id && !queryResult.items">
   <loading></loading>
 </div>
 <div *ngIf="queryResult.items">
@@ -53,7 +53,6 @@
     <tbody>
       <tr *ngFor="let c of queryResult.items">
         <td>{{ c.id }}</td>
-        <!-- <td>{{ c.userId }}</td> -->
         <td>{{ c.startDate }}</td>
         <td>{{ c.finishDate }}</td>
         <td *ngIf="c.isActive"> Active </td>

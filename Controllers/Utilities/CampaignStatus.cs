@@ -1,4 +1,4 @@
-namespace Kaizen.Controllers
+namespace Kaizen.Controllers.Utilities
 {
     public enum CampaignStatus
     {

@@ -8,7 +8,6 @@ namespace Kaizen.Core
     {
         ICategoryRepository CategoryRepository { get; }
         IProductRepository ProductRepository { get; }
-        IEmployeeRepository EmployeeRepository { get; }
         ICustomerRepository CustomerRepository { get; }
         ICampaignRepository CampaignRepository { get; }
         ICampaignDetailRepository CampaignDetailRepository { get; }

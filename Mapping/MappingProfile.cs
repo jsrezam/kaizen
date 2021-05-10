@@ -15,8 +15,6 @@ namespace Kaizen.Mapping
             CreateMap<Category, CategoryResource>();
             CreateMap(typeof(QueryResult<>), typeof(QueryResultResource<>));
             CreateMap<Category, CategoryViewResource>();
-            CreateMap<Employee, EmployeeResource>();
-            CreateMap<Employee, EmployeeViewResource>();
             CreateMap<Customer, CustomerResource>();
             CreateMap<Customer, CustomerViewResource>();
             CreateMap<Order, OrderResource>();
@@ -42,10 +40,6 @@ namespace Kaizen.Mapping
             .ForMember(c => c.Id, opt => opt.Ignore());
             CreateMap<CategoryQueryResource, CategoryQuery>();
             CreateMap<CategoryViewResource, Category>();
-            CreateMap<EmployeeResource, Employee>()
-            .ForMember(e => e.Id, opt => opt.Ignore());
-            CreateMap<EmployeeViewResource, Employee>();
-            CreateMap<EmployeeQueryResource, EmployeeQuery>();
             CreateMap<CustomerResource, Customer>()
             .ForMember(c => c.Id, opt => opt.Ignore());
             CreateMap<CustomerQueryResource, CustomerQuery>();
@@ -57,6 +51,7 @@ namespace Kaizen.Mapping
             CreateMap<CampaignDetailQueryResource, CampaignDetailQuery>();
             CreateMap<CallLogResource, CallLog>();
             CreateMap<OrderSaveResource, Order>();
+            CreateMap<OrderDetailResource, OrderDetail>();
         }
     }
 }

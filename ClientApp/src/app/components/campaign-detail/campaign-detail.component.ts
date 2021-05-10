@@ -1,9 +1,6 @@
-import { Employee } from 'src/app/models/employee';
-import { CampaignService } from './../../services/campaign.service';
 import { UserService } from './../../services/user.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { Campaign } from 'src/app/models/campaign';
 import { CampaignDetailService } from 'src/app/services/campaignDetail.service';
 
 @Component({
@@ -22,8 +19,8 @@ export class CampaignDetailComponent implements OnInit {
     { title: 'Status Call', key: 'unitPrice', isSortable: true }
   ];
 
-  user: Employee = {};
-  campaign: Campaign = {};
+  user: any = {};
+  campaign: any = {};
   queryResult: any = {};
   query: any = {
     pageSize: this.PAGE_SIZE
@@ -31,8 +28,6 @@ export class CampaignDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute, //Read routes parameters
-    private router: Router,
-    private campaignService: CampaignService,
     private campaignDetailService: CampaignDetailService,
     private userService: UserService) {
 

@@ -1,7 +1,6 @@
 import { CategoryService } from './../../services/category.service';
 import { ProductService } from 'src/app/services/product.service';
 import { CustomerService } from './../../services/customer.service';
-import { Customer } from './../../models/customer';
 import { Component, OnInit } from '@angular/core';
 
 
@@ -43,6 +42,7 @@ export class OrderFormComponent implements OnInit {
   isInCheckoutPage: boolean = false;
 
   cart: any[] = [];
+  order: any = {};
 
   constructor(private customerService: CustomerService,
     private categoryService: CategoryService,
@@ -172,12 +172,20 @@ export class OrderFormComponent implements OnInit {
   }
 
   addToOrder(product) {
-    var productInCart = this.cart.find(p => p.id === product.id)
+    let productInCart = this.cart.find(p => p.productId === product.id);
 
     if (!productInCart) {
-      product.quantity = 1;
-      product.totalPrice = product.quantity * product.unitPrice;
-      this.cart.push(product);
+
+      let newProduct = {
+        productId: product.id,
+        name: product.name,
+        quantity: 1,
+        unitPrice: product.unitPrice,
+        totalPrice: 1 * product.unitPrice,
+      };
+
+      this.cart.push(newProduct);
+
     } else {
       productInCart.quantity++;
       productInCart.totalPrice = productInCart.quantity * productInCart.unitPrice;
@@ -208,7 +216,13 @@ export class OrderFormComponent implements OnInit {
 
   creatOrder() {
     if (confirm("Are you sure?")) {
-      console.log("true");
+      this.order.campaignDetailId = this.customer.campaignDetailId;
+      this.order.orderDate = new Date();
+      this.order.requiredDate = new Date();
+      this.order.shippedDate = new Date();
+      this.order.orderDetails = this.cart;
+      console.log(this.order);
+
     }
   }
 

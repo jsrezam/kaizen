@@ -8,7 +8,7 @@
   {{customers | json}}
 </p> -->
 <p>
-  {{campaign | json}}
+  {{campaignSave | json}}
 </p>
 
 <p *ngIf="errorMessage">
@@ -17,20 +17,20 @@
   </ngb-alert>
 </p>
 
-<p><strong>Assing an employee to new campaign</strong></p>
+<p><strong>Assing an agent to new campaign</strong></p>
 <hr class="rounded">
 
 <form #f="ngForm" (ngSubmit)="create()" novalidate>
   <div class="mb-3">
-    <label for="user">Employee</label>
-    <select id="user" class="form-control" [(ngModel)]="campaign.userId" name="userId" required #user="ngModel">
+    <label for="user">Agent:</label>
+    <select id="user" class="form-control" [(ngModel)]="campaignSave.userId" name="userId" required #user="ngModel">
       <option value=""></option>
       <option *ngFor="let u of agentUsers" value="{{ u.id }}">
         {{u.firstName}} {{ u.lastName }} - {{u.userName}}
       </option>
     </select>
     <div class="alert alert-danger" *ngIf="user.touched && !user.valid">
-      Please specify the employee.
+      Please specify the agent.
     </div>
   </div>
 
@@ -59,7 +59,6 @@
     <label for="columnTable">Search by</label>
     <select id="columnTable" class="form-control" [(ngModel)]="selectedfilterColumn" name="columnTableKey"
       #columnTable="ngModel">
-      <!-- <option value=""></option> -->
       <option *ngFor="let c of columns" value="{{ c.key }}">
         {{c.title}}
       </option>
@@ -89,7 +88,6 @@
         </tr>
       </thead>
       <tbody>
-        <!-- <tr *ngFor="let c of queryResult.items"> -->
         <tr
           *ngFor="let c of filteredCustomers | slice: (this.query.page-1) * query.pageSize : this.query.page * query.pageSize">
           <td>
@@ -97,7 +95,6 @@
               type="checkbox" class="form-check-input" [(ngModel)]="c.isSelected" [ngModelOptions]="{standalone: true}"
               #isChecked="ngModel" name="isChecked">
           </td>
-          <!-- <td>{{ c.id }}</td> -->
           <td>{{ c.lastName }}</td>
           <td>{{ c.firstName }}</td>
           <td>{{ c.address }}</td>
@@ -105,10 +102,6 @@
           <td>{{ c.region }}</td>
           <td>{{ c.homePhone }}</td>
           <td>{{ c.cellPhone }}</td>
-          <!-- <td>
-                  <a class="btn btn-outline-success" [routerLink]="['/products/edit/', p.id]">Edit</a>
-                  <button class="btn btn-outline-danger" type="button" (click)="delete(p.id)">Delete</button>
-                </td> -->
         </tr>
       </tbody>
     </table>
