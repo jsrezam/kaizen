@@ -41,7 +41,6 @@ namespace Kaizen
 
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICallLogService, CallLogService>();
             services.AddScoped<IUserService, UserService>();
@@ -50,6 +49,7 @@ namespace Kaizen
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ICampaignService, CampaignService>();
             services.AddScoped<ICampaignDetailService, CampaignDetailService>();
+            services.AddScoped<ICategoryService, CategoryService>();
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<KaizenDbContext>()
