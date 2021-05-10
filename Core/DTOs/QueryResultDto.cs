@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Kaizen.Core.DTOs
 {
-    public class QueryResultResource<T>
+    public class QueryResultDto<T>
     {
         public int TotalItems { get; set; }
 

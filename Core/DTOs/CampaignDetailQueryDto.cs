@@ -1,6 +1,6 @@
 namespace Kaizen.Core.DTOs
 {
-    public class CampaignDetailQueryResource
+    public class CampaignDetailQueryDto
     {
         public string Status { get; set; }
         public string SortBy { get; set; }

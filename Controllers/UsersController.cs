@@ -48,7 +48,7 @@ namespace Kaizen.Controllers
             if (user == null)
                 return NotFound();
 
-            var result = mapper.Map<ApplicationUser, ApplicationUserResource>(user);
+            var result = mapper.Map<ApplicationUser, ApplicationUserDto>(user);
             return Ok(result);
         }
     }

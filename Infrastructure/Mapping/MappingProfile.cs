@@ -10,19 +10,19 @@ namespace Kaizen.Infrastructure.Mapping
         public MappingProfile()
         {
             // Domian to API Resource
-            CreateMap<Product, ProductResource>();
-            CreateMap<ProductQuery, ProductQueryResource>();
-            CreateMap<Category, CategoryResource>();
-            CreateMap(typeof(QueryResult<>), typeof(QueryResultResource<>));
-            CreateMap<Category, CategoryViewResource>();
-            CreateMap<Customer, CustomerResource>();
-            CreateMap<Customer, CustomerViewResource>();
-            CreateMap<Order, OrderResource>();
-            CreateMap<ApplicationUser, ApplicationUserResource>();
-            CreateMap<Campaign, CampaignResource>();
-            CreateMap<CampaignDetail, CampaignDetailResource>();
-            CreateMap<Campaign, CampaignSaveResource>();
-            CreateMap<AgentCustomer, AgentCustomerResource>()
+            CreateMap<Product, ProductDto>();
+            CreateMap<ProductQuery, ProductQueryDto>();
+            CreateMap<Category, CategoryDto>();
+            CreateMap(typeof(QueryResult<>), typeof(QueryResultDto<>));
+            CreateMap<Category, CategoryViewDto>();
+            CreateMap<Customer, CustomerDto>();
+            CreateMap<Customer, CustomerViewDto>();
+            CreateMap<Order, OrderDto>();
+            CreateMap<ApplicationUser, ApplicationUserDto>();
+            CreateMap<Campaign, CampaignDto>();
+            CreateMap<CampaignDetail, CampaignDetailDto>();
+            CreateMap<Campaign, CampaignSaveDto>();
+            CreateMap<AgentCustomer, AgentCustomerDto>()
             .AfterMap((ac, acr) =>
             {
                 acr.Customer.CampaignId = acr.CampaignId;
@@ -32,26 +32,26 @@ namespace Kaizen.Infrastructure.Mapping
             });
 
             // API Resource to Domain
-            CreateMap<ProductResource, Product>()
+            CreateMap<ProductDto, Product>()
             .ForMember(p => p.Id, opt => opt.Ignore())
             .ForMember(p => p.Category, opt => opt.Ignore());
-            CreateMap<ProductQueryResource, ProductQuery>();
-            CreateMap<CategoryResource, Category>()
+            CreateMap<ProductQueryDto, ProductQuery>();
+            CreateMap<CategoryDto, Category>()
             .ForMember(c => c.Id, opt => opt.Ignore());
-            CreateMap<CategoryQueryResource, CategoryQuery>();
-            CreateMap<CategoryViewResource, Category>();
-            CreateMap<CustomerResource, Customer>()
+            CreateMap<CategoryQueryDto, CategoryQuery>();
+            CreateMap<CategoryViewDto, Category>();
+            CreateMap<CustomerDto, Customer>()
             .ForMember(c => c.Id, opt => opt.Ignore());
-            CreateMap<CustomerQueryResource, CustomerQuery>();
-            CreateMap<OrderResource, Order>();
-            CreateMap<ApplicationUserResource, ApplicationUser>();
-            CreateMap<CampaignResource, Campaign>();
-            CreateMap<CampaignQueryResource, CampaignQuery>();
-            CreateMap<CampaignSaveResource, Campaign>();
-            CreateMap<CampaignDetailQueryResource, CampaignDetailQuery>();
-            CreateMap<CallLogResource, CallLog>();
-            CreateMap<OrderSaveResource, Order>();
-            CreateMap<OrderDetailResource, OrderDetail>();
+            CreateMap<CustomerQueryDto, CustomerQuery>();
+            CreateMap<OrderDto, Order>();
+            CreateMap<ApplicationUserDto, ApplicationUser>();
+            CreateMap<CampaignDto, Campaign>();
+            CreateMap<CampaignQueryDto, CampaignQuery>();
+            CreateMap<CampaignSaveDto, Campaign>();
+            CreateMap<CampaignDetailQueryDto, CampaignDetailQuery>();
+            CreateMap<CallLogDto, CallLog>();
+            CreateMap<OrderSaveDto, Order>();
+            CreateMap<OrderDetailDto, OrderDetail>();
         }
     }
 }

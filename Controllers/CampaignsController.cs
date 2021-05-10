@@ -28,27 +28,27 @@ namespace Kaizen.Controllers
 
         [HttpPost]
         [Authorize(Policies.RequireAdminRole)]
-        public async Task<IActionResult> CreateCampaign([FromBody] CampaignSaveResource CampaignSaveResource)
+        public async Task<IActionResult> CreateCampaign([FromBody] CampaignSaveDto CampaignSaveResource)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var campaign = mapper.Map<CampaignSaveResource, Campaign>(CampaignSaveResource);
+            var campaign = mapper.Map<CampaignSaveDto, Campaign>(CampaignSaveResource);
             await campaignService.CreateCampaignAsync(campaign);
 
             await campaignService.AddCampaignDetailAsync(campaign.Id, CampaignSaveResource.Customers);
-            var result = mapper.Map<Campaign, CampaignSaveResource>(campaign);
+            var result = mapper.Map<Campaign, CampaignSaveDto>(campaign);
 
             return Ok(result);
         }
 
         [HttpGet("agents/{agentId}")]
         [Authorize(Policies.RequireAdminRole)]
-        public async Task<IActionResult> GetAgentCampaignsAsync(string agentId, CampaignQueryResource campaignQueryResource)
+        public async Task<IActionResult> GetAgentCampaignsAsync(string agentId, CampaignQueryDto campaignQueryResource)
         {
-            var campaignQuery = mapper.Map<CampaignQueryResource, CampaignQuery>(campaignQueryResource);
+            var campaignQuery = mapper.Map<CampaignQueryDto, CampaignQuery>(campaignQueryResource);
             var userCampaignsQuery = await campaignService.GetAgentCampaignsAsync(agentId, campaignQuery);
-            var resultQuery = mapper.Map<QueryResult<Campaign>, QueryResultResource<CampaignResource>>(userCampaignsQuery);
+            var resultQuery = mapper.Map<QueryResult<Campaign>, QueryResultDto<CampaignDto>>(userCampaignsQuery);
 
             resultQuery.Items = await campaignService.AddProgressToCampaignsAsync(resultQuery.Items);
 
@@ -56,14 +56,14 @@ namespace Kaizen.Controllers
         }
 
         [HttpGet("agents/valids")]
-        public async Task<IActionResult> GetAgentValidCampaignsAsync(CampaignQueryResource campaignQueryResource)
+        public async Task<IActionResult> GetAgentValidCampaignsAsync(CampaignQueryDto campaignQueryResource)
         {
             var loggedAgentEmail = HttpContext.User.Claims.FirstOrDefault(u => u.Type.Equals("email")).Value;
             var agent = await userService.GetUserByEmailAsync(loggedAgentEmail);
 
-            var campaignQuery = mapper.Map<CampaignQueryResource, CampaignQuery>(campaignQueryResource);
+            var campaignQuery = mapper.Map<CampaignQueryDto, CampaignQuery>(campaignQueryResource);
             var userCampaignsQuery = await campaignService.GetAgentValidCampaignsAsync(agent.Id, campaignQuery);
-            var resultQuery = mapper.Map<QueryResult<Campaign>, QueryResultResource<CampaignResource>>(userCampaignsQuery);
+            var resultQuery = mapper.Map<QueryResult<Campaign>, QueryResultDto<CampaignDto>>(userCampaignsQuery);
 
             resultQuery.Items = await campaignService.AddProgressToCampaignsAsync(resultQuery.Items);
 
@@ -72,7 +72,7 @@ namespace Kaizen.Controllers
 
         [HttpPut("{campaignId}")]
         [Authorize(Policies.RequireAdminRole)]
-        public async Task<IActionResult> InactivateCampaign(int campaignId, [FromBody] CampaignResource campaignResource)
+        public async Task<IActionResult> InactivateCampaign(int campaignId, [FromBody] CampaignDto campaignResource)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -82,9 +82,9 @@ namespace Kaizen.Controllers
             if (campaign == null)
                 return NotFound();
 
-            mapper.Map<CampaignResource, Campaign>(campaignResource, campaign);
+            mapper.Map<CampaignDto, Campaign>(campaignResource, campaign);
             await campaignService.UpdateCampaignAsync(campaign);
-            var result = mapper.Map<Campaign, CampaignResource>(campaign);
+            var result = mapper.Map<Campaign, CampaignDto>(campaign);
 
             return Ok(result);
         }

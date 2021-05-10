@@ -20,20 +20,20 @@ namespace Kaizen.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProduct([FromBody] ProductResource productResource)
+        public async Task<IActionResult> CreateProduct([FromBody] ProductDto productResource)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var product = mapper.Map<ProductResource, Product>(productResource);
+            var product = mapper.Map<ProductDto, Product>(productResource);
             await productService.CreateProductAsync(product);
-            var result = mapper.Map<Product, ProductResource>(product);
+            var result = mapper.Map<Product, ProductDto>(product);
 
             return Ok(result);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(int id, [FromBody] ProductResource productResource)
+        public async Task<IActionResult> UpdateProduct(int id, [FromBody] ProductDto productResource)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -43,28 +43,28 @@ namespace Kaizen.Controllers
             if (product == null)
                 return NotFound();
 
-            mapper.Map<ProductResource, Product>(productResource, product);
+            mapper.Map<ProductDto, Product>(productResource, product);
             await productService.UpdateProductAsync(product);
 
-            var result = mapper.Map<Product, ProductResource>(product);
+            var result = mapper.Map<Product, ProductDto>(product);
             return Ok(result);
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProducts(ProductQueryResource productQueryResource)
+        public async Task<IActionResult> GetProducts(ProductQueryDto productQueryResource)
         {
-            var productQuery = mapper.Map<ProductQueryResource, ProductQuery>(productQueryResource);
+            var productQuery = mapper.Map<ProductQueryDto, ProductQuery>(productQueryResource);
             var queryResult = await productService.GetProductsAsync(productQuery);
-            var resultQuery = mapper.Map<QueryResult<Product>, QueryResultResource<ProductResource>>(queryResult);
+            var resultQuery = mapper.Map<QueryResult<Product>, QueryResultDto<ProductDto>>(queryResult);
             return Ok(resultQuery);
         }
 
         [HttpGet("validated")]
-        public async Task<IActionResult> GetValidProducts(ProductQueryResource productQueryResource)
+        public async Task<IActionResult> GetValidProducts(ProductQueryDto productQueryResource)
         {
-            var productQuery = mapper.Map<ProductQueryResource, ProductQuery>(productQueryResource);
+            var productQuery = mapper.Map<ProductQueryDto, ProductQuery>(productQueryResource);
             var queryResult = await productService.GetValidProducts(productQuery);
-            var resultQuery = mapper.Map<QueryResult<Product>, QueryResultResource<ProductResource>>(queryResult);
+            var resultQuery = mapper.Map<QueryResult<Product>, QueryResultDto<ProductDto>>(queryResult);
             return Ok(resultQuery);
         }
 
@@ -75,7 +75,7 @@ namespace Kaizen.Controllers
             if (product == null)
                 return NotFound();
 
-            var productResource = mapper.Map<Product, ProductResource>(product);
+            var productResource = mapper.Map<Product, ProductDto>(product);
             return Ok(productResource);
         }
 

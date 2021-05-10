@@ -2,7 +2,7 @@ using System;
 
 namespace Kaizen.Core.DTOs
 {
-    public class CallLogResource
+    public class CallLogDto
     {
         public string CallName { get; set; }
         public string CallNumber { get; set; }

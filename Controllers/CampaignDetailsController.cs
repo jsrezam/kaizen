@@ -19,11 +19,11 @@ namespace Kaizen.Controllers
         }
 
         [HttpGet("{campaignId}")]
-        public async Task<IActionResult> GetCampaignDetail(int campaignId, CampaignDetailQueryResource campaignDetailQueryResource)
+        public async Task<IActionResult> GetCampaignDetail(int campaignId, CampaignDetailQueryDto campaignDetailQueryResource)
         {
-            var productQuery = mapper.Map<CampaignDetailQueryResource, CampaignDetailQuery>(campaignDetailQueryResource);
+            var productQuery = mapper.Map<CampaignDetailQueryDto, CampaignDetailQuery>(campaignDetailQueryResource);
             var queryResult = await unitOfWork.CampaignDetailRepository.GetCampaignDetailAsync(campaignId, productQuery);
-            var resultQuery = mapper.Map<QueryResult<CampaignDetail>, QueryResultResource<CampaignDetailResource>>(queryResult);
+            var resultQuery = mapper.Map<QueryResult<CampaignDetail>, QueryResultDto<CampaignDetailDto>>(queryResult);
             return Ok(resultQuery);
         }
 

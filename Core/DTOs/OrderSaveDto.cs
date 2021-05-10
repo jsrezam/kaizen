@@ -4,17 +4,16 @@ using System.Collections.ObjectModel;
 
 namespace Kaizen.Core.DTOs
 {
-    public class
-    OrderSaveResource
+    public class OrderSaveDto
     {
         public int CampaignDetailId { get; set; }
         public DateTime OrderDate { get; set; }
         public DateTime RequiredDate { get; set; }
         public DateTime ShippedDate { get; set; }
-        public ICollection<OrderDetailResource> OrderDetails { get; set; }
-        public OrderSaveResource()
+        public ICollection<OrderDetailDto> OrderDetails { get; set; }
+        public OrderSaveDto()
         {
-            this.OrderDetails = new Collection<OrderDetailResource>();
+            this.OrderDetails = new Collection<OrderDetailDto>();
         }
     }
 }

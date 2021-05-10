@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Kaizen.Core.DTOs
 {
-    public class UserCredentialsResource
+    public class UserCredentialsDto
     {
         [EmailAddress]
         [Required]

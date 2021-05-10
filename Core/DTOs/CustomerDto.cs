@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace Kaizen.Core.DTOs
 {
-    public class CustomerResource
+    public class CustomerDto
     {
         public int Id { get; set; }
         public string LastName { get; set; }

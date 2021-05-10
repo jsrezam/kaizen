@@ -1,10 +1,8 @@
 namespace Kaizen.Core.DTOs
 {
-    public class CustomerQueryResource
+    public class CategoryQueryDto
     {
-        public string LastName { get; set; }
-        public string FirstName { get; set; }
-        public string CellPhone { get; set; }
+        public string Name { get; set; }
         public string SortBy { get; set; }
         public bool IsSortAscending { get; set; }
         public int Page { get; set; }

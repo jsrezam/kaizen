@@ -1,6 +1,6 @@
 namespace Kaizen.Core.DTOs
 {
-    public class OrderDetailResource
+    public class OrderDetailDto
     {
         public int ProductId { get; set; }
         public decimal UnitPrice { get; set; }

@@ -22,7 +22,7 @@ namespace Kaizen.Core.Services
             await unitOfWork.SaveChangesAsync();
         }
 
-        public async Task AddCampaignDetailAsync(int CampaignId, IEnumerable<CustomerResource> customersResource)
+        public async Task AddCampaignDetailAsync(int CampaignId, IEnumerable<CustomerDto> customersResource)
         {
             await unitOfWork.CampaignDetailRepository
             .AddRangeAsync((from customer in customersResource
@@ -58,7 +58,7 @@ namespace Kaizen.Core.Services
             await unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<CampaignResource>> AddProgressToCampaignsAsync(IEnumerable<CampaignResource> userCampaignsResource)
+        public async Task<IEnumerable<CampaignDto>> AddProgressToCampaignsAsync(IEnumerable<CampaignDto> userCampaignsResource)
         {
             foreach (var userCampaign in userCampaignsResource)
             {

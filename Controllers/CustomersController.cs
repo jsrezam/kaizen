@@ -28,24 +28,24 @@ namespace Kaizen.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetCustomersAsync(CustomerQueryResource customerQueryResource)
+        public async Task<IActionResult> GetCustomersAsync(CustomerQueryDto customerQueryResource)
         {
-            var customerQuery = mapper.Map<CustomerQueryResource, CustomerQuery>(customerQueryResource);
+            var customerQuery = mapper.Map<CustomerQueryDto, CustomerQuery>(customerQueryResource);
             var queryResult = await customerService.GetCustomersAsync(customerQuery);
-            var resultQuery = mapper.Map<QueryResult<Customer>, QueryResultResource<CustomerResource>>(queryResult);
+            var resultQuery = mapper.Map<QueryResult<Customer>, QueryResultDto<CustomerDto>>(queryResult);
             return Ok(resultQuery);
         }
 
         [HttpGet("userCustomers")]
-        public async Task<IActionResult> GetAgentCustomersAsync(CustomerQueryResource customerQueryResource)
+        public async Task<IActionResult> GetAgentCustomersAsync(CustomerQueryDto customerQueryResource)
         {
             var userEmail = HttpContext.User.Claims
             .FirstOrDefault(x => x.Type.Equals("email")).Value;
             var user = await userManager.FindByEmailAsync(userEmail);
 
-            var customerQuery = mapper.Map<CustomerQueryResource, CustomerQuery>(customerQueryResource);
+            var customerQuery = mapper.Map<CustomerQueryDto, CustomerQuery>(customerQueryResource);
             var queryResult = await customerService.GetAgentCustomersAsync(user.Id, customerQuery);
-            var resultQuery = mapper.Map<QueryResult<AgentCustomer>, QueryResultResource<AgentCustomerResource>>(queryResult);
+            var resultQuery = mapper.Map<QueryResult<AgentCustomer>, QueryResultDto<AgentCustomerDto>>(queryResult);
             return Ok(resultQuery);
         }
     }

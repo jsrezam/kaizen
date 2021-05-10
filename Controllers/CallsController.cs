@@ -28,7 +28,7 @@ namespace Kaizen.Controllers
         }
 
         [HttpPost("synchronize")]
-        public async Task<IActionResult> SynchronizeTodayCalls([FromBody] IEnumerable<CallLogResource> callLogResources)
+        public async Task<IActionResult> SynchronizeTodayCalls([FromBody] IEnumerable<CallLogDto> callLogResources)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -36,7 +36,7 @@ namespace Kaizen.Controllers
             var userEmail = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("email")).Value;
             var user = await userManager.FindByEmailAsync(userEmail);
 
-            var calls = mapper.Map<IEnumerable<CallLogResource>, IEnumerable<CallLog>>(callLogResources);
+            var calls = mapper.Map<IEnumerable<CallLogDto>, IEnumerable<CallLog>>(callLogResources);
 
             await callLogService.SynchronizeTodayCalls(user.Id, calls);
 

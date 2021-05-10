@@ -20,12 +20,12 @@ namespace Kaizen.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrder([FromBody] OrderSaveResource orderSaveResource)
+        public async Task<IActionResult> CreateOrder([FromBody] OrderSaveDto orderSaveResource)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var order = mapper.Map<OrderSaveResource, Order>(orderSaveResource);
+            var order = mapper.Map<OrderSaveDto, Order>(orderSaveResource);
 
             await orderService.CreateOrder(order);
 

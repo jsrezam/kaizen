@@ -20,22 +20,22 @@ namespace Kaizen.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCategory([FromBody] CategoryResource categoryResource)
+        public async Task<IActionResult> CreateCategory([FromBody] CategoryDto categoryResource)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var category = mapper.Map<CategoryResource, Category>(categoryResource);
+            var category = mapper.Map<CategoryDto, Category>(categoryResource);
 
             await unitOfWork.CategoryRepository.AddAsync(category);
             await unitOfWork.SaveChangesAsync();
-            var result = mapper.Map<Category, CategoryResource>(category);
+            var result = mapper.Map<Category, CategoryDto>(category);
 
             return Ok(result);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCategory(int id, [FromBody] CategoryResource categoryResource)
+        public async Task<IActionResult> UpdateCategory(int id, [FromBody] CategoryDto categoryResource)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -45,20 +45,20 @@ namespace Kaizen.Controllers
             if (category == null)
                 return NotFound();
 
-            mapper.Map<CategoryResource, Category>(categoryResource, category);
+            mapper.Map<CategoryDto, Category>(categoryResource, category);
             unitOfWork.CategoryRepository.Update(category);
             await unitOfWork.SaveChangesAsync();
 
-            var result = mapper.Map<Category, CategoryResource>(category);
+            var result = mapper.Map<Category, CategoryDto>(category);
             return Ok(result);
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetCategories(CategoryQueryResource categoryQueryResource)
+        public async Task<IActionResult> GetCategories(CategoryQueryDto categoryQueryResource)
         {
-            var categoryQuery = mapper.Map<CategoryQueryResource, CategoryQuery>(categoryQueryResource);
+            var categoryQuery = mapper.Map<CategoryQueryDto, CategoryQuery>(categoryQueryResource);
             var queryResult = await unitOfWork.CategoryRepository.GetCategoriesAsync(categoryQuery);
-            var resultQuery = mapper.Map<QueryResult<Category>, QueryResultResource<CategoryResource>>(queryResult);
+            var resultQuery = mapper.Map<QueryResult<Category>, QueryResultDto<CategoryDto>>(queryResult);
             return Ok(resultQuery);
         }
 
@@ -69,7 +69,7 @@ namespace Kaizen.Controllers
             if (category == null)
                 return NotFound();
 
-            var categoryResource = mapper.Map<Category, CategoryResource>(category);
+            var categoryResource = mapper.Map<Category, CategoryDto>(category);
             return Ok(categoryResource);
         }
 

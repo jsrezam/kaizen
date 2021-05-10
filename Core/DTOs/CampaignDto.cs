@@ -4,20 +4,20 @@ using System.Collections.ObjectModel;
 
 namespace Kaizen.Core.DTOs
 {
-    public class CampaignResource
+    public class CampaignDto
     {
         public int Id { get; set; }
         public string UserId { get; set; }
-        public ApplicationUserResource User { get; set; }
+        public ApplicationUserDto User { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime FinishDate { get; set; }
         public bool IsActive { get; set; }
         public decimal Progress { get; set; }
-        public ICollection<CampaignDetailResource> CampaignDetails { get; set; }
+        public ICollection<CampaignDetailDto> CampaignDetails { get; set; }
 
-        public CampaignResource()
+        public CampaignDto()
         {
-            this.CampaignDetails = new Collection<CampaignDetailResource>();
+            this.CampaignDetails = new Collection<CampaignDetailDto>();
         }
     }
 }

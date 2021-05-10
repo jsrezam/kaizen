@@ -30,7 +30,7 @@ namespace Kaizen.Controllers
         }
 
         [HttpPost("signUp")]
-        public async Task<IActionResult> SignUp([FromBody] UserCredentialsResource userCredentialsResource)
+        public async Task<IActionResult> SignUp([FromBody] UserCredentialsDto userCredentialsResource)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -54,7 +54,7 @@ namespace Kaizen.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] UserCredentialsResource userCredentialsResource)
+        public async Task<IActionResult> Login([FromBody] UserCredentialsDto userCredentialsResource)
         {
             var response = await signInManager
             .PasswordSignInAsync(userCredentialsResource.Email
@@ -69,7 +69,7 @@ namespace Kaizen.Controllers
             return Ok(await BuildToken(userCredentialsResource));
         }
 
-        private async Task<ResponseAuthenticationResourse> BuildToken(UserCredentialsResource userCredentialsResource, bool IsNew = false)
+        private async Task<ResponseAuthenticationDto> BuildToken(UserCredentialsDto userCredentialsResource, bool IsNew = false)
         {
             var user = await userManager.FindByEmailAsync(userCredentialsResource.Email);
 
@@ -93,7 +93,7 @@ namespace Kaizen.Controllers
             var token = new JwtSecurityToken(issuer: null, audience: null, claims: claimsDB
             , expires: expiration, signingCredentials: credentials);
 
-            return new ResponseAuthenticationResourse
+            return new ResponseAuthenticationDto
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiration = expiration

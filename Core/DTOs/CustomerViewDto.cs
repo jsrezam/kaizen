@@ -1,6 +1,6 @@
 namespace Kaizen.Core.DTOs
 {
-    public class CustomerViewResource
+    public class CustomerViewDto
     {
         public int Id { get; set; }
         public string LastName { get; set; }

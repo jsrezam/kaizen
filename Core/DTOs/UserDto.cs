@@ -1,6 +1,6 @@
 namespace Kaizen.Core.DTOs
 {
-    public class UserResource
+    public class UserDto
     {
         public string Id { get; set; }
         public string LastName { get; set; }
