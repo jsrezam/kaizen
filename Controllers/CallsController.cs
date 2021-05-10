@@ -7,7 +7,6 @@ using Kaizen.Core.Interfaces;
 using Kaizen.Core.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kaizen.Controllers
@@ -18,11 +17,11 @@ namespace Kaizen.Controllers
     {
         private readonly IMapper mapper;
         private readonly ICallLogService callLogService;
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly IUserService userService;
 
-        public CallsController(IMapper mapper, ICallLogService callLogService, UserManager<ApplicationUser> userManager)
+        public CallsController(IMapper mapper, ICallLogService callLogService, IUserService userService)
         {
-            this.userManager = userManager;
+            this.userService = userService;
             this.callLogService = callLogService;
             this.mapper = mapper;
         }
@@ -33,12 +32,12 @@ namespace Kaizen.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var userEmail = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("email")).Value;
-            var user = await userManager.FindByEmailAsync(userEmail);
+            var loggedAgentEmail = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("email")).Value;
+            var agent = await userService.GetUserByEmailAsync(loggedAgentEmail);
 
             var calls = mapper.Map<IEnumerable<CallLogDto>, IEnumerable<CallLog>>(callLogResources);
 
-            await callLogService.SynchronizeTodayCalls(user.Id, calls);
+            await callLogService.SynchronizeTodayCalls(agent.Id, calls);
 
             return Ok();
         }
