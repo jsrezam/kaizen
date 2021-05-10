@@ -1,8 +1,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Kaizen.Controllers.Resources;
 using Kaizen.Controllers.Utilities;
+using Kaizen.Core.DTOs;
 using Kaizen.Core.Interfaces;
 using Kaizen.Core.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

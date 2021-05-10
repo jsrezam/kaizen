@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Kaizen.Controllers.Resources
+namespace Kaizen.Core.DTOs
 {
     public class UserCredentialsResource
     {

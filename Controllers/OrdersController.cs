@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using AutoMapper;
-using Kaizen.Controllers.Resources;
+using Kaizen.Core.DTOs;
 using Kaizen.Core.Interfaces;
 using Kaizen.Core.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +28,7 @@ namespace Kaizen.Controllers
             var order = mapper.Map<OrderSaveResource, Order>(orderSaveResource);
 
             await orderService.CreateOrder(order);
-            // await orderService.SaveOrderDetail(order.Id, orderSaveResource.OrderDetails);
+
             return Ok();
         }
     }

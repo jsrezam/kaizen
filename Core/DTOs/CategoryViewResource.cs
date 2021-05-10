@@ -1,4 +1,4 @@
-namespace Kaizen.Controllers.Resources
+namespace Kaizen.Core.DTOs
 {
     public class CategoryViewResource
     {

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Kaizen.Controllers.Resources
+namespace Kaizen.Core.DTOs
 {
     public class QueryResultResource<T>
     {

@@ -1,8 +1,6 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Kaizen.Controllers.Resources;
-using Kaizen.Core;
+using Kaizen.Core.DTOs;
 using Kaizen.Core.Interfaces;
 using Kaizen.Core.Models;
 using Microsoft.AspNetCore.Mvc;

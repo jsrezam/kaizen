@@ -1,10 +1,8 @@
-using System;
-
-namespace Kaizen.Controllers.Resources
+namespace Kaizen.Core.DTOs
 {
-    public class CampaignQueryResource
+    public class CategoryQueryResource
     {
-        public DateTime? FinishDate { get; set; }
+        public string Name { get; set; }
         public string SortBy { get; set; }
         public bool IsSortAscending { get; set; }
         public int Page { get; set; }

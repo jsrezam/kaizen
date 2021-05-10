@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Kaizen.Controllers.Resources;
+using Kaizen.Core.DTOs;
 using Kaizen.Core.Models;
 
 namespace Kaizen.Core.Interfaces

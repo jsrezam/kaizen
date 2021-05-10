@@ -1,6 +1,6 @@
 using System;
 
-namespace Kaizen.Controllers.Resources
+namespace Kaizen.Core.DTOs
 {
     public class ResponseAuthenticationResourse
     {
