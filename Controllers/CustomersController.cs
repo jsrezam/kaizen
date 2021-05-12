@@ -26,6 +26,23 @@ namespace Kaizen.Controllers
             this.mapper = mapper;
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateCustomerAsync([FromBody] CustomerDto customerDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var response = await customerService.isUniqueCellphone(customerDto.CellPhone);
+
+            if (response)
+                return BadRequest("The cellphone is already taken");
+
+            var customer = mapper.Map<CustomerDto, Customer>(customerDto);
+            await customerService.CreateCustomer(customer);
+
+            return Ok();
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetCustomersAsync(CustomerQueryDto customerQueryResource)
         {

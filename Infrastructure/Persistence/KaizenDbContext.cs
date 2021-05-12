@@ -15,6 +15,10 @@ namespace Kaizen.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Customer>()
+            .HasIndex(u => u.CellPhone)
+            .IsUnique();
         }
 
 
@@ -25,5 +29,8 @@ namespace Kaizen.Infrastructure.Persistence
         public DbSet<CampaignDetail> CampaignDetails { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<Region> Regions { get; set; }
+        public DbSet<City> Cities { get; set; }
     }
 }

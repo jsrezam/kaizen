@@ -51,6 +51,9 @@ namespace Kaizen
             services.AddTransient<ICampaignDetailService, CampaignDetailService>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<ICountryService, CountryService>();
+            services.AddTransient<IRegionService, RegionService>();
+            services.AddTransient<ICityService, CityService>();
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<KaizenDbContext>()

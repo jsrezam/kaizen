@@ -47,5 +47,16 @@ namespace Kaizen.Core.Services
             return result;
         }
 
+        public async Task<bool> isUniqueCellphone(string cellPhone)
+        {
+            return await unitOfWork.CustomerRepository.isUniqueCellphone(cellPhone);
+        }
+
+        public async Task CreateCustomer(Customer customer)
+        {
+            await unitOfWork.CustomerRepository.AddAsync(customer);
+            await unitOfWork.SaveChangesAsync();
+        }
+
     }
 }

@@ -19,6 +19,9 @@ namespace Kaizen.Infrastructure.Repositories
         public IOrderDetailRepository _orderDetailRepository;
         public IUserRepository _userRepository;
         public IAccountRepository _accountRepository;
+        public ICountryRepository _countryRepository;
+        public IRegionRepository _regionRepository;
+        public ICityRepository _cityRepository;
 
 
         private readonly KaizenDbContext context;
@@ -40,8 +43,11 @@ namespace Kaizen.Infrastructure.Repositories
         public ICallLogRepository CallLogRepository => _callLogRepository ?? new CallLogRepository(context);
         public IOrderRepository OrderRepository => _orderRepository ?? new OrderRepository(context);
         public IOrderDetailRepository OrderDetailRepository => _orderDetailRepository ?? new OrderDetailRepository(context);
-        public IUserRepository userRepository => _userRepository ?? new UserRepository(context, userManager);
-        public IAccountRepository accountRepository => _accountRepository ?? new AccountRepository(context, userManager, signInManager);
+        public IUserRepository UserRepository => _userRepository ?? new UserRepository(context, userManager);
+        public IAccountRepository AccountRepository => _accountRepository ?? new AccountRepository(context, userManager, signInManager);
+        public ICountryRepository CountryRepository => _countryRepository ?? new CountryRepository(context);
+        public IRegionRepository RegionRepository => _regionRepository ?? new RegionRepository(context);
+        public ICityRepository CityRepository => _cityRepository ?? new CityRepository(context);
 
 
         public void Dispose()

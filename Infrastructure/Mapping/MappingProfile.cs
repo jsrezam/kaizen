@@ -30,6 +30,9 @@ namespace Kaizen.Infrastructure.Mapping
                 acr.CampaignId = 0;
                 acr.CampaignDetailId = 0;
             });
+            CreateMap<Country, CountryDto>();
+            CreateMap<Region, RegionDto>();
+            CreateMap<City, CityDto>();
 
             // API Resource to Domain
             CreateMap<ProductDto, Product>()

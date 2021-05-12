@@ -14,11 +14,20 @@ namespace Kaizen.Infrastructure.Repositories
     public class CustomerRepository : BaseRepository<Customer>, ICustomerRepository
     {
         public CustomerRepository(KaizenDbContext context) : base(context) { }
+
+        public async Task<bool> isUniqueCellphone(string cellPhone)
+        {
+            var customer = await entities
+            .SingleOrDefaultAsync(c => c.CellPhone.Equals(cellPhone));
+            return (customer != null) ? true : false;
+        }
+
         public async Task<Customer> GetCustomerAsync(int id)
         {
             return await entities
                     .SingleOrDefaultAsync(c => c.Id == id);
         }
+
         public async Task<QueryResult<Customer>> GetCustomersAsync(CustomerQuery queryObj)
         {
             var result = new QueryResult<Customer>();

@@ -26,12 +26,12 @@ namespace Kaizen.Core.Services
 
         public async Task<IdentityResult> SignUpAsync(ApplicationUser user, string userPassword)
         {
-            return await unitOfWork.accountRepository.SignUpAsync(user, userPassword);
+            return await unitOfWork.AccountRepository.SignUpAsync(user, userPassword);
         }
 
         public async Task<ResponseAuthenticationDto> BuildToken(UserCredentialsDto userCredentialsResource, bool IsNew = false)
         {
-            var user = await unitOfWork.userRepository.GetUserByEmailAsync(userCredentialsResource.Email);
+            var user = await unitOfWork.UserRepository.GetUserByEmailAsync(userCredentialsResource.Email);
 
             if (IsNew)
             {
@@ -41,10 +41,10 @@ namespace Kaizen.Core.Services
                     new Claim("role","agent")
                 };
 
-                await unitOfWork.accountRepository.AddClaimsAsync(user, claims);
+                await unitOfWork.AccountRepository.AddClaimsAsync(user, claims);
             }
 
-            var claimsDB = await unitOfWork.accountRepository.GetClaimsAsync(user);
+            var claimsDB = await unitOfWork.AccountRepository.GetClaimsAsync(user);
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["KeyJwt"]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -61,7 +61,7 @@ namespace Kaizen.Core.Services
 
         public async Task<SignInResult> PasswordSignInAsync(string userName, string password, bool isPersistent, bool lockoutOnFailure)
         {
-            return await unitOfWork.accountRepository.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
+            return await unitOfWork.AccountRepository.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
         }
     }
 }

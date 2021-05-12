@@ -37,6 +37,7 @@ import { CampaignDetailComponent } from './components/campaign-detail/campaign-d
 import { CampaignDetailService } from './services/campaignDetail.service';
 import { AgentCampaignListComponent } from './components/agent-campaign-list/agent-campaign-list.component';
 import { OrderFormComponent } from './components/order-form/order-form.component';
+import { CustomerFormComponent } from './components/customer-form/customer-form.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { OrderFormComponent } from './components/order-form/order-form.component
     CampaignDetailComponent,
     AgentCampaignListComponent,
     OrderFormComponent,
+    CustomerFormComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -86,6 +88,7 @@ import { OrderFormComponent } from './components/order-form/order-form.component
       { path: 'agent-campaigns', component: AgentCampaignListComponent },
 
       { path: 'orders/new', component: OrderFormComponent },
+      { path: 'customers/new', component: CustomerFormComponent },
 
     ]), NgbModule
   ],

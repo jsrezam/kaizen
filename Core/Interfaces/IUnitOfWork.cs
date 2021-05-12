@@ -13,8 +13,11 @@ namespace Kaizen.Core.Interfaces
         ICampaignDetailRepository CampaignDetailRepository { get; }
         IOrderRepository OrderRepository { get; }
         IOrderDetailRepository OrderDetailRepository { get; }
-        IUserRepository userRepository { get; }
-        IAccountRepository accountRepository { get; }
+        IUserRepository UserRepository { get; }
+        IAccountRepository AccountRepository { get; }
+        ICountryRepository CountryRepository { get; }
+        IRegionRepository RegionRepository { get; }
+        ICityRepository CityRepository { get; }
 
         Task SaveChangesAsync();
     }

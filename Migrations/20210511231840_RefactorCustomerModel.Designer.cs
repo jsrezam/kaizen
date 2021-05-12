@@ -4,14 +4,16 @@ using Kaizen.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Kaizen.Migrations
 {
     [DbContext(typeof(KaizenDbContext))]
-    partial class KaizenDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210511231840_RefactorCustomerModel")]
+    partial class RefactorCustomerModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -173,41 +175,6 @@ namespace Kaizen.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Kaizen.Core.Models.City", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RegionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RegionId");
-
-                    b.ToTable("Cities");
-                });
-
-            modelBuilder.Entity("Kaizen.Core.Models.Country", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Countries");
-                });
-
             modelBuilder.Entity("Kaizen.Core.Models.Customer", b =>
                 {
                     b.Property<int>("Id")
@@ -219,15 +186,12 @@ namespace Kaizen.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CellPhone")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
@@ -236,9 +200,6 @@ namespace Kaizen.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("HomePhone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IdentificationCard")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
@@ -253,10 +214,6 @@ namespace Kaizen.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CellPhone")
-                        .IsUnique()
-                        .HasFilter("[CellPhone] IS NOT NULL");
 
                     b.ToTable("Customers");
                 });
@@ -350,26 +307,6 @@ namespace Kaizen.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("Kaizen.Core.Models.Region", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CountryId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CountryId");
-
-                    b.ToTable("Regions");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -531,17 +468,6 @@ namespace Kaizen.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("Kaizen.Core.Models.City", b =>
-                {
-                    b.HasOne("Kaizen.Core.Models.Region", "Region")
-                        .WithMany("cities")
-                        .HasForeignKey("RegionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Region");
-                });
-
             modelBuilder.Entity("Kaizen.Core.Models.Order", b =>
                 {
                     b.HasOne("Kaizen.Core.Models.CampaignDetail", "CampaignDetail")
@@ -581,17 +507,6 @@ namespace Kaizen.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("Kaizen.Core.Models.Region", b =>
-                {
-                    b.HasOne("Kaizen.Core.Models.Country", "Country")
-                        .WithMany("Regions")
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Country");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -660,11 +575,6 @@ namespace Kaizen.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("Kaizen.Core.Models.Country", b =>
-                {
-                    b.Navigation("Regions");
-                });
-
             modelBuilder.Entity("Kaizen.Core.Models.Customer", b =>
                 {
                     b.Navigation("CampaignDetails");
@@ -678,11 +588,6 @@ namespace Kaizen.Migrations
             modelBuilder.Entity("Kaizen.Core.Models.Product", b =>
                 {
                     b.Navigation("OrderDetails");
-                });
-
-            modelBuilder.Entity("Kaizen.Core.Models.Region", b =>
-                {
-                    b.Navigation("cities");
                 });
 #pragma warning restore 612, 618
         }

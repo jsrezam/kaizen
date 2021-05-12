@@ -19,12 +19,12 @@ namespace Kaizen.Core.Services
 
         public async Task<ApplicationUser> GetUserByEmailAsync(string email)
         {
-            return await unitOfWork.userRepository.GetUserByEmailAsync(email);
+            return await unitOfWork.UserRepository.GetUserByEmailAsync(email);
         }
 
         public async Task<IEnumerable<ApplicationUser>> GetAgentUsersAsync()
         {
-            return await unitOfWork.userRepository.GetAgentUsersAsync();
+            return await unitOfWork.UserRepository.GetAgentUsersAsync();
         }
 
         public async Task<ApplicationUser> GetUserByCampaignAsync(int campaignId)
@@ -32,7 +32,7 @@ namespace Kaizen.Core.Services
             var campaign = await unitOfWork.CampaignRepository.GetCampaignAsync(campaignId);
             if (campaign == null)
                 return null;
-            return await unitOfWork.userRepository.FindByIdAsync(campaign.UserId);
+            return await unitOfWork.UserRepository.FindByIdAsync(campaign.UserId);
         }
 
     }
