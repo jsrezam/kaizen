@@ -11,15 +11,32 @@ namespace Kaizen.Infrastructure.Repositories
     {
         public CityRepository(KaizenDbContext context) : base(context) { }
 
+        public async Task<QueryResult<City>> GetCitiesAsync()
+        {
+            var result = new QueryResult<City>();
+            var query = entities.AsQueryable();
+
+            result.TotalItems = await query.CountAsync();
+            result.Items = await query.OrderBy(c => c.Name).ToListAsync();
+
+            return result;
+        }
+
         public async Task<QueryResult<City>> GetCitiesByRegionAsync(int regionId)
         {
             var result = new QueryResult<City>();
             var query = entities.Where(c => c.RegionId == regionId).AsQueryable();
 
             result.TotalItems = await query.CountAsync();
-            result.Items = await query.ToListAsync();
+            result.Items = await query.OrderBy(c => c.Name).ToListAsync();
 
             return result;
+        }
+
+        public async Task<string> GetCityNameByIdAsync(int cityId)
+        {
+            return (await entities
+            .SingleOrDefaultAsync(c => c.Id == cityId)).Name;
         }
 
     }

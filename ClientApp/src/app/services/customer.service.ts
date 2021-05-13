@@ -10,6 +10,18 @@ export class CustomerService {
 
     constructor(private http: HttpClient) { }
 
+    createCustomer(customer) {
+        return this.http.post(this.apiUri, customer).pipe(
+            map(res => res)
+        );
+    }
+
+    getCustomer(customerId) {
+        return this.http.get(this.apiUri + customerId).pipe(
+            map(res => res)
+        );
+    }
+
     getCustomers(filter) {
         return this.http.get(this.apiUri + '?' + toQueryString(filter)).pipe(
             map(res => res)
@@ -18,6 +30,12 @@ export class CustomerService {
 
     getUserCustomers(filter) {
         return this.http.get(this.apiUri + 'userCustomers/' + '?' + toQueryString(filter)).pipe(
+            map(res => res)
+        );
+    }
+
+    updateCustomer(customer) {
+        return this.http.put(this.apiUri + customer.id, customer).pipe(
             map(res => res)
         );
     }

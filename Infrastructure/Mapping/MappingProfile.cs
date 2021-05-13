@@ -16,6 +16,7 @@ namespace Kaizen.Infrastructure.Mapping
             CreateMap(typeof(QueryResult<>), typeof(QueryResultDto<>));
             CreateMap<Category, CategoryViewDto>();
             CreateMap<Customer, CustomerDto>();
+
             CreateMap<Customer, CustomerViewDto>();
             CreateMap<Order, OrderDto>();
             CreateMap<ApplicationUser, ApplicationUserDto>();
@@ -59,8 +60,7 @@ namespace Kaizen.Infrastructure.Mapping
             .AfterMap((ucd, au) =>
             {
                 au.Email = ucd.UserName;
-            })
-            ;
+            });
         }
     }
 }

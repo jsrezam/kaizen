@@ -67,7 +67,6 @@ export class CampaignFormComponent implements OnInit {
   }
 
   filter(querySearch: string) {
-    console.log(this.selectedfilterColumn);
 
     switch (this.selectedfilterColumn) {
       case "lastName":
@@ -117,7 +116,7 @@ export class CampaignFormComponent implements OnInit {
       this.campaignSave.finishDate = new Date(`${this.model.year}-${this.model.month}-${this.model.day}`);
       this.campaignSave.isActive = true;
       this.campaignSave.customers = this.filteredCustomers.filter(c => c.isSelected);
-      console.log(this.campaignSave);
+
       this.campaignService.createCampaign(this.campaignSave)
         .subscribe((result: any) => {
           this.toastrService.success("Data was sucessfully saved.", "Success");

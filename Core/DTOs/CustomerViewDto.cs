@@ -14,5 +14,6 @@ namespace Kaizen.Core.DTOs
         public string HomePhone { get; set; }
         public string CellPhone { get; set; }
         public string PostalCode { get; set; }
+        public bool State { get; set; }
     }
 }

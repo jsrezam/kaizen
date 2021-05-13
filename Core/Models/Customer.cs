@@ -21,6 +21,7 @@ namespace Kaizen.Core.Models
         public string Country { get; set; }
         public string HomePhone { get; set; }
         public string CellPhone { get; set; }
+        public bool State { get; set; }
         public ICollection<CampaignDetail> CampaignDetails { get; set; }
         public Customer()
         {

@@ -4,7 +4,21 @@
 
 <div class="row">
   <div class="col-md-10 order-md-1">
-    <h4 class="mb-3">
+
+    <!-- <div *ngIf="errorMessages" class="mb-3 alert alert-danger" role="alert">
+      <strong>Error!</strong> {{errorMessages}}
+    </div> -->
+
+    <p *ngFor="let e of errorMessages">
+      <ngb-alert type="danger" [dismissible]="false">
+        <strong>Error!</strong> {{e.description}}
+      </ngb-alert>
+    </p>
+
+    <h4 *ngIf="customer.id" class="mb-3">
+      Update Customer
+    </h4>
+    <h4 *ngIf="!customer.id" class="mb-3">
       New Customer
     </h4>
 
@@ -25,6 +39,22 @@
             [(ngModel)]="customer.lastName">
           <div class="invalid-feedback">Valid last name is required.</div>
         </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="cellPhone">Cell Phone
+        </label>
+        <input type="text" class="form-control" id="cellPhone" placeholder="09874585236" required name="cellPhone"
+          [(ngModel)]="customer.cellPhone">
+        <div class="invalid-feedback">Please enter cell phone.</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="homePhone">Home Phone
+          <span class="text-muted">(Optional)</span>
+        </label>
+        <input type="text" class="form-control" id="homePhone" placeholder="2635214" name="homePhone"
+          [(ngModel)]="customer.homePhone">
       </div>
 
       <div class="mb-3">
@@ -54,27 +84,27 @@
       <div class="row">
         <div class="col-md-4 mb-3">
           <label for="country">Country</label>
-          <select class="custom-select d-block w-100" id="country" required>
-            <option>Choose...</option>
-            <option>Ecuador</option>
+          <select class="custom-select d-block w-100" id="country" required name="sltCountry"
+            [(ngModel)]="customer.countryId" (change)="onCountriesFilterChange()">
+            <option *ngFor="let c of countries.items" [ngValue]="c.id">
+              {{c.name}}</option>
           </select>
           <div class="invalid-feedback">Please select a valid country.</div>
         </div>
 
         <div class="col-md-4 mb-3">
           <label for="state">State</label>
-          <select class="custom-select d-block w-100" id="state" required>
-            <option>Choose...</option>
-            <option>Pichincha</option>
+          <select class="custom-select d-block w-100" id="state" required name="sltcountry"
+            [(ngModel)]="customer.regionId" (change)="onRegionsFilterChange()">
+            <option *ngFor="let r of regions.items" value="{{ r.id}}">{{ r.name }}</option>
           </select>
           <div class="invalid-feedback">Please select a valid state.</div>
         </div>
 
         <div class="col-md-4 mb-3">
           <label for="city">City</label>
-          <select class="custom-select d-block w-100" id="city" required>
-            <option>Choose...</option>
-            <option>Quito</option>
+          <select class="custom-select d-block w-100" id="city" required name="sltcity" [(ngModel)]="customer.cityId">
+            <option *ngFor="let c of cities.items" value="{{c.id}}">{{c.name}}</option>
           </select>
           <div class="invalid-feedback">Please select a valid city.</div>
         </div>
@@ -86,7 +116,21 @@
           <label for="postalCode">Zip
             <span class="text-muted">(Optional)</span>
           </label>
-          <input type="text" class="form-control" id="postalCode" placeholder>
+          <input type="text" class="form-control" id="postalCode" placeholder name="postalCode"
+            [(ngModel)]="customer.postalCode">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-2 mb-3">
+          <p>Is Active?</p>
+          <label for="isActive" class="form-check-inline">
+            <input type="radio" name="state" id="isActive" [value]="true" [(ngModel)]="customer.state"> Yes
+          </label>
+          <label for="isInactive" class="form-check-inline">
+            <input type="radio" name="state" id="isInactive" [value]="false" [(ngModel)]="customer.state">
+            No
+          </label>
         </div>
       </div>
 
@@ -94,7 +138,7 @@
 
       <div class="row">
         <div class="col-md-3 mb-3">
-          <button class="btn btn-primary btn-lg btn-block" type="submit">Create Customer</button>
+          <button class="btn btn-primary btn-lg btn-block" type="submit">Save</button>
         </div>
       </div>
 

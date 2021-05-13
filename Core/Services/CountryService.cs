@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Kaizen.Core.Interfaces;
 using Kaizen.Core.Models;
+using Kaizen.Core.Models.ViewModels;
 
 namespace Kaizen.Core.Services
 {
@@ -16,5 +17,6 @@ namespace Kaizen.Core.Services
         {
             return await unitOfWork.CountryRepository.GetCountriesAsync();
         }
+
     }
 }

@@ -37,10 +37,26 @@ namespace Kaizen.Controllers
             if (response)
                 return BadRequest("The cellphone is already taken");
 
+            customerDto = await customerService.GetLocationNames(customerDto);
+
             var customer = mapper.Map<CustomerDto, Customer>(customerDto);
             await customerService.CreateCustomer(customer);
 
             return Ok();
+        }
+
+        [HttpGet("{customerId}")]
+        public async Task<IActionResult> GetCustomerAsync(int customerId)
+        {
+            var customer = await customerService.GetCustomerAsync(customerId);
+
+            if (customer == null)
+                return NotFound();
+
+            var cutomerDto = mapper.Map<Customer, CustomerDto>(customer);
+            cutomerDto = await customerService.GetLocationIds(cutomerDto);
+
+            return Ok(cutomerDto);
         }
 
         [HttpGet]
@@ -62,6 +78,29 @@ namespace Kaizen.Controllers
             var queryResult = await customerService.GetAgentCustomersAsync(agent.Id, customerQuery);
             var resultQuery = mapper.Map<QueryResult<AgentCustomer>, QueryResultDto<AgentCustomerDto>>(queryResult);
             return Ok(resultQuery);
+        }
+
+        [HttpPut("{customerId}")]
+        public async Task<IActionResult> UpdateCustomerAsync(int customerId, [FromBody] CustomerDto customerDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var customer = await customerService.GetCustomerAsync(customerId);
+
+            if (customer == null)
+                return NotFound();
+
+            customerDto = await customerService.GetLocationNames(customerDto);
+
+            mapper.Map<CustomerDto, Customer>(customerDto, customer);
+            await customerService.UpdateCustomerAsync(customer);
+
+            var cutomerDto = mapper.Map<Customer, CustomerDto>(customer);
+            cutomerDto = await customerService.GetLocationIds(cutomerDto);
+
+            return Ok(cutomerDto);
+
         }
     }
 }

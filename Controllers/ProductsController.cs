@@ -33,7 +33,7 @@ namespace Kaizen.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(int id, [FromBody] ProductDto productResource)
+        public async Task<IActionResult> UpdateProduct(int id, [FromBody] ProductDto productDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -43,7 +43,7 @@ namespace Kaizen.Controllers
             if (product == null)
                 return NotFound();
 
-            mapper.Map<ProductDto, Product>(productResource, product);
+            mapper.Map<ProductDto, Product>(productDto, product);
             await productService.UpdateProductAsync(product);
 
             var result = mapper.Map<Product, ProductDto>(product);

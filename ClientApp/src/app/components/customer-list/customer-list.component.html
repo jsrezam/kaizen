@@ -1,0 +1,50 @@
+<p>
+  <a [routerLink]="['/customers/new']" class="btn btn-primary">New Customer</a>
+</p>
+<div *ngIf="!customers.items">
+  <loading></loading>
+</div>
+<div *ngIf="customers.totalItems > 0">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th *ngFor="let c of columns" aria-labelledby="tableLabel" class="text-center">
+          <div *ngIf="c.isSortable" (click)="sortBy(c.key)">
+            {{c.title}}
+            <i *ngIf="query.sortBy === c.key" class="fa" [class.fa-sort-asc]="query.isSortAscending"
+              [class.fa-sort-desc]="!query.isSortAscending"></i>
+          </div>
+          <div *ngIf="!c.isSortable">
+            {{c.title}}
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of customers.items">
+        <td class="text-center">{{ c.firstName }}</td>
+        <td class="text-center">{{ c.lastName }}</td>
+        <td class="text-center">{{ c.identificationCard }}</td>
+        <td class="text-center">{{ c.email }}</td>
+        <td class="text-center">{{ c.cellPhone }}</td>
+        <td class="text-center">{{ c.homePhone }}</td>
+        <td class="text-center">{{ c.country }}</td>
+        <td class="text-center">{{ c.region }}</td>
+        <td class="text-center">{{ c.city }}</td>
+        <td class="text-center">{{ c.postalCode }}</td>
+        <td class="text-center">{{ c.address }}</td>
+        <div *ngIf="c.state">
+          <td class="text-center">Active</td>
+        </div>
+        <div *ngIf="!c.state">
+          <td class="text-center">Inactive</td>
+        </div>
+        <td>
+          <a class="btn btn-outline-success" [routerLink]="['/customers/edit/', c.id]">Edit</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <pagination [total-items]="customers.totalItems" [page-size]="query.pageSize" (page-changed)="onPageChage($event)">
+  </pagination>
+</div>
