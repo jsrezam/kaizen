@@ -38,11 +38,18 @@ namespace Kaizen.Infrastructure.Extensions
         public static IQueryable<Customer> ApplyFiltering(this IQueryable<Customer> query, CustomerQuery queryObj)
         {
             if (!string.IsNullOrEmpty(queryObj.FirstName))
-                query = query.Where(c => c.FirstName == queryObj.FirstName);
+                query = query.Where(c => c.FirstName.ToUpper().Trim() == queryObj.FirstName.ToUpper().Trim());
             if (!string.IsNullOrEmpty(queryObj.LastName))
-                query = query.Where(c => c.LastName == queryObj.LastName);
+                query = query.Where(c => c.LastName.ToUpper().Trim() == queryObj.LastName.ToUpper().Trim());
             if (!string.IsNullOrEmpty(queryObj.CellPhone))
-                query = query.Where(c => c.CellPhone == queryObj.CellPhone);
+                query = query.Where(c => c.CellPhone.ToUpper().Trim() == queryObj.CellPhone.ToUpper().Trim());
+            if (!string.IsNullOrEmpty(queryObj.CellPhone))
+                query = query.Where(c => c.CellPhone.ToUpper().Trim() == queryObj.CellPhone.ToUpper().Trim());
+            if (!string.IsNullOrEmpty(queryObj.IdentificationCard))
+                query = query.Where(c => c.IdentificationCard.ToUpper().Trim() == queryObj.IdentificationCard.ToUpper().Trim());
+            if (!string.IsNullOrEmpty(queryObj.Email))
+                query = query.Where(c => c.Email.ToUpper().Trim() == queryObj.Email.ToUpper().Trim());
+
             return query;
         }
         public static IQueryable<Campaign> ApplyFiltering(this IQueryable<Campaign> query, CampaignQuery queryObj)

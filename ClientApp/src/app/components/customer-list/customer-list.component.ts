@@ -10,20 +10,22 @@ export class CustomerListComponent implements OnInit {
   private readonly PAGE_SIZE = 3;
 
   columns = [
-    { title: 'First Name', key: 'firstName', isSortable: false },
-    { title: 'Last Name', key: 'lastName', isSortable: false },
-    { title: 'ID', key: 'identificationCard', isSortable: false },
-    { title: 'Email', key: 'email', isSortable: false },
-    { title: 'Cell Phone', key: 'cellPhone', isSortable: false },
-    { title: 'Phone', key: 'homePhone', isSortable: false },
-    { title: 'Country', key: 'country', isSortable: false },
-    { title: 'Region', key: 'region', isSortable: false },
-    { title: 'City', key: 'city', isSortable: false },
-    { title: 'Zip', key: 'postalCode', isSortable: false },
-    { title: 'Address', key: 'address', isSortable: false },
-    { title: 'State', key: 'state', isSortable: false }
+    { title: 'First Name', key: 'firstName', isSortable: false, searchable: true },
+    { title: 'Last Name', key: 'lastName', isSortable: false, searchable: true },
+    { title: 'ID', key: 'identificationCard', isSortable: false, searchable: true },
+    { title: 'Email', key: 'email', isSortable: false, searchable: true },
+    { title: 'Cell Phone', key: 'cellPhone', isSortable: false, searchable: true, defaultSearch: true },
+    { title: 'Phone', key: 'homePhone', isSortable: false, searchable: false },
+    { title: 'Country', key: 'country', isSortable: false, searchable: false },
+    { title: 'Region', key: 'region', isSortable: false, searchable: false },
+    { title: 'City', key: 'city', isSortable: false, searchable: false },
+    { title: 'Zip', key: 'postalCode', isSortable: false, searchable: false },
+    { title: 'Address', key: 'address', isSortable: false, searchable: false },
+    { title: 'State', key: 'state', isSortable: false, searchable: false }
   ];
 
+  searchOption: any;
+  searchPlaceholder: string;
   customers: any = {};
   query: any = {
     pageSize: this.PAGE_SIZE
@@ -31,9 +33,7 @@ export class CustomerListComponent implements OnInit {
 
   constructor(private customerService: CustomerService) { }
 
-  ngOnInit(): void {
-    this.populateCustomers();
-  }
+  ngOnInit(): void { }
 
   populateCustomers() {
     this.customerService.getCustomers(this.query)
@@ -45,6 +45,49 @@ export class CustomerListComponent implements OnInit {
   onPageChage(page) {
     this.query.page = page;
     this.populateCustomers();
+  }
+
+  filterSearchOptions() {
+    this.setPlaceholderSearch();
+    return this.columns.filter(c => c.searchable);
+  }
+
+  search(querySearch) {
+
+    if (!this.searchOption) {
+      var defaultColumnSearch = this.getDefaultColumnSearch();
+      this.query[defaultColumnSearch.key] = querySearch;
+    } else {
+      this.query[this.searchOption] = querySearch;
+    }
+
+    if (querySearch !== '')
+      this.populateCustomers();
+  }
+
+  setPlaceholderSearch() {
+    if (!this.searchOption) {
+      var defaultColumnSearch = this.getDefaultColumnSearch();
+      return this.searchPlaceholder = "Search by " + defaultColumnSearch.title;
+    }
+    var columnSearch = this.columns.find(c => c.key === this.searchOption);
+    return this.searchPlaceholder = "Search by " + columnSearch.title;
+  }
+
+  onFilterChange() {
+    this.setPlaceholderSearch();
+    this.resetProductFilter();
+  }
+
+  getDefaultColumnSearch() {
+    return this.columns.find(c => c.defaultSearch);
+  }
+
+  resetProductFilter() {
+    this.query = {
+      page: 1,
+      pageSize: this.PAGE_SIZE
+    };
   }
 
 }

@@ -1,9 +1,29 @@
 <p>
   <a [routerLink]="['/customers/new']" class="btn btn-primary">New Customer</a>
 </p>
-<div *ngIf="!customers.items">
-  <loading></loading>
+
+
+<div class="mb-3">
+  <label for="searchOption">Search options:</label>
+  <select id="searchOption" class="form-control" name="sltsearchOption" [(ngModel)]="searchOption"
+    (change)="onFilterChange()">
+    <option *ngFor="let c of filterSearchOptions()" value="{{ c.key }}">
+      <div *ngIf="c.searchable">
+        {{c.title}}
+      </div>
+    </option>
+  </select>
 </div>
+
+<div>
+  <p>
+    <input #querySearch type="text" class="form-control" [placeholder]="setPlaceholderSearch()">
+  </p>
+  <p>
+    <button type="button" class="btn btn-primary" (click)="search(querySearch.value)">Search</button>
+  </p>
+</div>
+
 <div *ngIf="customers.totalItems > 0">
   <table class="table table-striped">
     <thead>
@@ -48,3 +68,5 @@
   <pagination [total-items]="customers.totalItems" [page-size]="query.pageSize" (page-changed)="onPageChage($event)">
   </pagination>
 </div>
+
+<div *ngIf="customers.totalItems === 0 " class="alert alert-info" role="alert">We don't find any matches</div>

@@ -6,6 +6,5 @@ namespace Kaizen.Core.Interfaces
     public interface ICountryRepository : IRepository<Country>
     {
         Task<QueryResult<Country>> GetCountriesAsync();
-        Task<string> GetCountryNameByIdAsync(int countryId);
     }
 }

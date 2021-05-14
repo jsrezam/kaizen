@@ -85,14 +85,6 @@ export class CustomerFormComponent implements OnInit {
       }, err => {
         this.errorMessages = parseErrorsAPI(err);
       })
-
-      // this.customerService
-      //   .createCustomer(this.customer)
-      //   .subscribe(response => {
-      //     this.toastrService.success("Data was sucessfully saved.", "Success");
-      //   }, err => {
-      //     this.errorMessages = parseErrorsAPI(err);
-      //   })
     }
   }
 

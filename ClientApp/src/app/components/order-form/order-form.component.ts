@@ -29,10 +29,10 @@ export class OrderFormComponent implements OnInit {
     { title: 'Cell Phone', key: 'cellPhone', isSortable: false }
   ];
   productColumns = [
-    { title: 'Product Id', key: 'id', isSortable: false, show: true },
-    { title: 'Category', key: 'category', isSortable: false, show: true },
-    { title: 'Name', key: 'name', isSortable: false, show: true },
-    { title: 'Unit Price', key: 'unitPrice', isSortable: false, show: false }
+    { title: 'Product Id', key: 'id', isSortable: false, searchable: true },
+    { title: 'Category', key: 'category', isSortable: false, searchable: true },
+    { title: 'Name', key: 'name', isSortable: false, searchable: true },
+    { title: 'Unit Price', key: 'unitPrice', isSortable: false, searchable: false }
   ];
 
   customer: any;
@@ -168,7 +168,7 @@ export class OrderFormComponent implements OnInit {
   }
 
   filterProductColumns() {
-    return this.productColumns.filter(pc => pc.show);
+    return this.productColumns.filter(pc => pc.searchable);
   }
 
   addToOrder(product) {

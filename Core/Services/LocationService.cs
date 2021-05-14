@@ -15,28 +15,35 @@ namespace Kaizen.Core.Services
 
         public async Task<Location> GetLocationNames(int countryId, int regionId, int cityId)
         {
-            return new Location
-            {
-                Country = await unitOfWork.CountryRepository.GetCountryNameByIdAsync(countryId),
-                Region = await unitOfWork.RegionRepository.GetRegionNameByIdAsync(regionId),
-                City = await unitOfWork.CityRepository.GetCityNameByIdAsync(cityId)
-            };
+            var countries = await unitOfWork.CountryRepository.GetCountriesAsync();
+            return (from country in countries.Items
+                    from region in country.Regions
+                    from city in region.cities
+                    where (country.Id == countryId
+                        && region.Id == regionId
+                        && city.Id == cityId)
+                    select new Location
+                    {
+                        Country = country.Name,
+                        Region = region.Name,
+                        City = city.Name
+                    }).FirstOrDefault();
         }
+
         public async Task<Location> GetLocationIds(string countryName, string regionName, string cityName)
         {
             var countries = await unitOfWork.CountryRepository.GetCountriesAsync();
-            var regions = await unitOfWork.RegionRepository.GetRegionsAsync();
-            var cities = await unitOfWork.CityRepository.GetCitiesAsync();
-
-            return (from c in countries.Items
-                    join r in regions.Items on c.Id equals r.CountryId
-                    join ct in cities.Items on r.Id equals ct.RegionId
-                    where (c.Name.Equals(countryName) && r.Name.Equals(regionName) && ct.Name.Equals(cityName))
+            return (from country in countries.Items
+                    from region in country.Regions
+                    from city in region.cities
+                    where (country.Name.Equals(countryName)
+                        && region.Name.Equals(regionName)
+                        && city.Name.Equals(cityName))
                     select new Location
                     {
-                        CountryId = c.Id,
-                        RegionId = r.Id,
-                        CityId = ct.Id
+                        CountryId = country.Id,
+                        RegionId = region.Id,
+                        CityId = city.Id
                     }).FirstOrDefault();
         }
     }

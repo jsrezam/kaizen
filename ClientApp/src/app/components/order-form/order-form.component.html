@@ -130,7 +130,7 @@
       <select id="selectSearchProduct" class="form-control" [(ngModel)]="searchFieldProduct"
         name="selectSearchProductKey" #selectSearchProduct="ngModel" (change)="onFilterChange()">
         <option *ngFor="let p of filterProductColumns()" value="{{ p.key }}">
-          <div *ngIf="p.show">
+          <div *ngIf="p.searchable">
             {{p.title}}
           </div>
         </option>

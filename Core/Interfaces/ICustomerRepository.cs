@@ -7,6 +7,5 @@ namespace Kaizen.Core.Interfaces
     {
         Task<bool> isUniqueCellphone(string cellPhone);
         Task<QueryResult<Customer>> GetCustomersAsync(CustomerQuery queryObj);
-        Task<Customer> GetCustomerAsync(int id);
     }
 }

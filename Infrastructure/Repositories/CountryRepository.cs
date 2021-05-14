@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading.Tasks;
 using Kaizen.Core.Interfaces;
 using Kaizen.Core.Models;
@@ -15,17 +14,11 @@ namespace Kaizen.Infrastructure.Repositories
         {
             var result = new QueryResult<Country>();
 
-            var query = entities.AsQueryable();
+            var query = entities.Include(c => c.Regions).ThenInclude(r => r.cities).AsSplitQuery();
             result.TotalItems = await query.CountAsync();
             result.Items = await query.ToListAsync();
 
             return result;
-        }
-
-        public async Task<string> GetCountryNameByIdAsync(int countryId)
-        {
-            return (await entities
-            .SingleOrDefaultAsync(c => c.Id == countryId)).Name;
         }
 
     }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Kaizen.Core.Interfaces;
@@ -22,18 +21,10 @@ namespace Kaizen.Infrastructure.Repositories
             return (customer != null) ? true : false;
         }
 
-        public async Task<Customer> GetCustomerAsync(int id)
-        {
-            return await entities
-                    .SingleOrDefaultAsync(c => c.Id == id);
-        }
-
         public async Task<QueryResult<Customer>> GetCustomersAsync(CustomerQuery queryObj)
         {
             var result = new QueryResult<Customer>();
-            var query = entities
-            .Include(c => c.CampaignDetails)
-            .AsQueryable();
+            var query = entities.AsQueryable();
 
             query = query.ApplyFiltering(queryObj);
 
@@ -41,6 +32,8 @@ namespace Kaizen.Infrastructure.Repositories
             {
                 ["firstName"] = c => c.FirstName,
                 ["lastName"] = c => c.LastName,
+                ["identificationCard"] = c => c.IdentificationCard,
+                ["email"] = c => c.Email,
                 ["cellPhone"] = c => c.CellPhone,
             };
             query = query.ApplyOrdering(queryObj, columnsMap);

@@ -11,17 +11,6 @@ namespace Kaizen.Infrastructure.Repositories
     {
         public RegionRepository(KaizenDbContext context) : base(context) { }
 
-        public async Task<QueryResult<Region>> GetRegionsAsync()
-        {
-            var result = new QueryResult<Region>();
-            var query = entities.AsQueryable();
-
-            result.TotalItems = await query.CountAsync();
-            result.Items = await query.OrderBy(c => c.Name).ToListAsync();
-
-            return result;
-        }
-
         public async Task<QueryResult<Region>> GetRegionsByCountryAsync(int countryId)
         {
             var result = new QueryResult<Region>();
@@ -31,12 +20,6 @@ namespace Kaizen.Infrastructure.Repositories
             result.Items = await query.OrderBy(c => c.Name).ToListAsync();
 
             return result;
-        }
-
-        public async Task<string> GetRegionNameByIdAsync(int regionId)
-        {
-            return (await entities
-            .SingleOrDefaultAsync(c => c.Id == regionId)).Name;
         }
     }
 }

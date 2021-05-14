@@ -1,13 +1,5 @@
-<p>
-  {{customer |json}}
-</p>
-
 <div class="row">
   <div class="col-md-10 order-md-1">
-
-    <!-- <div *ngIf="errorMessages" class="mb-3 alert alert-danger" role="alert">
-      <strong>Error!</strong> {{errorMessages}}
-    </div> -->
 
     <p *ngFor="let e of errorMessages">
       <ngb-alert type="danger" [dismissible]="false">
