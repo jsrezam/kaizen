@@ -20,6 +20,7 @@ namespace Kaizen.Core.Models
         public string PostalCode { get; set; }
         public string Country { get; set; }
         public string HomePhone { get; set; }
+        [Required]
         public string CellPhone { get; set; }
         public bool State { get; set; }
         public ICollection<CampaignDetail> CampaignDetails { get; set; }

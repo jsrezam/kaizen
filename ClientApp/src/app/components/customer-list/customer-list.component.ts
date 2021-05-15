@@ -10,11 +10,11 @@ export class CustomerListComponent implements OnInit {
   private readonly PAGE_SIZE = 3;
 
   columns = [
-    { title: 'First Name', key: 'firstName', isSortable: false, searchable: true },
-    { title: 'Last Name', key: 'lastName', isSortable: false, searchable: true },
-    { title: 'ID', key: 'identificationCard', isSortable: false, searchable: true },
-    { title: 'Email', key: 'email', isSortable: false, searchable: true },
-    { title: 'Cell Phone', key: 'cellPhone', isSortable: false, searchable: true, defaultSearch: true },
+    { title: 'First Name', key: 'firstName', isSortable: true, searchable: true },
+    { title: 'Last Name', key: 'lastName', isSortable: true, searchable: true },
+    { title: 'ID', key: 'identificationCard', isSortable: true, searchable: true },
+    { title: 'Email', key: 'email', isSortable: true, searchable: true },
+    { title: 'Cell Phone', key: 'cellPhone', isSortable: true, searchable: true, defaultSearch: true },
     { title: 'Phone', key: 'homePhone', isSortable: false, searchable: false },
     { title: 'Country', key: 'country', isSortable: false, searchable: false },
     { title: 'Region', key: 'region', isSortable: false, searchable: false },
@@ -79,6 +79,8 @@ export class CustomerListComponent implements OnInit {
 
   search(querySearch) {
 
+    this.resetFilter();
+
     if (!this.searchOption) {
       var defaultColumnSearch = this.getDefaultColumnSearch();
       this.query[defaultColumnSearch.key] = querySearch;
@@ -88,6 +90,16 @@ export class CustomerListComponent implements OnInit {
 
     if (querySearch !== '')
       this.populateCustomers();
+  }
+
+  sortBy(columnName) {
+    if (this.query.sortBy === columnName) {
+      this.query.isSortAscending = !this.query.isSortAscending;
+    } else {
+      this.query.sortBy = columnName;
+      this.query.isSortAscending = true;
+    }
+    this.populateCustomers();
   }
 
 }

@@ -13,7 +13,6 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { HomeComponent } from './components/home/home.component';
 import { CategoryFormComponent } from './components/category-form/category-form.component';
-import { CategoryViewComponent } from './components/category-view/category-view.component';
 import { CategoryListComponent } from './components/category-list/category-list.component';
 import { LoadingComponent } from './shared/loading/loading.component';
 import { PaginationComponent } from './shared/pagination/pagination.component';
@@ -46,7 +45,6 @@ import { CustomerListComponent } from './components/customer-list/customer-list.
     NavMenuComponent,
     HomeComponent,
     CategoryFormComponent,
-    CategoryViewComponent,
     CategoryListComponent,
     LoadingComponent,
     PaginationComponent,

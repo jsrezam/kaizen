@@ -19,10 +19,10 @@ namespace Kaizen.Core.DTOs
         public string FirstName { get; set; }
         [StringLength(255)]
         [Required]
-        [RegularExpression("([0-9]+)", ErrorMessage = "Please enter valid identification card")]
+        [RegularExpression("([0-9]+)", ErrorMessage = "please enter valid identification card")]
         public string IdentificationCard { get; set; }
         [Required]
-        [RegularExpression("([0-9]+)", ErrorMessage = "Please enter valid phone number")]
+        [RegularExpression("([0-9]+)", ErrorMessage = "please enter valid phone number")]
         public string PhoneNumber { get; set; }
     }
 }

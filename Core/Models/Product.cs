@@ -12,8 +12,10 @@ namespace Kaizen.Core.Models
         [Required]
         [StringLength(255)]
         public string Name { get; set; }
+        [Required]
         [Column(TypeName = "decimal(18, 2)")]
         public decimal UnitPrice { get; set; }
+        [Required]
         public int UnitsInStock { get; set; }
         public int UnitsOnOrder { get; set; }
         public bool IsDiscontinued { get; set; }

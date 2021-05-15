@@ -20,12 +20,12 @@ namespace Kaizen.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProduct([FromBody] ProductDto productResource)
+        public async Task<IActionResult> CreateProduct([FromBody] ProductDto productDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var product = mapper.Map<ProductDto, Product>(productResource);
+            var product = mapper.Map<ProductDto, Product>(productDto);
             await productService.CreateProductAsync(product);
             var result = mapper.Map<Product, ProductDto>(product);
 
@@ -47,24 +47,27 @@ namespace Kaizen.Controllers
             await productService.UpdateProductAsync(product);
 
             var result = mapper.Map<Product, ProductDto>(product);
+
             return Ok(result);
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProducts(ProductQueryDto productQueryResource)
+        public async Task<IActionResult> GetProducts(ProductQueryDto productQueryDto)
         {
-            var productQuery = mapper.Map<ProductQueryDto, ProductQuery>(productQueryResource);
+            var productQuery = mapper.Map<ProductQueryDto, ProductQuery>(productQueryDto);
             var queryResult = await productService.GetProductsAsync(productQuery);
             var resultQuery = mapper.Map<QueryResult<Product>, QueryResultDto<ProductDto>>(queryResult);
+
             return Ok(resultQuery);
         }
 
         [HttpGet("validated")]
-        public async Task<IActionResult> GetValidProducts(ProductQueryDto productQueryResource)
+        public async Task<IActionResult> GetValidProducts(ProductQueryDto productQueryDto)
         {
-            var productQuery = mapper.Map<ProductQueryDto, ProductQuery>(productQueryResource);
+            var productQuery = mapper.Map<ProductQueryDto, ProductQuery>(productQueryDto);
             var queryResult = await productService.GetValidProducts(productQuery);
             var resultQuery = mapper.Map<QueryResult<Product>, QueryResultDto<ProductDto>>(queryResult);
+
             return Ok(resultQuery);
         }
 

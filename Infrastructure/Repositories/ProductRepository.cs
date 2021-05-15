@@ -32,7 +32,7 @@ namespace Kaizen.Infrastructure.Repositories
 
             var columnsMap = new Dictionary<string, Expression<Func<Product, object>>>()
             {
-                ["category.name"] = p => p.Name
+                ["name"] = p => p.Name
             };
             query = query.ApplyOrdering(queryObj, columnsMap);
 
@@ -53,7 +53,7 @@ namespace Kaizen.Infrastructure.Repositories
             .Where(p => p.UnitsInStock > 0)
             .AsQueryable();
 
-            query = query.ApplyFiltering(queryObj, isExact: false);
+            query = query.ApplyFiltering(queryObj);
 
             var columnsMap = new Dictionary<string, Expression<Func<Product, object>>>()
             {

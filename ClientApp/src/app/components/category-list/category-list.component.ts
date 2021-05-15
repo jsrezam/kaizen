@@ -16,7 +16,7 @@ export class CategoryListComponent implements OnInit {
 
   searchOption: any;
   searchPlaceholder: string;
-  queryResult: any = {};
+  categories: any = {};
   query: any = {
     pageSize: this.PAGE_SIZE
   };
@@ -30,7 +30,7 @@ export class CategoryListComponent implements OnInit {
   private populateCategories() {
     this.categoryService.getCategories(this.query)
       .subscribe((result: any) => {
-        this.queryResult = result
+        this.categories = result
       });
   }
 
@@ -70,6 +70,8 @@ export class CategoryListComponent implements OnInit {
   }
 
   search(querySearch) {
+
+    this.resetFilter();
 
     if (!this.searchOption) {
       var defaultColumnSearch = this.getDefaultColumnSearch();

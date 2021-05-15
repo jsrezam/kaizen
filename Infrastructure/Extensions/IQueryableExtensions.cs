@@ -11,12 +11,12 @@ namespace Kaizen.Infrastructure.Extensions
         public static IQueryable<Category> ApplyFiltering(this IQueryable<Category> query, CategoryQuery queryObj)
         {
             if (!string.IsNullOrEmpty(queryObj.Name))
-                query = query.Where(c => c.Name == queryObj.Name);
+                query = query.Where(c => c.Name.Contains(queryObj.Name));
 
             return query;
         }
 
-        public static IQueryable<Product> ApplyFiltering(this IQueryable<Product> query, ProductQuery queryObj, bool isExact = true)
+        public static IQueryable<Product> ApplyFiltering(this IQueryable<Product> query, ProductQuery queryObj)
         {
             if (queryObj.Id.HasValue)
                 query = query.Where(c => c.Id == queryObj.Id);
@@ -24,34 +24,28 @@ namespace Kaizen.Infrastructure.Extensions
             if (queryObj.CategoryId.HasValue)
                 query = query.Where(c => c.CategoryId == queryObj.CategoryId);
 
-            if (isExact)
-            {
-                if (!string.IsNullOrEmpty(queryObj.Name))
-                    query = query.Where(c => c.Name.Equals(queryObj.Name));
-                return query;
-            }
-
             if (!string.IsNullOrEmpty(queryObj.Name))
                 query = query.Where(c => c.Name.Contains(queryObj.Name));
+
             return query;
         }
+
         public static IQueryable<Customer> ApplyFiltering(this IQueryable<Customer> query, CustomerQuery queryObj)
         {
             if (!string.IsNullOrEmpty(queryObj.FirstName))
-                query = query.Where(c => c.FirstName.ToUpper().Trim() == queryObj.FirstName.ToUpper().Trim());
+                query = query.Where(c => c.FirstName.Contains(queryObj.FirstName.Trim()));
             if (!string.IsNullOrEmpty(queryObj.LastName))
-                query = query.Where(c => c.LastName.ToUpper().Trim() == queryObj.LastName.ToUpper().Trim());
+                query = query.Where(c => c.LastName.Contains(queryObj.LastName.Trim()));
             if (!string.IsNullOrEmpty(queryObj.CellPhone))
-                query = query.Where(c => c.CellPhone.ToUpper().Trim() == queryObj.CellPhone.ToUpper().Trim());
-            if (!string.IsNullOrEmpty(queryObj.CellPhone))
-                query = query.Where(c => c.CellPhone.ToUpper().Trim() == queryObj.CellPhone.ToUpper().Trim());
+                query = query.Where(c => c.CellPhone.Contains(queryObj.CellPhone.Trim()));
             if (!string.IsNullOrEmpty(queryObj.IdentificationCard))
-                query = query.Where(c => c.IdentificationCard.ToUpper().Trim() == queryObj.IdentificationCard.ToUpper().Trim());
+                query = query.Where(c => c.IdentificationCard.Contains(queryObj.IdentificationCard.Trim()));
             if (!string.IsNullOrEmpty(queryObj.Email))
-                query = query.Where(c => c.Email.ToUpper().Trim() == queryObj.Email.ToUpper().Trim());
+                query = query.Where(c => c.Email.Contains(queryObj.Email.Trim()));
 
             return query;
         }
+
         public static IQueryable<Campaign> ApplyFiltering(this IQueryable<Campaign> query, CampaignQuery queryObj)
         {
             if (queryObj.FinishDate != null)
@@ -59,6 +53,7 @@ namespace Kaizen.Infrastructure.Extensions
 
             return query;
         }
+
         public static IQueryable<CampaignDetail> ApplyFiltering(this IQueryable<CampaignDetail> query, CampaignDetailQuery queryObj)
         {
             if (!string.IsNullOrEmpty(queryObj.Status))
