@@ -1,10 +1,10 @@
-<h1 *ngIf="category.id">Edit Category</h1>
-<h1 *ngIf="!category.id">New Category</h1>
-<!-- <p>
-    {{ category | json }}
-</p> -->
+<h2 *ngIf="category.id">Edit Category</h2>
+<h2 *ngIf="!category.id">New Category</h2>
+
+<hr class="my-4">
 
 <form #f="ngForm" (ngSubmit)="submit()" novalidate>
+
   <div class="form-group">
     <label for="categoryName">Name</label>
     <input id="categoryName" type="text" class="form-control" [(ngModel)]="category.name" name="categoryName" required
@@ -13,10 +13,25 @@
   <div class="alert alert-danger" role="alert" *ngIf="name.touched && !name.valid">
     Please specify the name.
   </div>
+
   <div>
     <label for="categoryDescription">Description</label>
     <textarea class="form-control" id="categoryDescription" rows="3" [(ngModel)]="category.description"
       name="categoryDescription" #description="ngModel"></textarea>
   </div>
+
+  <div class="row">
+    <div class="col-md-2 mb-3">
+      <p>Is Active?</p>
+      <label for="isActive" class="form-check-inline">
+        <input type="radio" name="state" id="isActive" [value]="true" [(ngModel)]="category.state"> Yes
+      </label>
+      <label for="isInactive" class="form-check-inline">
+        <input type="radio" name="state" id="isInactive" [value]="false" [(ngModel)]="category.state">
+        No
+      </label>
+    </div>
+  </div>
+
   <button class="btn btn-outline-success" [disabled]="!f.valid">Save</button>
 </form>

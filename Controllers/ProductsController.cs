@@ -78,17 +78,5 @@ namespace Kaizen.Controllers
             var productResource = mapper.Map<Product, ProductDto>(product);
             return Ok(productResource);
         }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduct(int id)
-        {
-            var product = await productService.GetProductAsync(id);
-
-            if (product == null)
-                return NotFound();
-
-            var result = productService.DeleteProductAsync(product);
-            return Ok(result);
-        }
     }
 }

@@ -12,6 +12,7 @@ namespace Kaizen.Core.Models
         [StringLength(255)]
         public string Name { get; set; }
         public string Description { get; set; }
+        public bool State { get; set; }
 
         public ICollection<Product> Products { get; set; }
 

@@ -51,13 +51,4 @@ export class ProductListComponent implements OnInit {
     this.populateProducts();
   }
 
-  delete(productId) {
-    if (confirm("Are you sure?")) {
-      this.productService.delete(productId)
-        .subscribe(x => {
-          this.populateProducts();
-        });
-    }
-  }
-
 }

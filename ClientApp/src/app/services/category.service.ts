@@ -35,10 +35,4 @@ export class CategoryService {
         );
     }
 
-    delete(id) {
-        return this.http.delete(this.apiUri + id).pipe(
-            map(res => res)
-        );
-    }
-
 }

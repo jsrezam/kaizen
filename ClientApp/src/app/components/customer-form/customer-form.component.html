@@ -1,18 +1,20 @@
 <div class="row">
   <div class="col-md-10 order-md-1">
 
+    <h2 *ngIf="customer.id" class="mb-3">
+      Update Customer
+    </h2>
+    <h2 *ngIf="!customer.id" class="mb-3">
+      New Customer
+    </h2>
+
+    <hr class="my-4">
+
     <p *ngFor="let e of errorMessages">
       <ngb-alert type="danger" [dismissible]="false">
         <strong>Error!</strong> {{e.description}}
       </ngb-alert>
     </p>
-
-    <h4 *ngIf="customer.id" class="mb-3">
-      Update Customer
-    </h4>
-    <h4 *ngIf="!customer.id" class="mb-3">
-      New Customer
-    </h4>
 
     <form #form="ngForm" (ngSubmit)="createCustomer(form)" class="needs-validation"
       [ngClass]="{'was-validated': form.submitted}" novalidate>

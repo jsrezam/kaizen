@@ -1,7 +1,31 @@
 <h2>Categories</h2>
+
+<hr class="my-4">
+
 <p>
   <a [routerLink]="['/categories/new']" class="btn btn-primary">New Category</a>
 </p>
+
+<div class="mb-3">
+  <label for="searchOption">Search options:</label>
+  <select id="searchOption" class="form-control" name="sltsearchOption" [(ngModel)]="searchOption"
+    (change)="onFilterChange()">
+    <option *ngFor="let c of filterSearchOptions()" value="{{ c.key }}">
+      <div *ngIf="c.searchable">
+        {{c.title}}
+      </div>
+    </option>
+  </select>
+</div>
+
+<div>
+  <p>
+    <input #querySearch type="text" class="form-control" [placeholder]="setPlaceholderSearch()">
+  </p>
+  <p>
+    <button type="button" class="btn btn-primary" (click)="search(querySearch.value)">Search</button>
+  </p>
+</div>
 
 <div *ngIf="!queryResult.items">
   <loading></loading>
@@ -10,7 +34,7 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th *ngFor="let c of columns" aria-labelledby="tableLabel">
+        <th *ngFor="let c of columns" aria-labelledby="tableLabel" class="text-center">
           <div *ngIf="c.isSortable" (click)="sortBy(c.key)">
             {{c.title}}
             <i *ngIf="query.sortBy === c.key" class="fa" [class.fa-sort-asc]="query.isSortAscending"
@@ -24,17 +48,14 @@
     </thead>
     <tbody>
       <tr *ngFor="let c of queryResult.items">
-        <td>{{ c.id }}</td>
-        <td>{{ c.name }}</td>
-        <td>{{ c.description }}</td>
+        <td class="text-center">{{ c.name }}</td>
+        <td class="text-center">{{ c.description }}</td>
         <td>
           <a class="btn btn-outline-success" [routerLink]="['/categories/edit/', c.id]">Edit</a>
-          <button class="btn btn-outline-danger" type="button" (click)="delete(c.id)">Delete</button>
         </td>
       </tr>
     </tbody>
   </table>
-  <!-- <pagination></pagination> -->
   <pagination [total-items]="queryResult.totalItems" [page-size]="query.pageSize" (page-changed)="onPageChage($event)">
   </pagination>
 </div>

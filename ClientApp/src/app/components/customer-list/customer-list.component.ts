@@ -47,9 +47,34 @@ export class CustomerListComponent implements OnInit {
     this.populateCustomers();
   }
 
+  setPlaceholderSearch() {
+    if (!this.searchOption) {
+      var defaultColumnSearch = this.getDefaultColumnSearch();
+      return this.searchPlaceholder = "Search by " + defaultColumnSearch.title;
+    }
+    var columnSearch = this.columns.find(c => c.key === this.searchOption);
+    return this.searchPlaceholder = "Search by " + columnSearch.title;
+  }
+
   filterSearchOptions() {
     this.setPlaceholderSearch();
     return this.columns.filter(c => c.searchable);
+  }
+
+  getDefaultColumnSearch() {
+    return this.columns.find(c => c.defaultSearch);
+  }
+
+  resetFilter() {
+    this.query = {
+      page: 1,
+      pageSize: this.PAGE_SIZE
+    };
+  }
+
+  onFilterChange() {
+    this.setPlaceholderSearch();
+    this.resetFilter();
   }
 
   search(querySearch) {
@@ -63,31 +88,6 @@ export class CustomerListComponent implements OnInit {
 
     if (querySearch !== '')
       this.populateCustomers();
-  }
-
-  setPlaceholderSearch() {
-    if (!this.searchOption) {
-      var defaultColumnSearch = this.getDefaultColumnSearch();
-      return this.searchPlaceholder = "Search by " + defaultColumnSearch.title;
-    }
-    var columnSearch = this.columns.find(c => c.key === this.searchOption);
-    return this.searchPlaceholder = "Search by " + columnSearch.title;
-  }
-
-  onFilterChange() {
-    this.setPlaceholderSearch();
-    this.resetProductFilter();
-  }
-
-  getDefaultColumnSearch() {
-    return this.columns.find(c => c.defaultSearch);
-  }
-
-  resetProductFilter() {
-    this.query = {
-      page: 1,
-      pageSize: this.PAGE_SIZE
-    };
   }
 
 }

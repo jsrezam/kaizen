@@ -1,8 +1,7 @@
-<h1 *ngIf="product.id">Edit Product</h1>
-<h1 *ngIf="!product.id">New Product</h1>
-<p>
-  {{ product | json }}
-</p>
+<h2 *ngIf="product.id">Edit Product</h2>
+<h2 *ngIf="!product.id">New Product</h2>
+
+<hr class="my-4">
 
 <form #f="ngForm" (ngSubmit)="submit()" novalidate>
   <div class="form-group">

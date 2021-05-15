@@ -1,4 +1,7 @@
 <h2>Products</h2>
+
+<hr class="my-4">
+
 <p>
   <a [routerLink]="['/products/new']" class="btn btn-primary">New Product</a>
 </p>
@@ -32,7 +35,6 @@
         <td>{{ p.isDiscontinued }}</td>
         <td>
           <a class="btn btn-outline-success" [routerLink]="['/products/edit/', p.id]">Edit</a>
-          <button class="btn btn-outline-danger" type="button" (click)="delete(p.id)">Delete</button>
         </td>
       </tr>
     </tbody>

@@ -20,12 +20,12 @@ namespace Kaizen.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCategory([FromBody] CategoryDto categoryResource)
+        public async Task<IActionResult> CreateCategory([FromBody] CategoryDto categoryDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var category = mapper.Map<CategoryDto, Category>(categoryResource);
+            var category = mapper.Map<CategoryDto, Category>(categoryDto);
 
             await categoryService.CreateCategoryAsync(category);
 
@@ -35,7 +35,7 @@ namespace Kaizen.Controllers
         }
 
         [HttpPut("{categoryId}")]
-        public async Task<IActionResult> UpdateCategory(int categoryId, [FromBody] CategoryDto categoryResource)
+        public async Task<IActionResult> UpdateCategory(int categoryId, [FromBody] CategoryDto categoryDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -45,7 +45,7 @@ namespace Kaizen.Controllers
             if (category == null)
                 return NotFound();
 
-            mapper.Map<CategoryDto, Category>(categoryResource, category);
+            mapper.Map<CategoryDto, Category>(categoryDto, category);
 
             await categoryService.UpdateCategoryAsync(category);
 
@@ -55,11 +55,12 @@ namespace Kaizen.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetCategories(CategoryQueryDto categoryQueryResource)
+        public async Task<IActionResult> GetCategories(CategoryQueryDto categoryQueryDto)
         {
-            var categoryQuery = mapper.Map<CategoryQueryDto, CategoryQuery>(categoryQueryResource);
+            var categoryQuery = mapper.Map<CategoryQueryDto, CategoryQuery>(categoryQueryDto);
             var queryResult = await categoryService.GetCategoriesAsync(categoryQuery);
             var resultQuery = mapper.Map<QueryResult<Category>, QueryResultDto<CategoryDto>>(queryResult);
+
             return Ok(resultQuery);
         }
 
@@ -72,20 +73,9 @@ namespace Kaizen.Controllers
                 return NotFound();
 
             var categoryResource = mapper.Map<Category, CategoryDto>(category);
+
             return Ok(categoryResource);
         }
 
-        [HttpDelete("{categoryId}")]
-        public async Task<IActionResult> DeleteCategory(int categoryId)
-        {
-            var category = await categoryService.GetCategoryAsync(categoryId);
-
-            if (category == null)
-                return NotFound();
-
-            var result = categoryService.DeleteCategoryAsync(category);
-
-            return Ok(result);
-        }
     }
 }

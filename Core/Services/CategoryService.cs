@@ -34,11 +34,5 @@ namespace Kaizen.Core.Services
             await unitOfWork.SaveChangesAsync();
         }
 
-        public async Task DeleteCategoryAsync(Category category)
-        {
-            unitOfWork.CategoryRepository.Delete(category);
-            await unitOfWork.SaveChangesAsync();
-        }
-
     }
 }

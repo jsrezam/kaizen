@@ -8,12 +8,14 @@ import { CategoryService } from 'src/app/services/category.service';
 })
 export class CategoryListComponent implements OnInit {
   private readonly PAGE_SIZE = 3;
+
   columns = [
-    { title: 'Id' },
-    { title: 'Name', key: 'name', isSortable: true },
-    { title: 'Description', key: 'description', isSortable: true },
+    { title: 'Name', key: 'name', isSortable: true, searchable: true, defaultSearch: true },
+    { title: 'Description', key: 'description', isSortable: false, searchable: false },
   ];
 
+  searchOption: any;
+  searchPlaceholder: string;
   queryResult: any = {};
   query: any = {
     pageSize: this.PAGE_SIZE
@@ -32,6 +34,53 @@ export class CategoryListComponent implements OnInit {
       });
   }
 
+  onPageChage(page) {
+    this.query.page = page;
+    this.populateCategories();
+  }
+
+  setPlaceholderSearch() {
+    if (!this.searchOption) {
+      var defaultColumnSearch = this.getDefaultColumnSearch();
+      return this.searchPlaceholder = "Search by " + defaultColumnSearch.title;
+    }
+    var columnSearch = this.columns.find(c => c.key === this.searchOption);
+    return this.searchPlaceholder = "Search by " + columnSearch.title;
+  }
+
+  filterSearchOptions() {
+    this.setPlaceholderSearch();
+    return this.columns.filter(c => c.searchable);
+  }
+
+  getDefaultColumnSearch() {
+    return this.columns.find(c => c.defaultSearch);
+  }
+
+  resetFilter() {
+    this.query = {
+      page: 1,
+      pageSize: this.PAGE_SIZE
+    };
+  }
+
+  onFilterChange() {
+    this.setPlaceholderSearch();
+    this.resetFilter();
+  }
+
+  search(querySearch) {
+
+    if (!this.searchOption) {
+      var defaultColumnSearch = this.getDefaultColumnSearch();
+      this.query[defaultColumnSearch.key] = querySearch;
+    } else {
+      this.query[this.searchOption] = querySearch;
+    }
+
+    this.populateCategories();
+  }
+
   sortBy(columnName) {
     if (this.query.sortBy === columnName) {
       this.query.isSortAscending = !this.query.isSortAscending;
@@ -40,20 +89,6 @@ export class CategoryListComponent implements OnInit {
       this.query.isSortAscending = true;
     }
     this.populateCategories();
-  }
-
-  onPageChage(page) {
-    this.query.page = page;
-    this.populateCategories();
-  }
-
-  delete(categoryId) {
-    if (confirm("Are you sure?")) {
-      this.categoryService.delete(categoryId)
-        .subscribe(x => {
-          this.populateCategories();
-        });
-    }
   }
 
 }

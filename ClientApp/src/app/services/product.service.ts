@@ -40,10 +40,4 @@ export class ProductService {
         );
     }
 
-    delete(id) {
-        return this.http.delete(this.apiUri + id).pipe(
-            map(res => res)
-        );
-    }
-
 }

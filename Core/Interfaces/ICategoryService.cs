@@ -9,6 +9,5 @@ namespace Kaizen.Core.Interfaces
         Task<Category> GetCategoryAsync(int categoryId);
         Task<QueryResult<Category>> GetCategoriesAsync(CategoryQuery categoryQuery);
         Task UpdateCategoryAsync(Category category);
-        Task DeleteCategoryAsync(Category category);
     }
 }
