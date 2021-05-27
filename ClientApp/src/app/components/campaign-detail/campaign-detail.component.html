@@ -1,69 +1,258 @@
-<h2>Campaign Details</h2>
+<h2>Campaign Detail</h2>
 
-<p>
-  {{campaign|json}}
+<hr class="my-4">
+
+<p *ngFor="let e of errorMessages">
+  <ngb-alert type="danger" [dismissible]="false">
+    <strong>Error!</strong> {{e.description}}
+  </ngb-alert>
 </p>
 
-<div *ngIf="!user">
-  <loading></loading>
-</div>
-<div *ngIf="user">
-  <div class="row align-items-center profile-header">
-    <div class="col-md-2 mb-3">
-      <img src="https://cdn4.iconfinder.com/data/icons/superheroes/512/batman-512.png" alt="User's profile picture"
-        class="rounded-circle img-fluid profile-picture">
-    </div>
-    <div class="col-md text-center text-md-left">
-      <h2>{{ user.firstName }} {{ user.lastName }}</h2>
-      <p>{{ user.email }}</p>
-      <p>{{ user.identificationCard }}</p>
-      <p><strong>Campaign: {{campaign.id}}</strong> </p>
+<div class="row">
+
+  <div class="col-md-6 mb-3">
+    <div class="mb3">
+
+      <h3>Agent:</h3>
+
+      <hr class="mb-4">
+
+      <div *ngIf="!agent">
+        <loading></loading>
+      </div>
+      <div *ngIf="agent">
+        <div class="row align-items-center profile-header">
+          <div class="col-md-4 mb-3">
+            <img src="https://cdn4.iconfinder.com/data/icons/superheroes/512/batman-512.png"
+              alt="User's profile picture" class="rounded-circle img-fluid profile-picture">
+          </div>
+          <div class="col-md text-center text-md-left">
+            <h4>{{ agent.firstName }} {{ agent.lastName }}</h4>
+            <p>{{ agent.email }}</p>
+            <p>{{ agent.identificationCard }}</p>
+            <p><strong>Campaign: {{campaign.id}}</strong> </p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+
+  <div class="col-md-6 mb-3">
+
+    <div class="mb-3">
+      <button *ngIf="campaign.isActive" type="button" class="btn btn-success" (click)="updateCampaignState()">Close
+        Campaign</button>
+      <button *ngIf="!campaign.isActive && this.authService.isInRole('admin')" type="button" class="btn btn-warning"
+        (click)="updateCampaignState()">Open
+        Campaign</button>
+    </div>
+
+    <div *ngIf="this.authService.isInRole('admin') && campaign.isActive" class="mb-3">
+      <div class="mb-3">
+        <label for="finishDate">Finish Campaign:</label>
+        <div class="input-group">
+          <input id="finishDate" class="form-control" placeholder="yyyy-mm-dd" name="finishDate"
+            [(ngModel)]="campaign.modelFinishDate" ngbDatepicker #finishDate="ngbDatepicker">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary calendar" (click)="finishDate.toggle()" type="button">
+              <i class="fas fa-calendar-alt fa-fw"></i>
+            </button>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <button *ngIf="campaign.isActive" type="button" class="btn btn-outline-warning w-100 btn btn-primary btn-lg"
+          (click)="updateFinishDate()">Update Finish Date</button>
+      </div>
+    </div>
+
+  </div>
+
 </div>
 
-<div *ngIf="!queryResult.items">
-  <loading></loading>
-</div>
-<div *ngIf="queryResult.items">
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th *ngFor="let c of columns" aria-labelledby="tableLabel">
-          <div *ngIf="c.isSortable" (click)="sortBy(c.key)">
-            {{c.title}}
-            <i *ngIf="query.sortBy === c.key" class="fa" [class.fa-sort-asc]="query.isSortAscending"
-              [class.fa-sort-desc]="!query.isSortAscending"></i>
-          </div>
-          <div *ngIf="!c.isSortable">
-            {{c.title}}
-          </div>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let cd of queryResult.items">
-        <td>{{ cd.id }}</td>
-        <td>{{ cd.customer.firstName }}</td>
-        <td>{{ cd.customer.lastName }}</td>
-        <td>{{ cd.callTimes }}</td>
-        <td>{{ cd.callDuration }}</td>
-        <td>
-          <div *ngIf="cd.status === 'NotCalled'">
-            <p class="fa fa-times"> Not Called</p>
-          </div>
-          <div *ngIf="cd.status === 'Called'">
-            <p class="fa fa-check"> Called</p>
-          </div>
-        </td>
 
-        <!-- <td>
-          <a class="btn btn-outline-success" [routerLink]="['/products/edit/', p.id]">Edit</a>
-          <button class="btn btn-outline-danger" type="button" (click)="delete(p.id)">Delete</button>
-        </td> -->
-      </tr>
-    </tbody>
-  </table>
-  <pagination [total-items]="queryResult.totalItems" [page-size]="query.pageSize" (page-changed)="onPageChage($event)">
-  </pagination>
-</div>
+<ngb-accordion>
+  <ngb-panel title="Show detail">
+    <ng-template ngbPanelContent>
+
+      <div class="mb-3">
+        <label for="searchOption">Search options:</label>
+        <select id="searchOption" class="form-control" name="sltsearchOption" [(ngModel)]="searchOption"
+          (change)="onFilterChange()">
+          <option *ngFor="let c of filterSearchOptions()" value="{{ c.key }}">
+            <div *ngIf="c.searchable">
+              {{c.title}}
+            </div>
+          </option>
+        </select>
+      </div>
+
+      <div>
+        <p>
+          <input #querySearch type="text" class="form-control" [placeholder]="setPlaceholderSearch()">
+        </p>
+        <p>
+          <button type="button" class="btn btn-primary" (click)="search(querySearch.value)">Search</button>
+        </p>
+      </div>
+
+      <div *ngIf="campaignDetails.items">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th *ngFor="let c of campaignDetailsColumns" aria-labelledby="tableLabel" class="text-center">
+                <div *ngIf="c.isSortable" (click)="sortBy(c.key)">
+                  {{c.title}}
+                  <i *ngIf="query.sortBy === c.key" class="fa" [class.fa-sort-asc]="query.isSortAscending"
+                    [class.fa-sort-desc]="!query.isSortAscending"></i>
+                </div>
+                <div *ngIf="!c.isSortable">
+                  {{c.title}}
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cd of campaignDetails.items">
+              <td class="text-center">{{ cd.id }}</td>
+              <td class="text-center">{{ cd.customer.firstName }}</td>
+              <td class="text-center">{{ cd.customer.lastName }}</td>
+              <td class="text-center">{{ cd.customer.cellPhone }}</td>
+              <td class="text-center">{{ cd.totalCallsNumber }}</td>
+              <td class="text-center">{{ cd.lastCallDuration }}</td>
+
+              <td class="text-center">
+                <div *ngIf="cd.lastCallDate === '0001-01-01T00:00:00'">
+                  Not available
+                </div>
+                <div *ngIf="cd.lastCallDate !== '0001-01-01T00:00:00'">
+                  {{ cd.lastCallDate | date:'short' }}
+                </div>
+              </td>
+
+              <td class="text-center">{{ cd.lastValidCallDuration }}</td>
+
+              <td class="text-center">
+                <div *ngIf="cd.lastValidCallDate === '0001-01-01T00:00:00'">
+                  Not available
+                </div>
+                <div *ngIf="cd.lastValidCallDate !== '0001-01-01T00:00:00'">
+                  {{ cd.lastValidCallDate | date:'short' }}
+                </div>
+              </td>
+
+              <td class="text-center">
+                <div *ngIf="cd.state === 'Uncalled'" data-toggle="tooltip" data-placement="right" [title]="cd.state">
+                  <p class="fa fa-times"></p>
+                </div>
+                <div *ngIf="cd.state === 'Called'" data-toggle="tooltip" data-placement="right" [title]="cd.state">
+                  <p class="fa fa-volume-control-phone"></p>
+                </div>
+                <div *ngIf="cd.state === 'Earned'" data-toggle="tooltip" data-placement="right" [title]="cd.state">
+                  <p class="fa fa-handshake-o"></p>
+                </div>
+              </td>
+              <td>
+                <button *ngIf="campaign.isActive && this.authService.isInRole('admin')" class="btn btn-outline-danger"
+                  [disabled]="cd.state === 'Earned'" type="button" (click)="remove(cd.id)">Remove</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <pagination [total-items]="campaignDetails.totalItems" [page-size]="query.pageSize"
+          (page-changed)="onPageChage($event)">
+        </pagination>
+      </div>
+
+    </ng-template>
+  </ngb-panel>
+  <ngb-panel title="Add customers" *ngIf="campaign.isActive">
+    <ng-template ngbPanelContent>
+
+      <div class="mb-3">
+        <label for="customerSearchOption">Search options:</label>
+        <select id="customerSearchOption" class="form-control" name="sltCustomerSearchOption"
+          [(ngModel)]="customerSearchOption" (change)="onCustomerFilterChange()">
+          <option *ngFor="let c of filterCustomersSearchOptions()" value="{{ c.key }}">
+            <div *ngIf="c.searchable">
+              {{c.title}}
+            </div>
+          </option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <p>
+          <input #customerQuerySearch (keyup)="searchCustomers(customerQuerySearch.value)" type="text"
+            class="form-control" [placeholder]="setCustomersPlaceholderSearch()">
+        </p>
+      </div>
+      <div class="mb-3">
+        <button *ngIf="isSelectedAllCustomers" type="button" class="btn btn-primary"
+          (click)="SelectAllCustomers()">Deselect
+          All</button>
+        <button *ngIf="!isSelectedAllCustomers" type="button" class="btn btn-primary"
+          (click)="SelectAllCustomers()">Select
+          All</button>
+        <button type="button" class="btn btn-outline-warning" (click)="addCustomersToCampaign()">Add Customers
+        </button>
+      </div>
+
+      <div *ngIf="customers.items">
+        <div class="table-responsive">
+          <table class="table align-middle">
+            <thead>
+              <tr>
+                <th *ngFor="let c of customersColumns" aria-labelledby="tableLabel" class="text-center">
+                  <div *ngIf="c.isSortable" (click)="sortCustomerColumnsBy(c.key)">
+                    {{c.title}}
+                    <i *ngIf="customerQuery.sortBy === c.key" class="fa"
+                      [class.fa-sort-asc]="customerQuery.isSortAscending"
+                      [class.fa-sort-desc]="!customerQuery.isSortAscending"></i>
+                  </div>
+                  <div *ngIf="!c.isSortable">
+                    {{c.title}}
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let c of filteredCustomers | slice: (this.customerQuery.page-1) * customerQuery.pageSize : this.customerQuery.page * customerQuery.pageSize">
+                <td>
+                  <input style="text-align: center; vertical-align: middle; margin-left:auto; margin-right:auto;"
+                    type="checkbox" class="form-check-input" [(ngModel)]="c.isSelected"
+                    [ngModelOptions]="{standalone: true}" #isChecked="ngModel" name="isChecked" [disabled]="!c.state">
+                </td>
+                <td class="text-center">{{ c.firstName }}</td>
+                <td class="text-center">{{ c.lastName }}</td>
+                <td class="text-center">{{ c.identificationCard }}</td>
+                <td class="text-center">{{ c.email }}</td>
+                <td class="text-center">{{ c.cellPhone }}</td>
+                <td class="text-center">{{ c.homePhone }}</td>
+                <td class="text-center">{{ c.country }}</td>
+                <td class="text-center">{{ c.region }}</td>
+                <td class="text-center">{{ c.city }}</td>
+                <td class="text-center">{{ c.postalCode }}</td>
+                <td class="text-center">{{ c.address }}</td>
+                <div *ngIf="c.state">
+                  <td class="text-center">Active</td>
+                </div>
+                <div *ngIf="!c.state">
+                  <td class="text-center">Inactive</td>
+                </div>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+
+        <pagination [total-items]="totalItems" [page-size]="customerQuery.pageSize"
+          (page-changed)="onCustomerTablePageChage($event)">
+        </pagination>
+      </div>
+
+    </ng-template>
+  </ngb-panel>
+</ngb-accordion>

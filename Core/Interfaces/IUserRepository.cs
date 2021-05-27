@@ -6,7 +6,7 @@ namespace Kaizen.Core.Interfaces
 {
     public interface IUserRepository
     {
-        Task<IEnumerable<ApplicationUser>> GetAgentUsersAsync();
+        Task<IEnumerable<ApplicationUser>> GetActiveAgentsAsync();
         Task<ApplicationUser> GetUserByEmailAsync(string email);
         Task<ApplicationUser> FindByIdAsync(string userId);
     }

@@ -14,6 +14,6 @@ namespace Kaizen.Core.DTOs
         public string CallType { get; set; }
         public string CallTitle { get; set; }
         public string CallDescription { get; set; }
-        public int CallTimes { get; set; }
+        public int TotalCallsNumber { get; set; }
     }
 }

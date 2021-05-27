@@ -4,14 +4,16 @@ using Kaizen.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Kaizen.Migrations
 {
     [DbContext(typeof(KaizenDbContext))]
-    partial class KaizenDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210518163234_AddStateToUser")]
+    partial class AddStateToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -132,29 +134,20 @@ namespace Kaizen.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("CallDuration")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CallTimes")
+                        .HasColumnType("int");
+
                     b.Property<int>("CampaignId")
                         .HasColumnType("int");
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("LastCallDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastCallDuration")
+                    b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastValidCallDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastValidCallDuration")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("State")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TotalCallsNumber")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

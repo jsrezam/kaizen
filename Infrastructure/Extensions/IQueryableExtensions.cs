@@ -42,22 +42,43 @@ namespace Kaizen.Infrastructure.Extensions
                 query = query.Where(c => c.IdentificationCard.Contains(queryObj.IdentificationCard.Trim()));
             if (!string.IsNullOrEmpty(queryObj.Email))
                 query = query.Where(c => c.Email.Contains(queryObj.Email.Trim()));
+            if (!string.IsNullOrEmpty(queryObj.City))
+                query = query.Where(c => c.City.Contains(queryObj.City.Trim()));
+            if (!string.IsNullOrEmpty(queryObj.Region))
+                query = query.Where(c => c.Region.Contains(queryObj.Region.Trim()));
+            if (!string.IsNullOrEmpty(queryObj.Country))
+                query = query.Where(c => c.Country.Contains(queryObj.Country.Trim()));
 
             return query;
         }
 
         public static IQueryable<Campaign> ApplyFiltering(this IQueryable<Campaign> query, CampaignQuery queryObj)
         {
-            if (queryObj.FinishDate != null)
-                query = query.Where(c => c.FinishDate == queryObj.FinishDate);
+            if (queryObj.Id.HasValue)
+                query = query.Where(c => c.Id == queryObj.Id);
 
             return query;
         }
 
         public static IQueryable<CampaignDetail> ApplyFiltering(this IQueryable<CampaignDetail> query, CampaignDetailQuery queryObj)
         {
-            if (!string.IsNullOrEmpty(queryObj.Status))
-                query = query.Where(c => c.Status == queryObj.Status);
+            if (queryObj.Customer != null && !string.IsNullOrEmpty(queryObj.Customer.FirstName))
+                query = query.Where(c => c.Customer.FirstName.Contains(queryObj.Customer.FirstName.Trim()));
+
+            if (queryObj.Customer != null && !string.IsNullOrEmpty(queryObj.Customer.LastName))
+                query = query.Where(c => c.Customer.LastName.Contains(queryObj.Customer.LastName.Trim()));
+
+            if (queryObj.Customer != null && !string.IsNullOrEmpty(queryObj.Customer.CellPhone))
+                query = query.Where(c => c.Customer.CellPhone.Contains(queryObj.Customer.CellPhone.Trim()));
+
+            if (queryObj.TotalCallsNumber.HasValue)
+                query = query.Where(c => c.TotalCallsNumber == queryObj.TotalCallsNumber);
+
+            if (!string.IsNullOrEmpty(queryObj.LastCallDuration))
+                query = query.Where(c => c.LastCallDuration.Contains(queryObj.LastCallDuration.Trim()));
+
+            if (!string.IsNullOrEmpty(queryObj.State))
+                query = query.Where(c => c.State.Contains(queryObj.State.Trim()));
 
             return query;
         }
@@ -75,6 +96,9 @@ namespace Kaizen.Infrastructure.Extensions
 
         public static IQueryable<T> ApplyPaging<T>(this IQueryable<T> query, IQueryObject queryObj)
         {
+            if (queryObj.ApplyPagingFromClient)
+                return query;
+
             if (queryObj.Page <= 0)
                 queryObj.Page = 1;
 

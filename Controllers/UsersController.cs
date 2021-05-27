@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Kaizen.Controllers
 {
     [Route("/api/users")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UsersController : Controller
     {
         private readonly IMapper mapper;
@@ -22,15 +23,14 @@ namespace Kaizen.Controllers
             this.mapper = mapper;
         }
 
-        [HttpGet("agents")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.RequireAdminRole)]
-        public async Task<IActionResult> GetAgentUsersAsync()
+        [HttpGet("agents/actives")]
+        [Authorize(Policies.RequireAdminRole)]
+        public async Task<IActionResult> GetActiveAgentsAsync()
         {
-            return Ok(await userService.GetAgentUsersAsync());
+            return Ok(await userService.GetActiveAgentsAsync());
         }
 
         [HttpGet("{email}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetUserByEmailAsync(string email)
         {
             var user = await userService.GetUserByEmailAsync(email);
@@ -41,10 +41,9 @@ namespace Kaizen.Controllers
         }
 
         [HttpGet("campaign/{campaignId}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.RequireAdminRole)]
-        public async Task<IActionResult> GetUserByCampaignAsync(int campaignId)
+        public async Task<IActionResult> GetAgentByCampaignAsync(int campaignId)
         {
-            var user = await userService.GetUserByCampaignAsync(campaignId);
+            var user = await userService.GetAgentByCampaignAsync(campaignId);
             if (user == null)
                 return NotFound();
 

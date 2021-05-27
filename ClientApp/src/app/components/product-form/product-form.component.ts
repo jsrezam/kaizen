@@ -54,7 +54,7 @@ export class ProductFormComponent implements OnInit {
   submit() {
     var result$ = (this.product.id) ? this.productService.update(this.product) : this.productService.create(this.product);
     result$.subscribe((product: any) => {
-      this.toastrService.success("Data was sucessfully saved.", "Success")
+      this.toastrService.success("Data was successfully saved.", "Success")
       this.router.navigate(['/products/'])
     }, err => {
       this.errorMessages = parseErrorsAPI(err);

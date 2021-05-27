@@ -34,7 +34,7 @@ namespace Kaizen.Controllers
 
             var response = await customerService.isUniqueCellphone(customerDto.CellPhone);
 
-            if (response)
+            if (!response)
                 return BadRequest("The cellphone is already taken");
 
             customerDto = await customerService.GetLocationNames(customerDto);
@@ -68,7 +68,16 @@ namespace Kaizen.Controllers
             return Ok(resultQuery);
         }
 
-        [HttpGet("userCustomers")]
+        [HttpGet("noInCampaign/{campaignId}")]
+        public async Task<IActionResult> GetNoInCampaignCustomersAsync(int campaignId, CustomerQueryDto customerQueryResource)
+        {
+            var customerQuery = mapper.Map<CustomerQueryDto, CustomerQuery>(customerQueryResource);
+            var queryResult = await customerService.GetNoInCampaignCustomersAsync(campaignId, customerQuery);
+            var resultQuery = mapper.Map<QueryResult<Customer>, QueryResultDto<CustomerDto>>(queryResult);
+            return Ok(resultQuery);
+        }
+
+        [HttpGet("agentCustomers")]
         public async Task<IActionResult> GetAgentCustomersAsync(CustomerQueryDto customerQueryResource)
         {
             var loggedAgentEmail = HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("email")).Value;
@@ -91,6 +100,14 @@ namespace Kaizen.Controllers
             if (customer == null)
                 return NotFound();
 
+            if (!customer.CellPhone.Equals(customerDto.CellPhone))
+            {
+                var response = await customerService.isUniqueCellphone(customerDto.CellPhone);
+
+                if (!response)
+                    return BadRequest("The cellphone is already taken");
+            }
+
             customerDto = await customerService.GetLocationNames(customerDto);
 
             mapper.Map<CustomerDto, Customer>(customerDto, customer);
@@ -101,6 +118,14 @@ namespace Kaizen.Controllers
 
             return Ok(cutomerDto);
 
+        }
+
+        [HttpGet("random/{maxRange}")]
+        public async Task<IActionResult> GetRandomCustomersAsync(int maxRange)
+        {
+            var queryResult = await customerService.GetRandomCustomersAsync(maxRange);
+            var resultQuery = mapper.Map<QueryResult<Customer>, QueryResultDto<CustomerDto>>(queryResult);
+            return Ok(resultQuery);
         }
     }
 }

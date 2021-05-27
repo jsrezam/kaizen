@@ -9,40 +9,95 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CampaignListComponent implements OnInit {
   private readonly PAGE_SIZE = 3;
-  agentUsers: any[] = [];
+
+  columns = [
+    { title: 'Campaign Id', key: 'id', isSortable: false, searchable: true, defaultSearch: true },
+    { title: 'Start Date', key: 'startDate', isSortable: false, searchable: false },
+    { title: 'Finish Date', key: 'finishDate', isSortable: false, searchable: false },
+    { title: 'State', key: 'isActive', isSortable: false, searchable: false },
+    { title: 'Progress', key: 'progress', isSortable: false, searchable: false }
+  ];
+
+  searchOption: any;
+  searchPlaceholder: string;
+
+  agents: any[] = [];
   agent: any = {};
+
   campaign: any = {};
   queryResult: any = {};
   query: any = {
     pageSize: this.PAGE_SIZE
   };
-  columns = [
-    { title: 'Campaign' },
-    { title: 'Start Date', key: 'startDate', isSortable: false },
-    { title: 'Finish Date', key: 'finishDate', isSortable: false },
-    { title: 'State', key: 'isActive', isSortable: false },
-    { title: 'Progress', key: 'progress', isSortable: false }
-  ];
 
   constructor(private userService: UserService,
     private campaignService: CampaignService) { }
 
   ngOnInit(): void {
-    this.userService.getAgentUsers()
+    this.populateActiveAgents();
+  }
+
+  private populateActiveAgents() {
+    this.userService.getActiveAgents()
       .subscribe((result: any) => {
-        this.agentUsers = result;
+        this.agents = result;
       });
   }
 
-  private populateAgentCampaigns(userId) {
-    this.campaignService.getAgentCampaigns(this.query, userId)
+  private populateAgentCampaigns() {
+    this.campaignService.getAgentCampaigns(this.query, this.agent.id)
       .subscribe((result: any) => {
-        this.queryResult = result
+        this.queryResult = result;
       });
   }
 
-  onUserChange() {
-    this.populateAgentCampaigns(this.agent.id);
+  onPageChage(page) {
+    this.query.page = page;
+    this.populateAgentCampaigns();
+  }
+
+  setPlaceholderSearch() {
+    if (!this.searchOption) {
+      let defaultColumnSearch = this.getDefaultColumnSearch();
+      return this.searchPlaceholder = "Search by " + defaultColumnSearch.title;
+    }
+    let columnSearch = this.columns.find(c => c.key === this.searchOption);
+    return this.searchPlaceholder = "Search by " + columnSearch.title;
+  }
+
+  filterSearchOptions() {
+    this.setPlaceholderSearch();
+    return this.columns.filter(c => c.searchable);
+  }
+
+  getDefaultColumnSearch() {
+    return this.columns.find(c => c.defaultSearch);
+  }
+
+  resetFilter() {
+    this.query = {
+      page: 1,
+      pageSize: this.PAGE_SIZE
+    };
+  }
+
+  onFilterChange() {
+    this.setPlaceholderSearch();
+    this.resetFilter();
+  }
+
+  search(querySearch) {
+
+    this.resetFilter();
+
+    if (!this.searchOption) {
+      let defaultColumnSearch = this.getDefaultColumnSearch();
+      this.query[defaultColumnSearch.key] = querySearch;
+    } else {
+      this.query[this.searchOption] = querySearch;
+    }
+
+    this.populateAgentCampaigns();
   }
 
   sortBy(columnName) {
@@ -52,23 +107,12 @@ export class CampaignListComponent implements OnInit {
       this.query.sortBy = columnName;
       this.query.isSortAscending = true;
     }
-    this.populateAgentCampaigns(this.agent.id);
+    this.populateAgentCampaigns();
   }
 
-  onPageChage(page) {
-    this.query.page = page;
-    this.populateAgentCampaigns(this.agent.id);
-  }
-
-  inactivate(campaign) {
-    if (confirm("Are you sure?")) {
-      this.campaign = campaign;
-      this.campaign.isActive = false;
-      this.campaignService.inactivateCampaign(campaign)
-        .subscribe(resp => {
-          this.populateAgentCampaigns(this.agent.id);
-        });
-    }
+  onAgentFilterChange() {
+    this.resetFilter();
+    this.populateAgentCampaigns();
   }
 
   isExpired(finishDate) {

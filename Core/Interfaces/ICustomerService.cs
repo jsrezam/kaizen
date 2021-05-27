@@ -15,5 +15,7 @@ namespace Kaizen.Core.Interfaces
         Task<Customer> GetCustomerAsync(int customerId);
         Task<CustomerDto> GetLocationIds(CustomerDto customerDto);
         Task UpdateCustomerAsync(Customer customer);
+        Task<QueryResult<Customer>> GetRandomCustomersAsync(int maxRange);
+        Task<QueryResult<Customer>> GetNoInCampaignCustomersAsync(int campaignId, CustomerQuery queryObj);
     }
 }

@@ -80,7 +80,7 @@ export class CustomerFormComponent implements OnInit {
     if (form.valid) {
       let result$ = (this.customer.id) ? this.customerService.updateCustomer(this.customer) : this.customerService.createCustomer(this.customer);
       result$.subscribe(resp => {
-        this.toastrService.success("Data was sucessfully saved.", "Success");
+        this.toastrService.success("Data was successfully saved.", "Success");
         this.router.navigate(['/customers/'])
       }, err => {
         this.errorMessages = parseErrorsAPI(err);

@@ -1,7 +1,3 @@
-<p>
-  {{queryResult | json}}
-</p>
-
 <hr class="rounded">
 <p><strong>My campaigns</strong></p>
 <hr class="rounded">
@@ -13,7 +9,7 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th *ngFor="let c of columns" aria-labelledby="tableLabel">
+        <th *ngFor="let c of columns" aria-labelledby="tableLabel" class="text-center">
           <div *ngIf="c.isSortable" (click)="sortBy(c.key)">
             {{c.title}}
             <i *ngIf="query.sortBy === c.key" class="fa" [class.fa-sort-asc]="query.isSortAscending"
@@ -27,14 +23,13 @@
     </thead>
     <tbody>
       <tr *ngFor="let c of queryResult.items">
-        <td>{{ c.id }}</td>
-        <!-- <td>{{ c.userId }}</td> -->
-        <td>{{ c.startDate }}</td>
-        <td>{{ c.finishDate }}</td>
-        <td *ngIf="c.isActive"> Active </td>
-        <td *ngIf="!c.isActive"> Inactive </td>
-        <td>
-          <div class="progress">
+        <td class="text-center">{{ c.id }}</td>
+        <td class="text-center">{{ c.startDate | date:'short' }}</td>
+        <td class="text-center">{{ c.finishDate | date:'short' }}</td>
+        <td *ngIf="c.isActive" class="text-center"> Open </td>
+        <td *ngIf="!c.isActive" class="text-center"> Closed </td>
+        <td class="text-center">
+          <div class="progress" data-toggle="tooltip" data-placement="right" [title]="(c.progress) /100 | percent">
             <div class="progress-bar" [class.bg-danger]="c.progress <= 25"
               [class.bg-warning]="c.progress > 25 && c.progress <= 75"
               [class.bg-info]="c.progress > 75 && c.progress <= 99.99" [class.bg-success]="c.progress === 100"
@@ -43,9 +38,8 @@
             </div>
           </div>
         </td>
-        <td>
-          <a class="btn btn-outline-success" [routerLink]="['/user-campaigns-detail/', c.id]">View Detail</a>
-          <p *ngIf="isExpired(c.finishDate)" class="fa fa-clock-o"></p>
+        <td class="text-center">
+          <a class="btn btn-outline-success" [routerLink]="['/campaigns-detail/', c.id]">View Detail</a>
         </td>
       </tr>
     </tbody>

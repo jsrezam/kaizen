@@ -8,5 +8,6 @@ namespace Kaizen.Core.DTOs
         public string IdentificationCard { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
+        public bool IsActive { get; set; }
     }
 }

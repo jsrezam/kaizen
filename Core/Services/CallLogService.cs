@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Kaizen.Controllers.Enumerations;
+using Kaizen.Controllers.Utilities;
 using Kaizen.Core.Interfaces;
 using Kaizen.Core.Models;
 
@@ -27,18 +29,43 @@ namespace Kaizen.Core.Services
                 foreach (var campaignDetail in userCampaign.CampaignDetails)
                 {
                     var matchCall = callLogs.FirstOrDefault(cd => cd.CallNumberFormatted.Equals(campaignDetail.Customer.CellPhone));
+
                     if (matchCall != null)
                     {
-                        campaignDetail.CallDuration = matchCall.CallDurationFormat;
-                        campaignDetail.CallTimes += matchCall.CallTimes;
-                        campaignDetail.Status = CampaignStatus.Called.ToString();
+                        campaignDetail.TotalCallsNumber += GetCallsNumber(campaignDetail, matchCall);
+
+                        var isValidCallByDuration = Convert.ToInt32(matchCall.CallDuration) > Constants.MinimunCallDurationValue;
+                        var isValidCallByCallsNumber = IsValidCallByCallsNumber(campaignDetail, matchCall);
+
+                        if (isValidCallByDuration || isValidCallByCallsNumber)
+                        {
+                            campaignDetail.LastValidCallDate = matchCall.CallDate;
+                            campaignDetail.LastValidCallDuration = matchCall.CallDurationFormat;
+                            campaignDetail.State = CampaignStatus.Called.ToString();
+                        }
+
+                        campaignDetail.LastCallDate = matchCall.CallDate;
+                        campaignDetail.LastCallDuration = matchCall.CallDurationFormat;
+
                         unitOfWork.CampaignDetailRepository.Update(campaignDetail);
                     }
                 }
             }
 
             await unitOfWork.SaveChangesAsync();
+        }
 
+        private static bool IsValidCallByCallsNumber(CampaignDetail campaignDetail, CallLog matchCall)
+        {
+            return (matchCall.TotalCallsNumber > Constants.MinimunTotalCallsNumberValue
+                    && campaignDetail.LastValidCallDuration
+                    .Equals(Constants.CallDurationDefaultValue));
+        }
+
+        private static int GetCallsNumber(CampaignDetail campaignDetail, CallLog matchCall)
+        {
+            return (matchCall.CallDate > campaignDetail.LastCallDate) ?
+                matchCall.TotalCallsNumber - campaignDetail.TotalCallsNumber : 0;
         }
     }
 }

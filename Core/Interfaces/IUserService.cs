@@ -7,8 +7,8 @@ namespace Kaizen.Core.Interfaces
     public interface IUserService
     {
         Task<ApplicationUser> GetUserByEmailAsync(string email);
-        Task<IEnumerable<ApplicationUser>> GetAgentUsersAsync();
-        Task<ApplicationUser> GetUserByCampaignAsync(int campaignId);
+        Task<IEnumerable<ApplicationUser>> GetActiveAgentsAsync();
+        Task<ApplicationUser> GetAgentByCampaignAsync(int campaignId);
 
     }
 }

@@ -15,20 +15,20 @@
         <hr class="rounded">
 
         <div>
-          <label for="lastName" class="sr-only">Last name</label>
-          <input class="form-control" id="lastName" type="text" [(ngModel)]="userCredentials.lastName" name="lastName"
-            #lastName="ngModel" placeholder="Your last name" autofocus required>
-          <div class="alert alert-danger" *ngIf="lastName.touched && !lastName.valid">
-            Please specify the last name.
-          </div>
-        </div>
-
-        <div>
           <label for="firstName" class="sr-only">First mame</label>
           <input class="form-control" id="firstName" type="text" [(ngModel)]="userCredentials.firstName"
             name="firstName" #firstName="ngModel" placeholder="Your first name" required>
           <div class="alert alert-danger" *ngIf="firstName.touched && !firstName.valid">
             Please specify the first name.
+          </div>
+        </div>
+
+        <div>
+          <label for="lastName" class="sr-only">Last name</label>
+          <input class="form-control" id="lastName" type="text" [(ngModel)]="userCredentials.lastName" name="lastName"
+            #lastName="ngModel" placeholder="Your last name" autofocus required>
+          <div class="alert alert-danger" *ngIf="lastName.touched && !lastName.valid">
+            Please specify the last name.
           </div>
         </div>
 

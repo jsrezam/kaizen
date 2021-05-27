@@ -11,5 +11,6 @@ namespace Kaizen.Core.Models
         public string FirstName { get; set; }
         [StringLength(255)]
         public string IdentificationCard { get; set; }
+        public bool IsActive { get; set; }
     }
 }

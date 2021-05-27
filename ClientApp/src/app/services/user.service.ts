@@ -8,8 +8,8 @@ export class UserService {
     private readonly apiUri = environment.apiUrl + '/api/users/';
     constructor(private http: HttpClient) { }
 
-    getAgentUsers() {
-        return this.http.get(this.apiUri + 'agents').pipe(
+    getActiveAgents() {
+        return this.http.get(this.apiUri + 'agents/actives').pipe(
             map(res => res)
         );
     }
@@ -20,7 +20,7 @@ export class UserService {
         );
     }
 
-    getUserByCampaign(campaignId) {
+    getAgentByCampaign(campaignId) {
         return this.http.get(this.apiUri + 'campaign/' + campaignId).pipe(
             map(res => res)
         );

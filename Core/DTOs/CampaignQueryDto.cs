@@ -4,7 +4,7 @@ namespace Kaizen.Core.DTOs
 {
     public class CampaignQueryDto
     {
-        public DateTime? FinishDate { get; set; }
+        public int? Id { get; set; }
         public string SortBy { get; set; }
         public bool IsSortAscending { get; set; }
         public int Page { get; set; }

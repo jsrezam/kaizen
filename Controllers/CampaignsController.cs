@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -28,18 +29,38 @@ namespace Kaizen.Controllers
 
         [HttpPost]
         [Authorize(Policies.RequireAdminRole)]
-        public async Task<IActionResult> CreateCampaign([FromBody] CampaignSaveDto CampaignSaveResource)
+        public async Task<IActionResult> CreateCampaign([FromBody] CampaignSaveDto campaignSaveDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var campaign = mapper.Map<CampaignSaveDto, Campaign>(CampaignSaveResource);
+            var campaign = mapper.Map<CampaignSaveDto, Campaign>(campaignSaveDto);
             await campaignService.CreateCampaignAsync(campaign);
 
-            await campaignService.AddCampaignDetailAsync(campaign.Id, CampaignSaveResource.Customers);
+            var customers = mapper.Map<IEnumerable<CustomerDto>, IEnumerable<Customer>>(campaignSaveDto.Customers);
+
+            await campaignService.AddCampaignDetailAsync(campaign.Id, customers);
             var result = mapper.Map<Campaign, CampaignSaveDto>(campaign);
 
             return Ok(result);
+        }
+
+        [HttpPost("addCustomers/{campaignId}")]
+        public async Task<IActionResult> AddCustomersToCampaign([FromBody] IEnumerable<CustomerDto> customersDto, int campaignId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var campaign = await campaignService.GetCampaignAsync(campaignId);
+
+            if (campaign == null)
+                return NotFound();
+
+            var customers = mapper.Map<IEnumerable<CustomerDto>, IEnumerable<Customer>>(customersDto);
+
+            await campaignService.AddCampaignDetailAsync(campaign.Id, customers);
+
+            return Ok();
         }
 
         [HttpGet("agents/{agentId}")]
@@ -53,6 +74,19 @@ namespace Kaizen.Controllers
             resultQuery.Items = await campaignService.AddProgressToCampaignsAsync(resultQuery.Items);
 
             return Ok(resultQuery);
+        }
+
+        [HttpGet("{campaignId}")]
+        public async Task<IActionResult> GetCampaignAsync(int campaignId)
+        {
+            var campaign = await campaignService.GetCampaignAsync(campaignId);
+
+            if (campaign == null)
+                return NotFound();
+
+            var campaignDto = mapper.Map<Campaign, CampaignDto>(campaign);
+
+            return Ok(campaignDto);
         }
 
         [HttpGet("agents/valids")]
@@ -71,8 +105,7 @@ namespace Kaizen.Controllers
         }
 
         [HttpPut("{campaignId}")]
-        [Authorize(Policies.RequireAdminRole)]
-        public async Task<IActionResult> InactivateCampaign(int campaignId, [FromBody] CampaignDto campaignResource)
+        public async Task<IActionResult> UpdateCampaignAsync(int campaignId, [FromBody] CampaignDto campaignDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -82,8 +115,9 @@ namespace Kaizen.Controllers
             if (campaign == null)
                 return NotFound();
 
-            mapper.Map<CampaignDto, Campaign>(campaignResource, campaign);
+            mapper.Map<CampaignDto, Campaign>(campaignDto, campaign);
             await campaignService.UpdateCampaignAsync(campaign);
+
             var result = mapper.Map<Campaign, CampaignDto>(campaign);
 
             return Ok(result);

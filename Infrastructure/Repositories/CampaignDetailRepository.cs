@@ -27,7 +27,15 @@ namespace Kaizen.Infrastructure.Repositories
             query = query.ApplyFiltering(queryObj);
             var columnsMap = new Dictionary<string, Expression<Func<CampaignDetail, object>>>()
             {
-                ["status"] = cd => cd.Status
+                ["customer.firstName"] = cd => cd.Customer.FirstName,
+                ["customer.lastName"] = cd => cd.Customer.LastName,
+                ["customer.cellPhone"] = cd => cd.Customer.LastName,
+                ["totalCallsNumber"] = cd => cd.TotalCallsNumber,
+                ["lastCallDuration"] = cd => cd.LastCallDuration,
+                ["lastCallDate"] = cd => cd.LastCallDate,
+                ["lastValidCallDuration"] = cd => cd.LastValidCallDuration,
+                ["lastValidCallDate"] = cd => cd.LastValidCallDate,
+                ["state"] = cd => cd.State,
             };
             query = query.ApplyOrdering(queryObj, columnsMap);
 
@@ -46,7 +54,7 @@ namespace Kaizen.Infrastructure.Repositories
         {
             return await entities
             .Where(cd => cd.CampaignId == campaignId
-            && cd.Status.Equals(CampaignStatus.Called.ToString())).CountAsync();
+            && cd.State.Equals(CampaignStatus.Called.ToString())).CountAsync();
         }
     }
 }

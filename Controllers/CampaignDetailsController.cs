@@ -28,5 +28,18 @@ namespace Kaizen.Controllers
             return Ok(resultQuery);
         }
 
+        [HttpDelete("{campaignDetailItemId}")]
+        public async Task<IActionResult> RemoveDetailCampaignItem(int campaignDetailItemId)
+        {
+            var campaignDetailItem = await campaignDetailService.GetCampaignDetailItemAsync(campaignDetailItemId);
+
+            if (campaignDetailItem == null)
+                return NotFound();
+
+            await campaignDetailService.RemoveDetailCampaignItem(campaignDetailItem);
+
+            return Ok();
+        }
+
     }
 }

@@ -5,6 +5,7 @@ using Kaizen.Controllers.Enumerations;
 using Kaizen.Core.Models;
 using Kaizen.Core.Interfaces;
 using Kaizen.Core.DTOs;
+using Kaizen.Controllers.Utilities;
 
 namespace Kaizen.Core.Services
 {
@@ -22,17 +23,18 @@ namespace Kaizen.Core.Services
             await unitOfWork.SaveChangesAsync();
         }
 
-        public async Task AddCampaignDetailAsync(int CampaignId, IEnumerable<CustomerDto> customersResource)
+        public async Task AddCampaignDetailAsync(int CampaignId, IEnumerable<Customer> customersDto)
         {
             await unitOfWork.CampaignDetailRepository
-            .AddRangeAsync((from customer in customersResource
+            .AddRangeAsync((from customer in customersDto
                             select new CampaignDetail
                             {
                                 CustomerId = customer.Id,
                                 CampaignId = CampaignId,
-                                CallDuration = "00:00:00:000",
-                                CallTimes = 0,
-                                Status = CampaignStatus.NotCalled.ToString()
+                                TotalCallsNumber = 0,
+                                LastCallDuration = Constants.CallDurationDefaultValue,
+                                LastValidCallDuration = Constants.CallDurationDefaultValue,
+                                State = CampaignStatus.Uncalled.ToString()
                             }).AsEnumerable());
             await unitOfWork.SaveChangesAsync();
         }

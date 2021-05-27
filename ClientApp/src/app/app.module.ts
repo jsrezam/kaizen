@@ -81,16 +81,19 @@ import { CustomerListComponent } from './components/customer-list/customer-list.
       { path: 'login', component: LoginComponent },
       { path: 'sign-up', component: SignupFormComponent },
       { path: 'non-authorized', component: NonAuthorizedComponent },
+
       { path: 'campaigns', component: CampaignListComponent },
       { path: 'campaigns/new', component: CampaignFormComponent },
       { path: 'campaigns-detail/:id', component: CampaignDetailComponent },
 
       { path: 'agent-campaigns', component: AgentCampaignListComponent },
 
-      { path: 'orders/new', component: OrderFormComponent },
+
       { path: 'customers', component: CustomerListComponent },
       { path: 'customers/new', component: CustomerFormComponent },
       { path: 'customers/edit/:id', component: CustomerFormComponent },
+
+      { path: 'orders/new', component: OrderFormComponent },
 
     ]), NgbModule
   ],

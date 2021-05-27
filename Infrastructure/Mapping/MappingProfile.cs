@@ -1,3 +1,4 @@
+using System;
 using AutoMapper;
 using Kaizen.Core.DTOs;
 using Kaizen.Core.Models;
@@ -20,7 +21,16 @@ namespace Kaizen.Infrastructure.Mapping
             CreateMap<Customer, CustomerViewDto>();
             CreateMap<Order, OrderDto>();
             CreateMap<ApplicationUser, ApplicationUserDto>();
-            CreateMap<Campaign, CampaignDto>();
+            CreateMap<Campaign, CampaignDto>()
+            .AfterMap((c, cd) =>
+            {
+                cd.ModelFinishDate = new ModelDateDto
+                {
+                    Year = c.FinishDate.Year,
+                    Month = c.FinishDate.Month,
+                    Day = c.FinishDate.Day
+                };
+            });
             CreateMap<CampaignDetail, CampaignDetailDto>();
             CreateMap<Campaign, CampaignSaveDto>();
             CreateMap<AgentCustomer, AgentCustomerDto>()
@@ -44,12 +54,19 @@ namespace Kaizen.Infrastructure.Mapping
             .ForMember(c => c.Id, opt => opt.Ignore());
             CreateMap<CategoryQueryDto, CategoryQuery>();
             CreateMap<CategoryViewDto, Category>();
-            CreateMap<CustomerDto, Customer>()
-            .ForMember(c => c.Id, opt => opt.Ignore());
+            CreateMap<CustomerDto, Customer>();
+            // .ForMember(c => c.Id, opt => opt.Ignore());
             CreateMap<CustomerQueryDto, CustomerQuery>();
             CreateMap<OrderDto, Order>();
             CreateMap<ApplicationUserDto, ApplicationUser>();
-            CreateMap<CampaignDto, Campaign>();
+            CreateMap<CampaignDto, Campaign>()
+            .AfterMap((cd, c) =>
+            {
+                c.FinishDate = new DateTime(
+                    cd.ModelFinishDate.Year,
+                    cd.ModelFinishDate.Month,
+                    cd.ModelFinishDate.Day);
+            });
             CreateMap<CampaignQueryDto, CampaignQuery>();
             CreateMap<CampaignSaveDto, Campaign>();
             CreateMap<CampaignDetailQueryDto, CampaignDetailQuery>();
@@ -60,6 +77,7 @@ namespace Kaizen.Infrastructure.Mapping
             .AfterMap((ucd, au) =>
             {
                 au.Email = ucd.UserName;
+                au.IsActive = true;
             });
         }
     }

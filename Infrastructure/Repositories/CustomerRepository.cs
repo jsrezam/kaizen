@@ -18,7 +18,7 @@ namespace Kaizen.Infrastructure.Repositories
         {
             var customer = await entities
             .SingleOrDefaultAsync(c => c.CellPhone.Equals(cellPhone));
-            return (customer != null) ? true : false;
+            return (customer == null) ? true : false;
         }
 
         public async Task<QueryResult<Customer>> GetCustomersAsync(CustomerQuery queryObj)
@@ -35,6 +35,9 @@ namespace Kaizen.Infrastructure.Repositories
                 ["identificationCard"] = c => c.IdentificationCard,
                 ["email"] = c => c.Email,
                 ["cellPhone"] = c => c.CellPhone,
+                ["city"] = c => c.City,
+                ["region"] = c => c.Region,
+                ["country"] = c => c.Country,
             };
             query = query.ApplyOrdering(queryObj, columnsMap);
 

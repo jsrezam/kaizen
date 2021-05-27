@@ -16,8 +16,20 @@ export class CampaignService {
         );
     }
 
+    addCustomersToCampaign(customers, campaignId) {
+        return this.http.post(this.apiUri + "addCustomers/" + campaignId, customers).pipe(
+            map(res => res)
+        );
+    }
+
     getAgentCampaigns(filter, id) {
         return this.http.get(this.apiUri + "agents/" + id + '?' + toQueryString(filter)).pipe(
+            map(res => res)
+        );
+    }
+
+    getCampaign(campaignId) {
+        return this.http.get(this.apiUri + campaignId).pipe(
             map(res => res)
         );
     }
@@ -28,7 +40,7 @@ export class CampaignService {
         );
     }
 
-    inactivateCampaign(campaign) {
+    updateCampaign(campaign) {
         return this.http.put(this.apiUri + campaign.id, campaign).pipe(
             map(res => res)
         );

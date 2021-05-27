@@ -49,10 +49,10 @@ export class CustomerListComponent implements OnInit {
 
   setPlaceholderSearch() {
     if (!this.searchOption) {
-      var defaultColumnSearch = this.getDefaultColumnSearch();
+      let defaultColumnSearch = this.getDefaultColumnSearch();
       return this.searchPlaceholder = "Search by " + defaultColumnSearch.title;
     }
-    var columnSearch = this.columns.find(c => c.key === this.searchOption);
+    let columnSearch = this.columns.find(c => c.key === this.searchOption);
     return this.searchPlaceholder = "Search by " + columnSearch.title;
   }
 
@@ -82,7 +82,7 @@ export class CustomerListComponent implements OnInit {
     this.resetFilter();
 
     if (!this.searchOption) {
-      var defaultColumnSearch = this.getDefaultColumnSearch();
+      let defaultColumnSearch = this.getDefaultColumnSearch();
       this.query[defaultColumnSearch.key] = querySearch;
     } else {
       this.query[this.searchOption] = querySearch;

@@ -1,115 +1,181 @@
-<h2>New Campaign</h2>
+<div class="row">
+  <div class="col-md-12 order-md-1">
+    <h2 class="mb-3">New Campaign</h2>
 
-<!-- <p>
-  {{model | json}}
-</p>
+    <hr class="my-4">
 
-<p>
-  {{customers | json}}
-</p> -->
-<p>
-  {{campaignSave | json}}
-</p>
-
-<p *ngIf="errorMessage">
-  <ngb-alert type="danger" [dismissible]="false">
-    <strong>Error!</strong> {{errorMessage}}
-  </ngb-alert>
-</p>
-
-<p><strong>Assing an agent to new campaign</strong></p>
-<hr class="rounded">
-
-<form #f="ngForm" (ngSubmit)="create()" novalidate>
-  <div class="mb-3">
-    <label for="user">Agent:</label>
-    <select id="user" class="form-control" [(ngModel)]="campaignSave.userId" name="userId" required #user="ngModel">
-      <option value=""></option>
-      <option *ngFor="let u of agentUsers" value="{{ u.id }}">
-        {{u.firstName}} {{ u.lastName }} - {{u.userName}}
-      </option>
-    </select>
-    <div class="alert alert-danger" *ngIf="user.touched && !user.valid">
-      Please specify the agent.
-    </div>
-  </div>
-
-  <hr class="rounded">
-  <p><strong>Select the end of the campaign</strong></p>
-  <hr class="rounded">
-
-  <div class="mb-3">
-    <label for="finishDate" class="form-label">Finish date</label>
-    <div class="input-group">
-      <input class="form-control" placeholder="yyyy-mm-dd" name="finishDate" [(ngModel)]="model" ngbDatepicker
-        #finishDate="ngbDatepicker">
-      <div class="input-group-append">
-        <button class="btn btn-outline-secondary calendar" (click)="finishDate.toggle()" type="button">
-          <i class="fas fa-calendar-alt fa-fw"></i>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <hr class="rounded">
-  <p><strong>Select the customers in the new campaign</strong></p>
-  <hr class="rounded">
-
-  <div class="mb-3">
-    <label for="columnTable">Search by</label>
-    <select id="columnTable" class="form-control" [(ngModel)]="selectedfilterColumn" name="columnTableKey"
-      #columnTable="ngModel">
-      <option *ngFor="let c of columns" value="{{ c.key }}">
-        {{c.title}}
-      </option>
-    </select>
-  </div>
-
-  <div *ngIf="!queryResult.items">
-    <loading></loading>
-  </div>
-  <div *ngIf="queryResult.items">
-    <p>
-      <input #querySearch (keyup)="filter(querySearch.value)" type="text" class="form-control" placeholder="Search...">
+    <p *ngFor="let e of errorMessages">
+      <ngb-alert type="danger" [dismissible]="false">
+        <strong>Error!</strong> {{e.description}}
+      </ngb-alert>
     </p>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th *ngFor="let c of columns" aria-labelledby="tableLabel">
-            <div *ngIf="c.isSortable" (click)="sortBy(c.key)">
-              {{c.title}}
-              <i *ngIf="query.sortBy === c.key" class="fa" [class.fa-sort-asc]="query.isSortAscending"
-                [class.fa-sort-desc]="!query.isSortAscending"></i>
+
+    <form #f="ngForm" (ngSubmit)="create()" novalidate>
+
+      <div class="row">
+
+        <div class="col-md-6 mb-3">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex flex-column align-items-center text-center">
+                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle"
+                  width="150">
+                <div class="mt-3">
+                  <h4>{{agent.firstName}} {{agent.lastName}}</h4>
+                  <p class="text-secondary mb-1">{{agent.userName}}</p>
+                  <p class="text-muted font-size-sm">{{agent.identificationCard}}</p>
+                </div>
+              </div>
             </div>
-            <div *ngIf="!c.isSortable">
-              {{c.title}}
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+
+          <div class="mb-3">
+            <label for="sltAgent">Agent:</label>
+            <select class="custom-select d-block w-100" id="sltAgent" required name="agentId"
+              [(ngModel)]="campaignSave.userId" #sltAgent="ngModel" (change)="onAgentFilterChange()">
+              <option *ngFor="let a of agents" value="{{ a.id }}">
+                {{a.firstName}} {{ a.lastName }}
+              </option>
+            </select>
+            <div class="alert alert-danger" *ngIf="sltAgent.touched && !sltAgent.valid">
+              Please specify the agent.
             </div>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          *ngFor="let c of filteredCustomers | slice: (this.query.page-1) * query.pageSize : this.query.page * query.pageSize">
-          <td>
-            <input style="text-align: center; vertical-align: middle; margin-left:auto; margin-right:auto;"
-              type="checkbox" class="form-check-input" [(ngModel)]="c.isSelected" [ngModelOptions]="{standalone: true}"
-              #isChecked="ngModel" name="isChecked">
-          </td>
-          <td>{{ c.lastName }}</td>
-          <td>{{ c.firstName }}</td>
-          <td>{{ c.address }}</td>
-          <td>{{ c.city }}</td>
-          <td>{{ c.region }}</td>
-          <td>{{ c.homePhone }}</td>
-          <td>{{ c.cellPhone }}</td>
-        </tr>
-      </tbody>
-    </table>
-    <pagination [total-items]="queryResult.totalItems" [page-size]="query.pageSize"
-      (page-changed)="onPageChage($event)">
-    </pagination>
+          </div>
+
+          <hr class="mb-4">
+
+          <div class="mb-3">
+            <label for="finishDate">Finish Campaign:</label>
+            <div class="input-group">
+              <input id="finishDate" class="form-control" placeholder="yyyy-mm-dd" name="finishDate" [(ngModel)]="model"
+                ngbDatepicker #finishDate="ngbDatepicker">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary calendar" (click)="finishDate.toggle()" type="button">
+                  <i class="fas fa-calendar-alt fa-fw"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="w-100 btn btn-primary btn-lg">
+            <button type="submit" class="btn btn-primary" [disabled]="!f.valid">Create Campaign</button>
+          </div>
+
+        </div>
+      </div>
+
+      <h4>Customers in the new campaign:</h4>
+      <hr class="rounded">
+
+      <div class="row">
+
+        <div class="col-md-5 mb-3">
+
+          <div class="mb-3">
+            <label for="searchOption">Search options:</label>
+            <select id="searchOption" class="form-control" name="sltsearchOption" [(ngModel)]="searchOption"
+              (change)="onCustomerFilterChange()">
+              <option *ngFor="let c of filterSearchOptions()" value="{{ c.key }}">
+                <div *ngIf="c.searchable">
+                  {{c.title}}
+                </div>
+              </option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <p>
+              <input #querySearch (keyup)="search(querySearch.value)" type="text" class="form-control"
+                [placeholder]="setPlaceholderSearch()">
+            </p>
+          </div>
+          <div class="mb-3">
+            <button *ngIf="isSelectedAll" type="button" class="btn btn-primary" (click)="SelectAll()">Deselect
+              All</button>
+            <button *ngIf="!isSelectedAll" type="button" class="btn btn-primary" (click)="SelectAll()">Select
+              All</button>
+          </div>
+
+        </div>
+
+        <div class="col-md-7 mb-3">
+          <label for="random">Generate Random Campaign: </label>
+          <div class="row">
+            <div class="input-group">
+              <input #maxRange type="text" id="random" class="form-control" placeholder="Enter max random range">
+              <div class="cinput-group-append">
+                <button type="button" class="btn btn-primary"
+                  (click)="getRandomCampaign(maxRange.value)">Generate</button>
+              </div>
+            </div>
+          </div>
+          <div class="text-success">
+            <small>Max Range available : {{queryResult.totalItems}} customers </small>
+          </div>
+        </div>
+
+      </div>
+
+      <div *ngIf="!queryResult.items">
+        <loading></loading>
+      </div>
+      <div *ngIf="queryResult.items">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th *ngFor="let c of columns" aria-labelledby="tableLabel" class="text-center">
+                <div *ngIf="c.isSortable" (click)="sortBy(c.key)">
+                  {{c.title}}
+                  <i *ngIf="query.sortBy === c.key" class="fa" [class.fa-sort-asc]="query.isSortAscending"
+                    [class.fa-sort-desc]="!query.isSortAscending"></i>
+                </div>
+                <div *ngIf="!c.isSortable">
+                  {{c.title}}
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let c of filteredCustomers | slice: (this.query.page-1) * query.pageSize : this.query.page * query.pageSize">
+              <td>
+                <input style="text-align: center; vertical-align: middle; margin-left:auto; margin-right:auto;"
+                  type="checkbox" class="form-check-input" [(ngModel)]="c.isSelected"
+                  [ngModelOptions]="{standalone: true}" #isChecked="ngModel" name="isChecked" [disabled]="!c.state">
+              </td>
+              <td class="text-center">{{ c.firstName }}</td>
+              <td class="text-center">{{ c.lastName }}</td>
+              <td class="text-center">{{ c.identificationCard }}</td>
+              <td class="text-center">{{ c.email }}</td>
+              <td class="text-center">{{ c.cellPhone }}</td>
+              <td class="text-center">{{ c.homePhone }}</td>
+              <td class="text-center">{{ c.country }}</td>
+              <td class="text-center">{{ c.region }}</td>
+              <td class="text-center">{{ c.city }}</td>
+              <td class="text-center">{{ c.postalCode }}</td>
+              <td class="text-center">{{ c.address }}</td>
+              <div *ngIf="c.state">
+                <td class="text-center">Active</td>
+              </div>
+              <div *ngIf="!c.state">
+                <td class="text-center">Inactive</td>
+              </div>
+            </tr>
+          </tbody>
+        </table>
+        <pagination [total-items]="totalItems" [page-size]="query.pageSize" (page-changed)="onPageChage($event)">
+        </pagination>
+      </div>
+
+
+    </form>
+
+
+
+
+
+
   </div>
-  <div>
-    <button type="submit" class="btn btn-primary" [disabled]="!f.valid">Create</button>
-  </div>
-</form>
+</div>

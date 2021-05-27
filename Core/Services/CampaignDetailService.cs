@@ -16,5 +16,16 @@ namespace Kaizen.Core.Services
         {
             return await unitOfWork.CampaignDetailRepository.GetCampaignDetailAsync(campaignId, productQuery);
         }
+
+        public async Task<CampaignDetail> GetCampaignDetailItemAsync(int campaignDetailItemId)
+        {
+            return await unitOfWork.CampaignDetailRepository.GetByIdAsync(campaignDetailItemId);
+        }
+
+        public async Task RemoveDetailCampaignItem(CampaignDetail campaignDetailItem)
+        {
+            unitOfWork.CampaignDetailRepository.Delete(campaignDetailItem);
+            await unitOfWork.SaveChangesAsync();
+        }
     }
 }

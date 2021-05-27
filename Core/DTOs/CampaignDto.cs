@@ -13,6 +13,7 @@ namespace Kaizen.Core.DTOs
         public DateTime FinishDate { get; set; }
         public bool IsActive { get; set; }
         public decimal Progress { get; set; }
+        public ModelDateDto ModelFinishDate { get; set; }
         public ICollection<CampaignDetailDto> CampaignDetails { get; set; }
 
         public CampaignDto()

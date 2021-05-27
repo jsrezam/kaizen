@@ -28,14 +28,26 @@ export class CustomerService {
         );
     }
 
-    getUserCustomers(filter) {
-        return this.http.get(this.apiUri + 'userCustomers/' + '?' + toQueryString(filter)).pipe(
+    getNoInCampaignCustomersAsync(filter, campaignId) {
+        return this.http.get(this.apiUri + 'noInCampaign/' + campaignId + '?' + toQueryString(filter)).pipe(
+            map(res => res)
+        );
+    }
+
+    getAgentCustomers(filter) {
+        return this.http.get(this.apiUri + 'agentCustomers/' + '?' + toQueryString(filter)).pipe(
             map(res => res)
         );
     }
 
     updateCustomer(customer) {
         return this.http.put(this.apiUri + customer.id, customer).pipe(
+            map(res => res)
+        );
+    }
+
+    getRandomCustomers(maxRange) {
+        return this.http.get(this.apiUri + 'random/' + maxRange).pipe(
             map(res => res)
         );
     }

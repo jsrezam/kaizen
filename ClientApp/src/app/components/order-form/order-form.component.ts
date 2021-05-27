@@ -67,7 +67,7 @@ export class OrderFormComponent implements OnInit {
       });
   }
   private populateUserCustomers() {
-    this.customerService.getUserCustomers(this.query)
+    this.customerService.getAgentCustomers(this.query)
       .subscribe((result: any) => {
         this.queryResult = result;
       });

@@ -1,81 +1,106 @@
-<p>
-  {{queryResult | json}}
-</p>
-
 <h2>Campaigns</h2>
 <hr class="rounded">
 
 <p>
-  <a [routerLink]="['/campaigns/new']" class="btn btn-primary">New Campaign</a>
+  <a [routerLink]="['/campaigns/new']" class="btn btn-primary">Create New Campaign</a>
 </p>
 
 <hr class="rounded">
-<p><strong>Select one agent to see their campaigns</strong></p>
+<p><strong>Select one agent to see their campaigns:</strong></p>
 <hr class="rounded">
 
 <div class="mb-3">
-  <label for="user">Agents:</label>
-  <select id="user" class="form-control" (change)="onUserChange()" [(ngModel)]="agent.id" name="userId" required
-    #user="ngModel">
-    <option value=""></option>
-    <option *ngFor="let u of agentUsers" value="{{ u.id }}">
-      {{u.firstName}} {{ u.lastName }} - {{u.userName}}
+  <label for="sltAgent">Agent:</label>
+  <select class="custom-select d-block w-100" id="sltAgent" required name="agentId" [(ngModel)]="agent.id"
+    #sltAgent="ngModel" (change)="onAgentFilterChange()">
+    <option *ngFor="let a of agents" value="{{ a.id }}">
+      {{a.firstName}} {{ a.lastName }}
     </option>
   </select>
-  <div class="alert alert-danger" *ngIf="user.touched && !user.valid">
+  <div class="alert alert-danger" *ngIf="sltAgent.touched && !sltAgent.valid">
     Please specify the agent.
   </div>
 </div>
 
-<hr class="rounded">
-<p><strong>Agent campaigns:</strong></p>
-<hr class="rounded">
-
 <div *ngIf="agent.id && !queryResult.items">
   <loading></loading>
 </div>
-<div *ngIf="queryResult.items">
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th *ngFor="let c of columns" aria-labelledby="tableLabel">
-          <div *ngIf="c.isSortable" (click)="sortBy(c.key)">
-            {{c.title}}
-            <i *ngIf="query.sortBy === c.key" class="fa" [class.fa-sort-asc]="query.isSortAscending"
-              [class.fa-sort-desc]="!query.isSortAscending"></i>
-          </div>
-          <div *ngIf="!c.isSortable">
-            {{c.title}}
-          </div>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let c of queryResult.items">
-        <td>{{ c.id }}</td>
-        <td>{{ c.startDate }}</td>
-        <td>{{ c.finishDate }}</td>
-        <td *ngIf="c.isActive"> Active </td>
-        <td *ngIf="!c.isActive"> Inactive </td>
-        <td>
-          <div class="progress">
-            <div class="progress-bar" [class.bg-danger]="c.progress <= 25"
-              [class.bg-warning]="c.progress > 25 && c.progress <= 75"
-              [class.bg-info]="c.progress > 75 && c.progress <= 99.99" [class.bg-success]="c.progress === 100"
-              role="progressbar" [style.width]="c.progress + '%'">
-              <span class="sr-only">{{c.progress}}%</span>
+
+<div *ngIf="agent.id">
+
+  <div class="mb-3">
+    <label for="searchOption">Search options:</label>
+    <select id="searchOption" class="form-control" name="sltsearchOption" [(ngModel)]="searchOption"
+      (change)="onFilterChange()">
+      <option *ngFor="let c of filterSearchOptions()" value="{{ c.key }}">
+        <div *ngIf="c.searchable">
+          {{c.title}}
+        </div>
+      </option>
+    </select>
+  </div>
+
+  <div>
+    <p>
+      <input #querySearch type="text" class="form-control" [placeholder]="setPlaceholderSearch()">
+    </p>
+    <p>
+      <button type="button" class="btn btn-primary" (click)="search(querySearch.value)">Search</button>
+    </p>
+  </div>
+
+  <div *ngIf="queryResult.totalItems > 0">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th *ngFor="let c of columns" aria-labelledby="tableLabel" class="text-center">
+            <div *ngIf="c.isSortable" (click)="sortBy(c.key)">
+              {{c.title}}
+              <i *ngIf="query.sortBy === c.key" class="fa" [class.fa-sort-asc]="query.isSortAscending"
+                [class.fa-sort-desc]="!query.isSortAscending"></i>
             </div>
-          </div>
-        </td>
-        <td>
-          <a class="btn btn-outline-success" [routerLink]="['/campaigns-detail/', c.id]">View Detail</a>
-          <button class="btn btn-outline-danger" [disabled]="!c.isActive" type="button"
-            (click)="inactivate(c)">Inactivate</button>
-          <p *ngIf="isExpired(c.finishDate)" class="fa fa-clock-o"></p>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <pagination [total-items]="queryResult.totalItems" [page-size]="query.pageSize" (page-changed)="onPageChage($event)">
-  </pagination>
+            <div *ngIf="!c.isSortable">
+              {{c.title}}
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of queryResult.items">
+          <td class="text-center">{{ c.id }}</td>
+          <td class="text-center">{{ c.startDate | date:'short' }}</td>
+          <td class="text-center">{{ c.finishDate | date:'short' }}</td>
+          <td *ngIf="c.isActive" class="text-center"> Open </td>
+          <td *ngIf="!c.isActive" class="text-center"> Closed </td>
+          <td class="text-center">
+            <div class="progress" data-toggle="tooltip" data-placement="right" [title]="(c.progress) /100 | percent">
+              <div class="progress-bar" [class.bg-danger]="c.progress <= 25"
+                [class.bg-warning]="c.progress > 25 && c.progress <= 75"
+                [class.bg-info]="c.progress > 75 && c.progress <= 99.99" [class.bg-success]="c.progress === 100"
+                role="progressbar" [style.width]="c.progress + '%'">
+                <span class="sr-only">{{c.progress}}%</span>
+              </div>
+            </div>
+          </td>
+          <td class="text-center">
+            <a class="btn btn-outline-success" [routerLink]="['/campaigns-detail/', c.id]">View Detail</a>
+          </td>
+          <td class="text-center">
+            <div data-toggle="tooltip" data-placement="right" title="active">
+              <p *ngIf="!isExpired(c.finishDate) && c.isActive" class="fa fa-hourglass"></p>
+            </div>
+            <div data-toggle="tooltip" data-placement="right" title="expired">
+              <p *ngIf="isExpired(c.finishDate) && c.isActive" class="fa fa-hourglass-end"></p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination [total-items]="queryResult.totalItems" [page-size]="query.pageSize"
+      (page-changed)="onPageChage($event)">
+    </pagination>
+  </div>
+
+  <div *ngIf="queryResult.totalItems === 0 " class="alert alert-info" role="alert">We didn't find any matches</div>
+
 </div>

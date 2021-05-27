@@ -19,17 +19,19 @@ namespace Kaizen.Core
             this.context = context;
         }
 
-        public async Task<IEnumerable<ApplicationUser>> GetAgentUsersAsync()
+        public async Task<IEnumerable<ApplicationUser>> GetActiveAgentsAsync()
         {
             return await (from u in context.Users
                           join uc in context.UserClaims on u.Id equals uc.UserId
-                          where uc.ClaimType.Equals("role") && uc.ClaimValue.Equals("agent")
+                          where uc.ClaimType.Equals("role") && uc.ClaimValue.Equals("agent") && u.IsActive
                           select new ApplicationUser
                           {
                               Id = u.Id,
                               LastName = u.LastName,
                               FirstName = u.FirstName,
                               UserName = u.UserName,
+                              PhoneNumber = u.PhoneNumber,
+                              IdentificationCard = u.IdentificationCard,
                               Email = u.Email
                           }).ToListAsync();
         }

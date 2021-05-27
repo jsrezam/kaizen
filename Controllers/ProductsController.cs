@@ -78,8 +78,8 @@ namespace Kaizen.Controllers
             if (product == null)
                 return NotFound();
 
-            var productResource = mapper.Map<Product, ProductDto>(product);
-            return Ok(productResource);
+            var productDto = mapper.Map<Product, ProductDto>(product);
+            return Ok(productDto);
         }
     }
 }

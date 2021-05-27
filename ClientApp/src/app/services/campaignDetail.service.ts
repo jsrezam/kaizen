@@ -15,4 +15,10 @@ export class CampaignDetailService {
             map(res => res)
         );
     }
+
+    removeDetailCampaignItem(campaignDetailItemId) {
+        return this.http.delete(this.apiUri + campaignDetailItemId).pipe(
+            map(res => res)
+        );
+    }
 }
