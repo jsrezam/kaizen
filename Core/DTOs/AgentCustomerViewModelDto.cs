@@ -1,6 +1,6 @@
 namespace Kaizen.Core.DTOs
 {
-    public class AgentCustomerDto
+    public class AgentCustomerViewModelDto
     {
         public CustomerDto Customer { get; set; }
         public int CampaignId { get; set; }

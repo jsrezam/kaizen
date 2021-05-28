@@ -4,6 +4,7 @@ using Kaizen.Controllers.Utilities;
 using Kaizen.Core.DTOs;
 using Kaizen.Core.Interfaces;
 using Kaizen.Core.Models;
+using Kaizen.Core.Models.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,20 +25,10 @@ namespace Kaizen.Controllers
         }
 
         [HttpGet("agents/actives")]
-        [Authorize(Policies.RequireAdminRole)]
+        [Authorize(Policies.AdminRoleValue)]
         public async Task<IActionResult> GetActiveAgentsAsync()
         {
             return Ok(await userService.GetActiveAgentsAsync());
-        }
-
-        [HttpGet("{email}")]
-        public async Task<IActionResult> GetUserByEmailAsync(string email)
-        {
-            var user = await userService.GetUserByEmailAsync(email);
-            if (user == null)
-                return NotFound();
-
-            return Ok(user);
         }
 
         [HttpGet("campaign/{campaignId}")]
@@ -49,6 +40,33 @@ namespace Kaizen.Controllers
 
             var result = mapper.Map<ApplicationUser, ApplicationUserDto>(user);
             return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUsersViewAsync(ApplicationUserQueryDto applicationUserQueryDto)
+        {
+            var userQuery = mapper.Map<ApplicationUserQueryDto, ApplicationUserQuery>(applicationUserQueryDto);
+            var queryResult = await userService.GetUsersViewAsync(userQuery);
+            var resultQuery = mapper.Map<QueryResult<UserViewModel>, QueryResultDto<UserViewModelDto>>(queryResult);
+
+            return Ok(resultQuery);
+        }
+
+        [HttpPost("changeState")]
+        [Authorize(Policies.AdminRoleValue)]
+        public async Task<IActionResult> ChangeUserState([FromBody] UserViewModelDto userDto)
+        {
+            var user = await userService.GetUserByIdAsync(userDto.Id);
+
+            if (user == null) return NotFound();
+
+            await userService.ChangeUserState(user);
+
+            var userUpdated = await userService.GetUserViewAsync(user.Id);
+
+            mapper.Map<UserViewModel, UserViewModelDto>(userUpdated);
+
+            return Ok(userUpdated);
         }
     }
 }

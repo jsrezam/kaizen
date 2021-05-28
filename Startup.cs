@@ -80,7 +80,7 @@ namespace Kaizen
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(Policies.RequireAdminRole, policy => policy.RequireClaim("role", "admin"));
+                options.AddPolicy(Policies.AdminRoleValue, policy => policy.RequireClaim("role", "admin"));
             });
 
             services.AddControllersWithViews();

@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Kaizen.Controllers.Utilities;
 using Kaizen.Core.Interfaces;
 using Kaizen.Core.Models;
 using Kaizen.Infrastructure.Persistence;
@@ -34,9 +36,24 @@ namespace Kaizen.Infrastructure.Repositories
         {
             return await userManager.GetClaimsAsync(user);
         }
+
         public async Task<SignInResult> PasswordSignInAsync(string userName, string password, bool isPersistent, bool lockoutOnFailure)
         {
             return await signInManager.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
+        }
+
+        public async Task<bool> AddRoleAsync(ApplicationUser user, string roleName)
+        {
+            return (await userManager
+            .AddClaimAsync(user, new Claim(Policies.RoleClaimTypeValue, roleName)))
+            .Succeeded;
+        }
+
+        public async Task<bool> RemoveRoleAsync(ApplicationUser user, string roleName)
+        {
+            return (await userManager
+            .RemoveClaimAsync(user, new Claim(Policies.RoleClaimTypeValue, roleName)))
+            .Succeeded;
         }
     }
 }

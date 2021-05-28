@@ -28,7 +28,7 @@ namespace Kaizen.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policies.RequireAdminRole)]
+        [Authorize(Policies.AdminRoleValue)]
         public async Task<IActionResult> CreateCampaign([FromBody] CampaignSaveDto campaignSaveDto)
         {
             if (!ModelState.IsValid)
@@ -64,7 +64,7 @@ namespace Kaizen.Controllers
         }
 
         [HttpGet("agents/{agentId}")]
-        [Authorize(Policies.RequireAdminRole)]
+        [Authorize(Policies.AdminRoleValue)]
         public async Task<IActionResult> GetAgentCampaignsAsync(string agentId, CampaignQueryDto campaignQueryResource)
         {
             var campaignQuery = mapper.Map<CampaignQueryDto, CampaignQuery>(campaignQueryResource);

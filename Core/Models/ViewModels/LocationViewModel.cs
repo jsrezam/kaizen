@@ -1,6 +1,6 @@
 namespace Kaizen.Core.Models.ViewModels
 {
-    public class Location
+    public class LocationViewModel
     {
         public int CountryId { get; set; }
         public string Country { get; set; }

@@ -5,7 +5,7 @@ namespace Kaizen.Core.Interfaces
 {
     public interface ILocationService
     {
-        Task<Location> GetLocationNames(int countryId, int regionId, int cityId);
-        Task<Location> GetLocationIds(string countryName, string regionName, string cityName);
+        Task<LocationViewModel> GetLocationNames(int countryId, int regionId, int cityId);
+        Task<LocationViewModel> GetLocationIds(string countryName, string regionName, string cityName);
     }
 }

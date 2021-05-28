@@ -1,0 +1,66 @@
+<h2>Users</h2>
+
+<hr class="my-4">
+
+<div class="mb-3">
+  <label for="searchOption">Search options:</label>
+  <select id="searchOption" class="form-control" name="sltsearchOption" [(ngModel)]="searchOption"
+    (change)="onFilterChange()">
+    <option *ngFor="let c of filterSearchOptions()" value="{{ c.key }}">
+      <div *ngIf="c.searchable">
+        {{c.title}}
+      </div>
+    </option>
+  </select>
+</div>
+
+<div>
+  <p>
+    <input #querySearch type="text" class="form-control" [placeholder]="setPlaceholderSearch()">
+  </p>
+  <p>
+    <button type="button" class="btn btn-primary" (click)="search(querySearch.value)">Search</button>
+  </p>
+</div>
+
+<div *ngIf="!queryResult.items">
+  <loading></loading>
+</div>
+<div *ngIf="queryResult.items">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th *ngFor="let c of columns" aria-labelledby="tableLabel" class="text-center">
+          <div *ngIf="c.isSortable" (click)="sortBy(c.key)">
+            {{c.title}}
+            <i *ngIf="query.sortBy === c.key" class="fa" [class.fa-sort-asc]="query.isSortAscending"
+              [class.fa-sort-desc]="!query.isSortAscending"></i>
+          </div>
+          <div *ngIf="!c.isSortable">
+            {{c.title}}
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let u of queryResult.items">
+        <td class="text-center">{{ u.firstName }}</td>
+        <td class="text-center">{{ u.lastName }}</td>
+        <td class="text-center">{{ u.identificationCard }}</td>
+        <td class="text-center">{{ u.userName }}</td>
+        <td class="text-center">
+          <button *ngIf="!u.isActive" class="btn btn-outline-success" (click)="chageUserState(u)">Active</button>
+          <button *ngIf="u.isActive" class="btn btn-outline-danger" (click)="chageUserState(u)">Inactivate</button>
+        </td>
+        <td class="text-center">
+          <button *ngIf="u.role !== 'admin'" class="btn btn-outline-success" (click)="changeUserRole(u)">Make
+            Admin</button>
+          <button *ngIf="u.role === 'admin'" class="btn btn-outline-info" (click)="changeUserRole(u)">Make
+            Agent</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <pagination [total-items]="queryResult.totalItems" [page-size]="query.pageSize" (page-changed)="onPageChage($event)">
+  </pagination>
+</div>

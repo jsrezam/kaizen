@@ -12,5 +12,7 @@ namespace Kaizen.Core.Interfaces
         Task<IdentityResult> AddClaimsAsync(ApplicationUser user, List<Claim> claims);
         Task<IList<Claim>> GetClaimsAsync(ApplicationUser user);
         Task<SignInResult> PasswordSignInAsync(string userName, string password, bool isPersistent, bool lockoutOnFailure);
+        Task<bool> AddRoleAsync(ApplicationUser user, string roleName);
+        Task<bool> RemoveRoleAsync(ApplicationUser user, string roleName);
     }
 }

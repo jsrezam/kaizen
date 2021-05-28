@@ -63,5 +63,15 @@ namespace Kaizen.Core.Services
         {
             return await unitOfWork.AccountRepository.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
         }
+
+        public async Task<bool> AddRoleAsync(ApplicationUser user, string roleName)
+        {
+            return await unitOfWork.AccountRepository.AddRoleAsync(user, roleName);
+        }
+
+        public async Task<bool> RemoveRoleAsync(ApplicationUser user, string roleName)
+        {
+            return await unitOfWork.AccountRepository.RemoveRoleAsync(user, roleName);
+        }
     }
 }

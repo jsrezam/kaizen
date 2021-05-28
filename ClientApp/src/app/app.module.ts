@@ -38,6 +38,7 @@ import { AgentCampaignListComponent } from './components/agent-campaign-list/age
 import { OrderFormComponent } from './components/order-form/order-form.component';
 import { CustomerFormComponent } from './components/customer-form/customer-form.component';
 import { CustomerListComponent } from './components/customer-list/customer-list.component';
+import { UserListComponent } from './components/users-list/user-list.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { CustomerListComponent } from './components/customer-list/customer-list.
     OrderFormComponent,
     CustomerFormComponent,
     CustomerListComponent,
+    UserListComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -82,8 +84,8 @@ import { CustomerListComponent } from './components/customer-list/customer-list.
       { path: 'sign-up', component: SignupFormComponent },
       { path: 'non-authorized', component: NonAuthorizedComponent },
 
-      { path: 'campaigns', component: CampaignListComponent },
-      { path: 'campaigns/new', component: CampaignFormComponent },
+      { path: 'campaigns', component: CampaignListComponent, canActivate: [AuthGuard] },
+      { path: 'campaigns/new', component: CampaignFormComponent, canActivate: [AuthGuard] },
       { path: 'campaigns-detail/:id', component: CampaignDetailComponent },
 
       { path: 'agent-campaigns', component: AgentCampaignListComponent },
@@ -93,7 +95,11 @@ import { CustomerListComponent } from './components/customer-list/customer-list.
       { path: 'customers/new', component: CustomerFormComponent },
       { path: 'customers/edit/:id', component: CustomerFormComponent },
 
+      { path: 'users', component: UserListComponent, canActivate: [AuthGuard] },
+
       { path: 'orders/new', component: OrderFormComponent },
+
+
 
     ]), NgbModule
   ],

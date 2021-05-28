@@ -85,7 +85,7 @@ namespace Kaizen.Controllers
 
             var customerQuery = mapper.Map<CustomerQueryDto, CustomerQuery>(customerQueryResource);
             var queryResult = await customerService.GetAgentCustomersAsync(agent.Id, customerQuery);
-            var resultQuery = mapper.Map<QueryResult<AgentCustomer>, QueryResultDto<AgentCustomerDto>>(queryResult);
+            var resultQuery = mapper.Map<QueryResult<AgentCustomerViewModel>, QueryResultDto<AgentCustomerViewModelDto>>(queryResult);
             return Ok(resultQuery);
         }
 

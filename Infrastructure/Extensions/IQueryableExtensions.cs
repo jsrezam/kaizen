@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Kaizen.Core.Models;
+using Kaizen.Core.Models.ViewModels;
 
 namespace Kaizen.Infrastructure.Extensions
 {
@@ -12,6 +13,29 @@ namespace Kaizen.Infrastructure.Extensions
         {
             if (!string.IsNullOrEmpty(queryObj.Name))
                 query = query.Where(c => c.Name.Contains(queryObj.Name));
+
+            return query;
+        }
+
+        public static IQueryable<UserViewModel> ApplyFiltering(this IQueryable<UserViewModel> query, ApplicationUserQuery queryObj)
+        {
+            if (!string.IsNullOrEmpty(queryObj.FirstName))
+                query = query.Where(c => c.FirstName.Contains(queryObj.FirstName.Trim()));
+
+            if (!string.IsNullOrEmpty(queryObj.LastName))
+                query = query.Where(c => c.LastName.Contains(queryObj.LastName.Trim()));
+
+            if (!string.IsNullOrEmpty(queryObj.IdentificationCard))
+                query = query.Where(c => c.IdentificationCard.Contains(queryObj.IdentificationCard.Trim()));
+
+            if (!string.IsNullOrEmpty(queryObj.UserName))
+                query = query.Where(c => c.UserName.Contains(queryObj.UserName.Trim()));
+
+            if (!string.IsNullOrEmpty(queryObj.Email))
+                query = query.Where(c => c.Email.Contains(queryObj.Email.Trim()));
+
+            if (!string.IsNullOrEmpty(queryObj.Role))
+                query = query.Where(c => c.Role.Contains(queryObj.Role.Trim()));
 
             return query;
         }

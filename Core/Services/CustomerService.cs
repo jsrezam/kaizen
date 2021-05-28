@@ -58,15 +58,15 @@ namespace Kaizen.Core.Services
             return result;
         }
 
-        public async Task<QueryResult<AgentCustomer>> GetAgentCustomersAsync(string agentId, CustomerQuery customerQuery)
+        public async Task<QueryResult<AgentCustomerViewModel>> GetAgentCustomersAsync(string agentId, CustomerQuery customerQuery)
         {
-            var result = new QueryResult<AgentCustomer>();
+            var result = new QueryResult<AgentCustomerViewModel>();
 
             var userCampaigns = await unitOfWork.CampaignRepository.GetAgentValidCampaignsAsync(agentId, new CampaignQuery());
 
             var query = (from userCampaign in userCampaigns.Items
                          from CampaignDetail in userCampaign.CampaignDetails
-                         select new AgentCustomer
+                         select new AgentCustomerViewModel
                          {
                              Customer = CampaignDetail.Customer,
                              CampaignDetailId = CampaignDetail.Id,

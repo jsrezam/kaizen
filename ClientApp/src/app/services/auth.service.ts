@@ -68,4 +68,16 @@ export class AuthService {
     getToken() {
         return localStorage.getItem(this.tokenKey);
     }
+
+    makeAdmin(user) {
+        return this.http.post(this.apiUri + 'makeAdmin', user).pipe(
+            map(res => res)
+        )
+    }
+
+    makeAgent(user) {
+        return this.http.post(this.apiUri + 'makeAgent', user).pipe(
+            map(res => res)
+        )
+    }
 }

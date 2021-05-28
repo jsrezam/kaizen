@@ -33,7 +33,7 @@ namespace Kaizen.Infrastructure.Mapping
             });
             CreateMap<CampaignDetail, CampaignDetailDto>();
             CreateMap<Campaign, CampaignSaveDto>();
-            CreateMap<AgentCustomer, AgentCustomerDto>()
+            CreateMap<AgentCustomerViewModel, AgentCustomerViewModelDto>()
             .AfterMap((ac, acr) =>
             {
                 acr.Customer.CampaignId = acr.CampaignId;
@@ -44,6 +44,7 @@ namespace Kaizen.Infrastructure.Mapping
             CreateMap<Country, CountryDto>();
             CreateMap<Region, RegionDto>();
             CreateMap<City, CityDto>();
+            CreateMap<UserViewModel, UserViewModelDto>();
 
             // API Resource to Domain
             CreateMap<ProductDto, Product>()
@@ -79,6 +80,10 @@ namespace Kaizen.Infrastructure.Mapping
                 au.Email = ucd.UserName;
                 au.IsActive = true;
             });
+            CreateMap<ApplicationUserQueryDto, ApplicationUserQuery>();
+
+            // // View Model to Domain
+            // CreateMap<UserViewModel, ApplicationUser>();
         }
     }
 }

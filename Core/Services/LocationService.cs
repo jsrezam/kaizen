@@ -13,7 +13,7 @@ namespace Kaizen.Core.Services
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<Location> GetLocationNames(int countryId, int regionId, int cityId)
+        public async Task<LocationViewModel> GetLocationNames(int countryId, int regionId, int cityId)
         {
             var countries = await unitOfWork.CountryRepository.GetCountriesAsync();
             return (from country in countries.Items
@@ -22,7 +22,7 @@ namespace Kaizen.Core.Services
                     where (country.Id == countryId
                         && region.Id == regionId
                         && city.Id == cityId)
-                    select new Location
+                    select new LocationViewModel
                     {
                         Country = country.Name,
                         Region = region.Name,
@@ -30,7 +30,7 @@ namespace Kaizen.Core.Services
                     }).FirstOrDefault();
         }
 
-        public async Task<Location> GetLocationIds(string countryName, string regionName, string cityName)
+        public async Task<LocationViewModel> GetLocationIds(string countryName, string regionName, string cityName)
         {
             var countries = await unitOfWork.CountryRepository.GetCountriesAsync();
             return (from country in countries.Items
@@ -39,7 +39,7 @@ namespace Kaizen.Core.Services
                     where (country.Name.Equals(countryName)
                         && region.Name.Equals(regionName)
                         && city.Name.Equals(cityName))
-                    select new Location
+                    select new LocationViewModel
                     {
                         CountryId = country.Id,
                         RegionId = region.Id,
