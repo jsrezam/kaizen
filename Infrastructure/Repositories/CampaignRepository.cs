@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Kaizen.Controllers.Enumerations;
 using Kaizen.Core.Interfaces;
 using Kaizen.Core.Models;
 using Kaizen.Infrastructure.Extensions;
@@ -51,13 +52,14 @@ namespace Kaizen.Infrastructure.Repositories
             var result = new QueryResult<Campaign>();
 
             var query = entities
-            .Include(c => c.CampaignDetails)
-                .ThenInclude(cd => cd.Customer)
-            .Where(c => c.UserId.Equals(userId)
-            && c.IsActive
-            && c.FinishDate > DateTime.UtcNow)
-            .OrderByDescending(c => c.Id)
-            .AsQueryable();
+            .Include(cp => cp.CampaignDetails
+            .Where(cd => !cd.State.Equals(CampaignStatus.Earned.ToString())))
+                .ThenInclude(cp => cp.Customer)
+            .Where(cp => cp.UserId.Equals(userId)
+            && cp.IsActive
+            && cp.FinishDate > DateTime.Now)
+            .OrderByDescending(cp => cp.Id)
+            .AsSplitQuery();
 
             query = query.ApplyFiltering(queryObj);
 

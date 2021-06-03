@@ -1,13 +1,17 @@
 using System.Threading.Tasks;
 using AutoMapper;
+using Kaizen.Controllers.Utilities;
 using Kaizen.Core.DTOs;
 using Kaizen.Core.Interfaces;
 using Kaizen.Core.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kaizen.Controllers
 {
     [Route("/api/categories")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = Policies.AdminRoleValue)]
     public class CategoriesController : Controller
     {
         private readonly IMapper mapper;

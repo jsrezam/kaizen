@@ -33,9 +33,8 @@
             [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/agent-campaigns']">My Campaigns</a>
           </li>
-          <li *ngIf="authService.isAuthenticated() && !authService.isInRole('admin')" class="nav-item"
-            [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/orders/new']">New Order</a>
+          <li *ngIf="authService.isAuthenticated()" class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/orders']">Orders</a>
           </li>
 
           <li class="nav-item" [routerLinkActive]="['link-active']">

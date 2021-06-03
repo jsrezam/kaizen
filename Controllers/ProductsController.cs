@@ -1,13 +1,17 @@
 using System.Threading.Tasks;
 using AutoMapper;
+using Kaizen.Controllers.Utilities;
 using Kaizen.Core.DTOs;
 using Kaizen.Core.Interfaces;
 using Kaizen.Core.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kaizen.Controllers
 {
     [Route("/api/products")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ProductsController : Controller
     {
         private readonly IMapper mapper;
@@ -20,6 +24,7 @@ namespace Kaizen.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policies.AdminRoleValue)]
         public async Task<IActionResult> CreateProduct([FromBody] ProductDto productDto)
         {
             if (!ModelState.IsValid)
@@ -33,6 +38,7 @@ namespace Kaizen.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Policies.AdminRoleValue)]
         public async Task<IActionResult> UpdateProduct(int id, [FromBody] ProductDto productDto)
         {
             if (!ModelState.IsValid)
@@ -52,6 +58,7 @@ namespace Kaizen.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policies.AdminRoleValue)]
         public async Task<IActionResult> GetProducts(ProductQueryDto productQueryDto)
         {
             var productQuery = mapper.Map<ProductQueryDto, ProductQuery>(productQueryDto);
@@ -72,6 +79,7 @@ namespace Kaizen.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Policies.AdminRoleValue)]
         public async Task<IActionResult> GetProduct(int id)
         {
             var product = await productService.GetProductAsync(id);

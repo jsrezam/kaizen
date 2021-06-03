@@ -1,3 +1,5 @@
+import { OrderService } from './services/order.service';
+import { LocationService } from './services/location.service';
 import { AuthGuard } from './services/auth-guard.service';
 import { AuthService } from './services/auth.service';
 import { CategoryService } from './services/category.service';
@@ -39,6 +41,9 @@ import { OrderFormComponent } from './components/order-form/order-form.component
 import { CustomerFormComponent } from './components/customer-form/customer-form.component';
 import { CustomerListComponent } from './components/customer-list/customer-list.component';
 import { UserListComponent } from './components/users-list/user-list.component';
+import { OrderListComponent } from './components/order-list/order-list.component';
+import { OrderDetailComponent } from './components/order-detail/order-detail.component';
+import { ReportsComponent } from './components/reports/reports.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +68,9 @@ import { UserListComponent } from './components/users-list/user-list.component';
     CustomerFormComponent,
     CustomerListComponent,
     UserListComponent,
+    OrderListComponent,
+    OrderDetailComponent,
+    ReportsComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -97,7 +105,9 @@ import { UserListComponent } from './components/users-list/user-list.component';
 
       { path: 'users', component: UserListComponent, canActivate: [AuthGuard] },
 
+      { path: 'orders', component: OrderListComponent },
       { path: 'orders/new', component: OrderFormComponent },
+      { path: 'orders-detail/:id', component: OrderDetailComponent },
 
 
 
@@ -112,6 +122,8 @@ import { UserListComponent } from './components/users-list/user-list.component';
     AuthGuard,
     CampaignService,
     CampaignDetailService,
+    LocationService,
+    OrderService,
     { provide: HTTP_INTERCEPTORS, useClass: SecurityInterceptorService, multi: true }
   ],
   bootstrap: [AppComponent]

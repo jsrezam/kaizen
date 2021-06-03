@@ -6,6 +6,9 @@ using Kaizen.Core.Interfaces;
 using Kaizen.Core.DTOs;
 using System;
 using System.Collections.Generic;
+using Kaizen.Infrastructure.Extensions;
+using System.Linq.Expressions;
+using Kaizen.Controllers.Enumerations;
 
 namespace Kaizen.Core.Services
 {
@@ -58,7 +61,7 @@ namespace Kaizen.Core.Services
             return result;
         }
 
-        public async Task<QueryResult<AgentCustomerViewModel>> GetAgentCustomersAsync(string agentId, CustomerQuery customerQuery)
+        public async Task<QueryResult<AgentCustomerViewModel>> GetAgentCustomersAsync(string agentId, CustomerQuery queryObj)
         {
             var result = new QueryResult<AgentCustomerViewModel>();
 
@@ -73,17 +76,23 @@ namespace Kaizen.Core.Services
                              CampaignId = CampaignDetail.CampaignId
                          }).AsQueryable();
 
-            if (customerQuery != null)
+            query = query.ApplyFiltering(queryObj);
+
+            var columnsMap = new Dictionary<string, Expression<Func<AgentCustomerViewModel, object>>>()
             {
-                if (!string.IsNullOrEmpty(customerQuery.FirstName))
-                    query = query.Where(c => c.Customer.FirstName.ToUpper().Trim().Equals(customerQuery.FirstName.ToUpper().Trim()));
-                if (!string.IsNullOrEmpty(customerQuery.LastName))
-                    query = query.Where(c => c.Customer.LastName.ToUpper().Trim().Equals(customerQuery.LastName.ToUpper().Trim()));
-                if (!string.IsNullOrEmpty(customerQuery.CellPhone))
-                    query = query.Where(c => c.Customer.CellPhone.ToUpper().Trim().Equals(customerQuery.CellPhone.ToUpper().Trim()));
-            }
+                ["customer.firstName"] = c => c.Customer.FirstName,
+                ["customer.lastName"] = c => c.Customer.LastName,
+                ["customer.identificationCard"] = c => c.Customer.IdentificationCard,
+                ["customer.email"] = c => c.Customer.Email,
+                ["customer.cellPhone"] = c => c.Customer.CellPhone,
+                ["customer.city"] = c => c.Customer.City,
+                ["customer.region"] = c => c.Customer.Region,
+                ["customer.country"] = c => c.Customer.Country,
+            };
+            query = query.ApplyOrdering(queryObj, columnsMap);
 
             result.TotalItems = query.Count();
+            query = query.ApplyPaging(queryObj);
             result.Items = query.ToList();
             return result;
         }

@@ -53,8 +53,10 @@ namespace Kaizen.Infrastructure.Repositories
         public async Task<decimal> GetCalledCustomerNumberInCampaignAsync(int campaignId)
         {
             return await entities
-            .Where(cd => cd.CampaignId == campaignId
-            && cd.State.Equals(CampaignStatus.Called.ToString())).CountAsync();
+            .Where(cd => cd.CampaignId == campaignId &&
+            (cd.State.Equals(CampaignStatus.Called.ToString()) ||
+            cd.State.Equals(CampaignStatus.Earned.ToString())))
+            .CountAsync();
         }
     }
 }

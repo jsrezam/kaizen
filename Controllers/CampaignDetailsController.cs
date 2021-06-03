@@ -36,7 +36,7 @@ namespace Kaizen.Controllers
             if (campaignDetailItem == null)
                 return NotFound();
 
-            await campaignDetailService.RemoveDetailCampaignItem(campaignDetailItem);
+            await campaignDetailService.RemoveCampaignDetailItem(campaignDetailItem);
 
             return Ok();
         }

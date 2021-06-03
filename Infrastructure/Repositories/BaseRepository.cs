@@ -33,9 +33,9 @@ namespace Kaizen.Infrastructure.Repositories
             return true;
         }
 
-        public IEnumerable<T> GetAll()
+        public async Task<IEnumerable<T>> GetAll()
         {
-            return entities.AsEnumerable();
+            return await entities.ToListAsync();
         }
 
         public async Task<T> GetByIdAsync(int id)

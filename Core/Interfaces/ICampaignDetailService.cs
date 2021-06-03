@@ -7,6 +7,7 @@ namespace Kaizen.Core.Interfaces
     {
         Task<QueryResult<CampaignDetail>> GetCampaignDetailByCampaignAsync(int campaignId, CampaignDetailQuery productQuery);
         Task<CampaignDetail> GetCampaignDetailItemAsync(int campaignDetailItemId);
-        Task RemoveDetailCampaignItem(CampaignDetail campaignDetailItem);
+        Task RemoveCampaignDetailItem(CampaignDetail campaignDetailItem);
+        Task UpdateCampaignDetailItem(CampaignDetail campaignDetail);
     }
 }

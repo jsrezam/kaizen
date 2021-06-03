@@ -1,174 +1,202 @@
 <h2>New Order</h2>
 
-<!-- <p>
-  Customer: {{customer|json}}
-</p> -->
-<!-- <p>
-  Products: {{cart|json}}
-</p> -->
-<p>
-  {{order|json}}
-</p>
+<hr class="mb-4">
 
-<hr class="rounded">
-<div class="btn-group btn-group-toggle" data-toggle="buttons">
-  <label class="btn btn-secondary active">
-    <input type="radio" name="options" id="option1" autocomplete="off" checked (click)="goCustomerPage()"> Customer
-  </label>
-  <label class="btn btn-secondary">
-    <input type="radio" name="options" id="option2" autocomplete="off" (click)="goProductsPage()"> Products
-  </label>
-  <label class="btn btn-secondary">
-    <input type="radio" name="options" id="option3" autocomplete="off" [disabled]="!customer || cart.length === 0"
-      (click)="goCheckoutPage()">
-    Checkout
-  </label>
-  <!-- <label class="btn btn-secondary">
-    <input type="radio" name="options" id="option3" autocomplete="off" (click)="goCheckoutPage()">
-    Checkout
-  </label> -->
+<div class="stepwizard col-md-offset-3">
+  <div class="stepwizard-row setup-panel">
+    <div class="stepwizard-step">
+      <a (click)="goCustomerPage()" type="button" class="btn" [class.btn-primary]="isInCustomerPage"
+        [class.btn-circle]="isInCustomerPage" [class.btn-default]="!isInCustomerPage">1</a>
+      <p>Select Customer</p>
+    </div>
+    <div class="stepwizard-step">
+      <a (click)="goProductsPage()" type="button" class="btn" [class.btn-primary]="isInProductsPage"
+        [class.btn-circle]="isInProductsPage" [class.btn-default]="!isInProductsPage">2</a>
+      <p>Select Products</p>
+    </div>
+    <div *ngIf="customer && cart.length !== 0" class="stepwizard-step">
+      <a (click)="goCheckoutPage()" type="button" class="btn" [class.btn-success]="isInCheckoutPage"
+        [class.btn-circle]="isInCheckoutPage" [class.btn-default]="!isInCheckoutPage">3</a>
+      <div class="text-success">
+        <p>Checkout</p>
+      </div>
+    </div>
+  </div>
 </div>
-<hr class="rounded">
+
+<hr class="mb-4">
+
+<p *ngFor="let e of errorMessages">
+  <ngb-alert type="danger" [dismissible]="false">
+    <strong>Error!</strong> {{e.description}}
+  </ngb-alert>
+</p>
 
 <div *ngIf="isInCustomerPage">
 
-  <p><strong>Select your customer</strong></p>
-  <hr class="rounded">
+  <div class="row">
 
-  <div class="mb-3">
-    <label for="selectSearchCustomer">Search by</label>
-    <select id="selectSearchCustomer" class="form-control" [(ngModel)]="searchFieldCustomer"
-      name="selectSearchCustomerKey" #selectSearchCustomer="ngModel">
-      <option *ngFor="let c of customerColumns" value="{{ c.key }}">
-        {{c.title}}
-      </option>
-    </select>
-  </div>
+    <div class="col-md-6 mb-3">
 
-  <p>
-    <input #queryCustomerSearch type="text" class="form-control" placeholder="Search...">
-  </p>
-  <p>
-    <button type="button" class="btn btn-primary" (click)="customerSearch(queryCustomerSearch.value)">Search</button>
-  </p>
-
-  <div *ngIf="!customer && queryResult.totalItems === 0" class="alert alert-warning" role="alert">
-    The client you are trying to find is not in any of your valid campaigns
-  </div>
-
-  <div *ngIf="queryResult.totalItems > 0">
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th *ngFor="let c of columns" aria-labelledby="tableLabel">
-            <div *ngIf="c.isSortable" (click)="sortBy(c.key)">
-              {{c.title}}
-              <i *ngIf="query.sortBy === c.key" class="fa" [class.fa-sort-asc]="query.isSortAscending"
-                [class.fa-sort-desc]="!query.isSortAscending"></i>
-            </div>
-            <div *ngIf="!c.isSortable">
+      <div class="mb-3">
+        <label for="searchCustomerOption">Search options:</label>
+        <select id="searchCustomerOption" class="form-control" name="sltsearchOption" [(ngModel)]="searchCustomerOption"
+          (change)="onCustomerFilterChange()">
+          <option *ngFor="let c of filterCustomerSearchOptions()" value="{{ c.key }}">
+            <div *ngIf="c.searchable">
               {{c.title}}
             </div>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let cus of queryResult.items">
-          <td>{{ cus.customer.firstName }}</td>
-          <td>{{ cus.customer.lastName }}</td>
-          <td>{{ cus.customer.cellPhone }}</td>
-          <td>
-            <button class="btn btn-outline-danger" type="button" (click)="selectCustomer(cus.customer)">Select</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <pagination [total-items]="queryResult.totalItems" [page-size]="query.pageSize"
-      (page-changed)="onPageChage($event)">
-    </pagination>
-  </div>
+          </option>
+        </select>
+      </div>
 
-  <div *ngIf="customer">
-    <hr class="mb-4">
-    <p><strong>Selected Customer:</strong></p>
-    <hr class="mb-4">
+      <div>
+        <p>
+          <input #queryCustomerSearch type="text" class="form-control" [placeholder]="setCustomerPlaceholderSearch()">
+        </p>
+        <p>
+          <button type="button" class="btn btn-primary"
+            (click)="customerSearch(queryCustomerSearch.value)">Search</button>
+        </p>
+      </div>
 
-    <div class="container mt-5 d-flex justify-content-center">
-      <div class="profileCard p-3">
-        <div class="d-flex align-items-center">
-          <div class="image">
-            <img src="https://cdn4.iconfinder.com/data/icons/superheroes/512/batman-512.png"
-              alt="customer's profile picture" class="rounded-circle img-fluid profile-picture">
-          </div>
-          <div class="ml-3 w-100">
-            <h4 class="mb-0 mt-0">{{ customer.firstName }} {{ customer.lastName }}</h4>
-            <span>{{ customer.cellPhone }}</span>
-            <div class="p-2 mt-2 bg-primary d-flex justify-content-between rounded text-white stats">
-              <div class="d-flex flex-column"> <span class="showCampaign">Campaign</span>
-                <span class="number1">{{customer.campaignId}}</span>
+      <div *ngIf="!customer && customers.totalItems === 0" class="alert alert-warning" role="alert">
+        The client you are trying to find is not in any of your valid campaigns
+      </div>
+
+      <div *ngIf="customers.totalItems > 0">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th *ngFor="let c of customerColumns" aria-labelledby="tableLabel" class="text-center">
+                <div *ngIf="c.isSortable" (click)="sortCustomerBy(c.key)">
+                  {{c.title}}
+                  <i *ngIf="customerQuery.sortProductBy === c.key" class="fa"
+                    [class.fa-sort-asc]="customerQuery.isSortAscending"
+                    [class.fa-sort-desc]="!customerQuery.isSortAscending"></i>
+                </div>
+                <div *ngIf="!c.isSortable">
+                  {{c.title}}
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let c of customers.items">
+              <td class="text-center">{{ c.customer.firstName }}</td>
+              <td class="text-center">{{ c.customer.lastName }}</td>
+              <td class="text-center">{{ c.customer.cellPhone }}</td>
+              <td>
+                <button class="btn btn-outline-danger" type="button"
+                  (click)="selectCustomer(c.customer)">Select</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <pagination [total-items]="customers.totalItems" [page-size]="customerQuery.pageSize"
+          (page-changed)="onCustomerTablePageChage($event)">
+        </pagination>
+      </div>
+
+    </div>
+
+
+    <div class="col-md-6 mb-3">
+
+      <div *ngIf="customer">
+        <p><strong>Selected Customer:</strong></p>
+
+        <div class="container mt-5 d-flex justify-content-center">
+          <div class="profileCard p-3">
+            <div class="d-flex align-items-center">
+              <div class="image">
+                <img src="https://cdn4.iconfinder.com/data/icons/superheroes/512/batman-512.png"
+                  alt="customer's profile picture" class="rounded-circle img-fluid profile-picture">
               </div>
-              <div class="d-flex flex-column"> <span class="showCampaignDetail">Campaign Detail</span>
-                <span class="number2">{{customer.campaignDetailId}}</span>
+              <div class="ml-3 w-100">
+                <h4 class="mb-0 mt-0">{{ customer.firstName }} {{ customer.lastName }}</h4>
+                <span>{{ customer.cellPhone }}</span>
+                <div class="p-2 mt-2 bg-primary d-flex justify-content-between rounded text-white stats">
+                  <div class="d-flex flex-column"> <span class="showCampaign">Campaign</span>
+                    <span class="number1">{{customer.campaignId}}</span>
+                  </div>
+                  <div class="d-flex flex-column"> <span class="showCampaignDetail">Campaign Detail</span>
+                    <span class="number2">{{customer.campaignDetailId}}</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
+
       </div>
+
     </div>
 
+
   </div>
+
+
+
+
 </div>
 
 <div *ngIf="isInProductsPage">
 
-  <p><strong>Select customer's products</strong></p>
-  <hr class="rounded">
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <div class="mb-3">
+        <label for="searchProductOption">Search options:</label>
+        <select id="searchProductOption" class="form-control" name="sltsearchOption" [(ngModel)]="searchProductOption"
+          (change)="onProductFilterChange()">
+          <option *ngFor="let c of filterProductSearchOptions()" value="{{ c.key }}">
+            <div *ngIf="c.searchable">
+              {{c.title}}
+            </div>
+          </option>
+        </select>
+      </div>
 
-  <div class="mb-3">
-    <div>
-      <label for="selectSearchProduct">Search by</label>
-      <select id="selectSearchProduct" class="form-control" [(ngModel)]="searchFieldProduct"
-        name="selectSearchProductKey" #selectSearchProduct="ngModel" (change)="onFilterChange()">
-        <option *ngFor="let p of filterProductColumns()" value="{{ p.key }}">
-          <div *ngIf="p.searchable">
-            {{p.title}}
-          </div>
-        </option>
-      </select>
+      <div>
+        <p>
+          <input #queryProductSearch type="text" class="form-control" [placeholder]="setProductPlaceholderSearch()">
+        </p>
+        <p>
+          <button type="button" class="btn btn-primary"
+            (click)="searchProduct(queryProductSearch.value)">Search</button>
+        </p>
+      </div>
     </div>
 
-    <div *ngIf="searchFieldProduct === 'category'">
-      <label for="selectSearchCategory">Select the category to search</label>
-      <select id="selectSearchCategory" class="form-control" [(ngModel)]="productQuery.categoryId"
-        name="selectSearchCategoryKey" #selectSearchCategory="ngModel">
-        <option value=""></option>
-        <option *ngFor="let category of categoryQueryResult.items" value="{{ category.id }}">
-          {{category.name}}
-        </option>
-      </select>
+    <div class="col-md-6 mb-3">
+      <h2>Cart Resume:</h2>
+      <h6 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-muted">Items:</span>
+        <span class="badge badge-secondary badge-pill">{{cart.length}}</span>
+      </h6>
+      <h6 class="d-flex justify-content-between align-items-center mb-3">
+        <span class=" text-muted">Total (USD):</span>
+        <strong>${{getTotalOrderPrice() | number : '1.2-2'}}</strong>
+      </h6>
     </div>
+
   </div>
-  <p>
-    <input #queryProductSearch type="text" class="form-control" placeholder="Search...">
-  </p>
-  <p>
-    <button type="button" class="btn btn-primary"
-      [disabled]="searchFieldProduct ==='category' && !productQuery.categoryId"
-      (click)="productSearch(queryProductSearch.value)">Search</button>
-  </p>
 
-  <div *ngIf="productQueryResult.totalItems === 0" class="alert alert-warning" role="alert">
+
+
+  <div *ngIf="products.totalItems === 0" class="alert alert-warning" role="alert">
     Product not found
   </div>
 
-  <div *ngIf="productQueryResult.totalItems > 0">
+  <div *ngIf="products.totalItems > 0">
     <table class="table table-striped">
       <thead>
         <tr>
-          <th *ngFor="let c of productColumns" aria-labelledby="tableLabel">
-            <div *ngIf="c.isSortable" (click)="sortBy(c.key)">
+          <th *ngFor="let c of productColumns" aria-labelledby="tableLabel" class="text-center">
+            <div *ngIf="c.isSortable" (click)="sortProductBy(c.key)">
               {{c.title}}
-              <i *ngIf="productQuery.sortBy === c.key" class="fa" [class.fa-sort-asc]="productQuery.isSortAscending"
+              <i *ngIf="productQuery.sortProductBy === c.key" class="fa"
+                [class.fa-sort-asc]="productQuery.isSortAscending"
                 [class.fa-sort-desc]="!productQuery.isSortAscending"></i>
             </div>
             <div *ngIf="!c.isSortable">
@@ -178,62 +206,82 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let p of productQueryResult.items">
-          <td>{{ p.id }}</td>
-          <td>{{ p.category.name }}</td>
-          <td>{{ p.name }}</td>
-          <td>{{ p.unitPrice | currency }}</td>
+        <tr *ngFor="let p of products.items">
+          <td class="text-center">{{ p.id }}</td>
+          <td class="text-center">{{ p.category.name }}</td>
+          <td class="text-center">{{ p.name }}</td>
+          <td class="text-center">{{ p.unitPrice | currency }}</td>
+          <td class="text-center">{{ p.unitsInStock }}</td>
+          <td class="text-center">{{ p.unitsOnOrder }}</td>
           <td>
-            <!-- <a class="btn btn-outline-success" [routerLink]="['/products/edit/', p.id]">Edit</a> -->
-            <button class="btn btn-outline-danger" type="button" (click)="addToOrder(p)"> + </button>
+            <div data-toggle="tooltip" data-placement="right" title="Add to Cart">
+              <button class="btn btn-outline-success" type="button" (click)="addToOrder(p)"> + </button>
+            </div>
           </td>
         </tr>
       </tbody>
     </table>
-    <pagination [total-items]="productQueryResult.totalItems" [page-size]="productQuery.pageSize"
-      (page-changed)="onPageChageProduct($event)">
+    <pagination [total-items]="products.totalItems" [page-size]="productQuery.pageSize"
+      (page-changed)="onProductTablePageChage($event)">
     </pagination>
   </div>
 
-  <div>
+  <div *ngIf="cart.length > 0">
 
-  </div>
+    <hr class="mb-4">
+    <h2>Items:</h2>
+    <hr class="mb-4">
 
-  <hr class="rounded">
-  <h2>Cart Resume:</h2>
-  <p><strong>Items:</strong> {{cart.length}}</p>
-  <p><strong>Total Order Price:</strong> ${{getTotalOrderPrice()}}</p>
-  <hr class="rounded">
+    <div class="row">
 
-
-  <div class="row" *ngIf="cart.length > 0">
-    <ng-container *ngFor="let item of cart; let i = index">
-      <div class="col-sm-8 col-md-4">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title" style="color:green;">{{ item.name }}</h5>
-            <p class="card-text"><strong>Quantity:</strong> {{ item.quantity }} </p>
-            <p class="card-text"><strong>Total Price:</strong> {{ item.totalPrice | currency }} </p>
-            <div class="card-footer text-center">
-              <button class="btn btn-primary btn-sm float-left" id="left" style="color:white"
-                (click)="reduceQuantityCartItem(item)"> - </button>
-              <button class="btn btn-danger btn-sm float-right" id="right" style="color:white"
-                (click)="removeCartItem(item)">Remove Item</button>
+      <ng-container *ngFor="let item of cart; let i = index">
+        <div class="col-sm-2 col-md-4">
+          <div class="card text-white bg-dark mb-3">
+            <div class="card-header">
+              <h5 class="card-title">{{ item.name }}</h5>
+            </div>
+            <div class="card-body">
+              <h6 class="d-flex justify-content-between align-items-center mb-3">
+                <span class=" text-muted">Unit Price:</span>
+                <strong>{{item.unitPrice | currency}}</strong>
+              </h6>
+              <h6 class="d-flex justify-content-between align-items-center mb-3">
+                <span class=" text-muted">Quantity:</span>
+                <strong>{{item.quantity}}</strong>
+              </h6>
+              <h6 class="d-flex justify-content-between align-items-center mb-3">
+                <span class=" text-muted">Import:</span>
+                <strong>{{item.totalPrice | currency}}</strong>
+              </h6>
+              <div class="card-footer text-center">
+                <button class="btn btn-outline-success btn-sm float-left" id="left" style="color:white"
+                  (click)="reduceQuantityCartItem(item)"> - </button>
+                <button class="btn btn-outline-success btn-sm float-center" id="left" style="color:white"
+                  (click)="increasedQuantityCartItem(item)"> + </button>
+                <button class="btn btn-outline-danger btn-sm float-right" id="right" style="color:white"
+                  (click)="removeCartItem(item)">Remove</button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div *ngIf="(i+1) % 3 === 0" class="w-100"></div>
-    </ng-container>
-  </div>
-  <div *ngIf="cart.length === 0" class="alert alert-warning" role="alert">
-    No items yet !
+        <div *ngIf="(i+1) % 3 === 0" class="w-100"></div>
+      </ng-container>
+    </div>
   </div>
 
+  <div *ngIf="cart.length === 0">
+    <hr class="mb-4">
+    <h2>Items:</h2>
+    <hr class="mb-4">
+    <div class="alert alert-warning" role="alert">
+      No items yet !
+    </div>
+  </div>
 
 </div>
 
 <div class="row" *ngIf="isInCheckoutPage">
+
   <div class="col-md-6 order-md-2 mb-4">
     <h4 class="d-flex justify-content-between align-items-center mb-3">
       <span class="text-muted">Customer's Cart</span>
@@ -258,10 +306,10 @@
   </div>
   <div class="col-md-6 order-md-1">
 
-    <hr class="mb-4">
     <h4>
       <span class="text-muted">Customer Info:</span>
     </h4>
+
     <hr class="mb-4">
 
     <div class="row align-items-center profile-header">
@@ -272,16 +320,42 @@
       <div class="col-md text-center text-md-left">
         <h2>{{ customer.firstName }} {{ customer.lastName }}</h2>
         <div>
-          <h6 class="my-0">Ubication</h6>
+          <h6 class="my-0">Ubication:</h6>
+          <small class="text-muted">{{ customer.address }}</small>
           <small class="text-muted">{{ customer.city }} - {{ customer.region }} - {{ customer.country }}</small>
         </div>
         <div>
-          <h6 class="my-0">CellPhone</h6>
+          <h6 class="my-0">Cell Phone:</h6>
           <small class="text-muted">{{ customer.cellPhone }}</small>
         </div>
-        <div class="text-success">
-          <h6 class="my-0">Campaign Id: {{customer.campaignId}} </h6>
-          <small>Campaign Detail Id: {{customer.campaignDetailId}} </small>
+        <div>
+          <h6 class="my-0">Home Phone:</h6>
+          <small *ngIf="customer.homePhone" class="text-muted">{{ customer.homePhone }}</small>
+          <small *ngIf="!customer.homePhone" class="text-danger">Not registered</small>
+        </div>
+        <div>
+          <h6 class="my-0">Postal Code:</h6>
+          <small *ngIf="customer.postalCode" class="text-muted">{{ customer.postalCode }}</small>
+          <small *ngIf="!customer.postalCode" class="text-danger">Not registered</small>
+
+        </div>
+        <div>
+          <h6 class="my-0">Id:</h6>
+          <small *ngIf="customer.identificationCard" class="text-muted">{{ customer.identificationCard }}</small>
+          <small *ngIf="!customer.identificationCard" class="text-danger">Not registered</small>
+        </div>
+        <div>
+          <h6 class="my-0">Email:</h6>
+          <small *ngIf="customer.email" class="text-muted">{{ customer.email }}</small>
+          <small *ngIf="!customer.email" class="text-danger">Not registered</small>
+        </div>
+        <div class="my-0">
+          <h6 class="my-0">Campaign Number:</h6>
+          <small class="text-success">{{customer.campaignId}}</small>
+        </div>
+        <div class="my-0">
+          <h6 class="my-0">Detail Number:</h6>
+          <small class="text-success">{{customer.campaignDetailId}}</small>
         </div>
       </div>
     </div>

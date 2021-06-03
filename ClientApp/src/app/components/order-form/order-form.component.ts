@@ -1,7 +1,10 @@
+import { OrderService } from './../../services/order.service';
 import { CategoryService } from './../../services/category.service';
 import { ProductService } from 'src/app/services/product.service';
 import { CustomerService } from './../../services/customer.service';
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
+import { parseErrorsAPI } from 'src/app/Utilities/Utilities';
 
 
 @Component({
@@ -11,107 +14,160 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OrderFormComponent implements OnInit {
   private readonly PAGE_SIZE = 3;
-  searchFieldCustomer: string;
-  searchFieldProduct: string;
-  // searchFieldCategory: string;
-  queryResult: any = {};
-  query: any = {
+
+  customerColumns = [
+    { title: 'First Name', key: 'firstName', isSortable: true, searchable: true },
+    { title: 'Last Name', key: 'lastName', isSortable: true, searchable: true },
+    { title: 'Cell Phone', key: 'cellPhone', isSortable: true, searchable: true, defaultSearch: true },
+  ];
+
+  productColumns = [
+    { title: 'Product Id', key: 'id', isSortable: false, searchable: true },
+    { title: 'Category', key: 'category.name', isSortable: false, searchable: true },
+    { title: 'Name', key: 'name', isSortable: false, searchable: true, defaultSearch: true },
+    { title: 'Unit Price', key: 'unitPrice', isSortable: false, searchable: false },
+    { title: 'Stock', key: 'unitsInStock', isSortable: false },
+    { title: 'Units on Order', key: 'unitsOnOrder', isSortable: true },
+  ];
+
+  //Customer variables
+  searchCustomerOption: any;
+  searchCustomerPlaceholder: string;
+  customer: any;
+  customers: any = {};
+  customerQuery: any = {
     pageSize: this.PAGE_SIZE
   };
-  productQueryResult: any = {};
+  isInCustomerPage: boolean = true;
+
+  //Product variables
+  searchProductOption: any;
+  searchProductPlaceholder: string;
+  products: any = {};
   productQuery: any = {
     pageSize: this.PAGE_SIZE
   };
-  categoryQueryResult: any = {};
-  customerColumns = [
-    { title: 'First Name', key: 'firstName', isSortable: false },
-    { title: 'Last Name', key: 'lastName', isSortable: false },
-    { title: 'Cell Phone', key: 'cellPhone', isSortable: false }
-  ];
-  productColumns = [
-    { title: 'Product Id', key: 'id', isSortable: false, searchable: true },
-    { title: 'Category', key: 'category', isSortable: false, searchable: true },
-    { title: 'Name', key: 'name', isSortable: false, searchable: true },
-    { title: 'Unit Price', key: 'unitPrice', isSortable: false, searchable: false }
-  ];
-
-  customer: any;
-
-  isInCustomerPage: boolean = true;
   isInProductsPage: boolean = false;
-  isInCheckoutPage: boolean = false;
 
+  //Checkout variables
+  isInCheckoutPage: boolean = false;
   cart: any[] = [];
   order: any = {};
 
+  //Common variables
+  errorMessages: any[];
+
   constructor(private customerService: CustomerService,
-    private categoryService: CategoryService,
-    private productService: ProductService
-  ) { }
+    private productService: ProductService,
+    private orderService: OrderService,
+    private toastrService: ToastrService) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void { }
 
+  //Customer configuration
+
+  populateUserCustomers() {
+    this.customerService.getAgentCustomers(this.customerQuery)
+      .subscribe(response => {
+        this.customers = response;
+      })
   }
 
-  private populateCategories() {
-    this.categoryService.getCategories(null)
-      .subscribe((result: any) => {
-        this.categoryQueryResult = result;
-      });
+  onCustomerTablePageChage(page) {
+    this.customerQuery.page = page;
+    this.populateUserCustomers();
   }
 
-  private populateProduct() {
-    this.productService.getValidProducts(this.productQuery)
-      .subscribe((result: any) => {
-        this.productQueryResult = result;
-      });
+  getCustomerDefaultColumnSearch() {
+    return this.customerColumns.find(c => c.defaultSearch);
   }
-  private populateUserCustomers() {
-    this.customerService.getAgentCustomers(this.query)
-      .subscribe((result: any) => {
-        this.queryResult = result;
-      });
+
+  setCustomerPlaceholderSearch() {
+    if (!this.searchCustomerOption) {
+      let defaultColumnSearch = this.getCustomerDefaultColumnSearch();
+      return this.searchCustomerPlaceholder = "Search by " + defaultColumnSearch.title;
+    }
+    let columnSearch = this.customerColumns.find(c => c.key === this.searchCustomerOption);
+    return this.searchCustomerPlaceholder = "Search by " + columnSearch.title;
+  }
+
+  filterCustomerSearchOptions() {
+    this.setCustomerPlaceholderSearch();
+    return this.customerColumns.filter(c => c.searchable);
+  }
+
+  resetCustomerFilter() {
+    this.customerQuery = {
+      page: 1,
+      pageSize: this.PAGE_SIZE
+    };
+  }
+
+  onCustomerFilterChange() {
+    this.setCustomerPlaceholderSearch();
+    this.resetCustomerFilter();
   }
 
   customerSearch(querySearch) {
+
     this.resetCustomerFilter();
 
-    if (querySearch === "")
-      return;
-
-    switch (this.searchFieldCustomer) {
-      case "firstName":
-        this.query.firstname = querySearch
-        break;
-      case "lastName":
-        this.query.lastName = querySearch
-        break;
-      case "cellPhone":
-        this.query.cellPhone = querySearch
-        break;
+    if (!this.searchCustomerOption) {
+      let defaultColumnSearch = this.getCustomerDefaultColumnSearch();
+      this.customerQuery[defaultColumnSearch.key] = querySearch;
+    } else {
+      this.customerQuery[this.searchCustomerOption] = querySearch;
     }
-    this.populateUserCustomers()
+
+    if (querySearch !== '')
+      this.populateUserCustomers();
   }
 
-  productSearch(productQuerySearch) {
-
-    if (this.productQuery.categoryId) {
-      if (productQuerySearch !== "") {
-        this.productQuery.name = productQuerySearch;
-      }
+  sortCustomerBy(columnName) {
+    if (this.customerQuery.sortBy === columnName) {
+      this.customerQuery.isSortAscending = !this.customerQuery.isSortAscending;
+    } else {
+      this.customerQuery.sortBy = columnName;
+      this.customerQuery.isSortAscending = true;
     }
+    this.populateUserCustomers();
+  }
 
-    switch (this.searchFieldProduct) {
-      case "id":
-        this.productQuery.id = productQuerySearch
-        break;
-      case "name":
-        this.productQuery.name = productQuerySearch
-        break;
+  selectCustomer(selectedCustomer) {
+    this.customer = selectedCustomer;
+    this.customers.totalItems = 0;
+  }
+
+  //Product configuration
+
+  populateProducts() {
+    this.productService.getValidProducts(this.productQuery)
+      .subscribe((result: any) => {
+        this.products = result;
+      });
+  }
+
+  onProductTablePageChage(page) {
+    this.productQuery.page = page;
+    this.populateProducts();
+  }
+
+  getProductDefaultColumnSearch() {
+    return this.productColumns.find(c => c.defaultSearch);
+  }
+
+  setProductPlaceholderSearch() {
+    if (!this.searchProductOption) {
+      var defaultColumnSearch = this.getProductDefaultColumnSearch();
+      return this.searchProductPlaceholder = "Search by " + defaultColumnSearch.title;
     }
+    var columnSearch = this.productColumns.find(c => c.key === this.searchProductOption);
+    return this.searchProductPlaceholder = "Search by " + columnSearch.title;
+  }
 
-    this.populateProduct();
-    this.resetProductFilter();
+  filterProductSearchOptions() {
+    this.setProductPlaceholderSearch();
+    return this.productColumns.filter(c => c.searchable);
   }
 
   resetProductFilter() {
@@ -121,33 +177,37 @@ export class OrderFormComponent implements OnInit {
     };
   }
 
-  resetCustomerFilter() {
-    this.query = {
-      page: 1,
-      pageSize: this.PAGE_SIZE
-    };
-    this.customer = null;
-  }
-
-  selectCustomer(selectedCustomer) {
-    this.customer = selectedCustomer;
-    this.queryResult.totalItems = 0;
-  }
-
-  onPageChage(page) {
-    this.query.page = page;
-    this.populateUserCustomers();
-  }
-
-  onPageChageProduct(page) {
-    this.productQuery.page = page;
-    this.populateProduct();
-  }
-
-  onFilterChange() {
+  onProductFilterChange() {
+    this.setProductPlaceholderSearch();
     this.resetProductFilter();
-    this.populateCategories();
   }
+
+  searchProduct(querySearch) {
+
+    this.resetProductFilter();
+
+    if (!this.searchProductOption) {
+      var defaultColumnSearch = this.getProductDefaultColumnSearch();
+      this.productQuery[defaultColumnSearch.key] = querySearch;
+    } else {
+      this.productQuery[this.searchProductOption] = querySearch;
+    }
+
+    this.populateProducts();
+
+  }
+
+  sortProductBy(columnName) {
+    if (this.productQuery.sortBy === columnName) {
+      this.productQuery.isSortAscending = !this.productQuery.isSortAscending;
+    } else {
+      this.productQuery.sortBy = columnName;
+      this.productQuery.isSortAscending = true;
+    }
+    this.populateProducts();
+  }
+
+  //Navigation configuration
 
   goProductsPage() {
     this.isInCustomerPage = false;
@@ -167,9 +227,7 @@ export class OrderFormComponent implements OnInit {
     this.isInCheckoutPage = true;
   }
 
-  filterProductColumns() {
-    return this.productColumns.filter(pc => pc.searchable);
-  }
+  //Checkout configuration
 
   addToOrder(product) {
     let productInCart = this.cart.find(p => p.productId === product.id);
@@ -180,6 +238,7 @@ export class OrderFormComponent implements OnInit {
         productId: product.id,
         name: product.name,
         quantity: 1,
+        unitsInStock: product.unitsInStock,
         unitPrice: product.unitPrice,
         totalPrice: 1 * product.unitPrice,
       };
@@ -187,6 +246,11 @@ export class OrderFormComponent implements OnInit {
       this.cart.push(newProduct);
 
     } else {
+      if (productInCart.quantity === product.unitsInStock) {
+        this.toastrService.info("Not enough products of this type available", "Info");
+        return;
+      }
+
       productInCart.quantity++;
       productInCart.totalPrice = productInCart.quantity * productInCart.unitPrice;
       let index = this.cart.indexOf(product);
@@ -203,6 +267,16 @@ export class OrderFormComponent implements OnInit {
     }
   }
 
+  increasedQuantityCartItem(product) {
+    if (product.quantity === product.unitsInStock) {
+      this.toastrService.info("Not enough products of this type available", "Info");
+      return;
+    }
+
+    product.quantity++;
+    product.totalPrice = product.quantity * product.unitPrice;
+  }
+
   removeCartItem(product) {
     let index = this.cart.indexOf(product);
     this.cart.splice(index, 1);
@@ -217,12 +291,13 @@ export class OrderFormComponent implements OnInit {
   creatOrder() {
     if (confirm("Are you sure?")) {
       this.order.campaignDetailId = this.customer.campaignDetailId;
-      this.order.orderDate = new Date();
-      this.order.requiredDate = new Date();
-      this.order.shippedDate = new Date();
       this.order.orderDetails = this.cart;
-      console.log(this.order);
-
+      this.orderService.createOrder(this.order)
+        .subscribe(response => {
+          this.toastrService.success("Data was successfully saved.", "Success");
+        }, err => {
+          this.errorMessages = parseErrorsAPI(err);
+        })
     }
   }
 

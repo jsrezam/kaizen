@@ -17,7 +17,6 @@ namespace Kaizen.Infrastructure.Mapping
             CreateMap(typeof(QueryResult<>), typeof(QueryResultDto<>));
             CreateMap<Category, CategoryViewDto>();
             CreateMap<Customer, CustomerDto>();
-
             CreateMap<Customer, CustomerViewDto>();
             CreateMap<Order, OrderDto>();
             CreateMap<ApplicationUser, ApplicationUserDto>();
@@ -45,6 +44,10 @@ namespace Kaizen.Infrastructure.Mapping
             CreateMap<Region, RegionDto>();
             CreateMap<City, CityDto>();
             CreateMap<UserViewModel, UserViewModelDto>();
+            CreateMap<OrderDetail, OrderDetailDto>();
+            CreateMap<ItemOrderDetailViewModel, ItemOrderDetailViewModelDto>();
+            CreateMap<OrderViewModel, OrderViewModelDto>();
+            CreateMap<SalesByProductReportViewModel, SalesByProductReportViewModelDto>();
 
             // API Resource to Domain
             CreateMap<ProductDto, Product>()
@@ -56,7 +59,6 @@ namespace Kaizen.Infrastructure.Mapping
             CreateMap<CategoryQueryDto, CategoryQuery>();
             CreateMap<CategoryViewDto, Category>();
             CreateMap<CustomerDto, Customer>();
-            // .ForMember(c => c.Id, opt => opt.Ignore());
             CreateMap<CustomerQueryDto, CustomerQuery>();
             CreateMap<OrderDto, Order>();
             CreateMap<ApplicationUserDto, ApplicationUser>();
@@ -72,7 +74,13 @@ namespace Kaizen.Infrastructure.Mapping
             CreateMap<CampaignSaveDto, Campaign>();
             CreateMap<CampaignDetailQueryDto, CampaignDetailQuery>();
             CreateMap<CallLogDto, CallLog>();
-            CreateMap<OrderSaveDto, Order>();
+            CreateMap<OrderSaveDto, Order>()
+            .AfterMap((od, o) =>
+            {
+                o.OrderDate = DateTime.Now;
+                o.ShippedDate = DateTime.Now;
+                o.RequiredDate = DateTime.Now;
+            });
             CreateMap<OrderDetailDto, OrderDetail>();
             CreateMap<UserCredentialsDto, ApplicationUser>()
             .AfterMap((ucd, au) =>
@@ -81,9 +89,8 @@ namespace Kaizen.Infrastructure.Mapping
                 au.IsActive = true;
             });
             CreateMap<ApplicationUserQueryDto, ApplicationUserQuery>();
+            CreateMap<OrderQueryDto, OrderQuery>();
 
-            // // View Model to Domain
-            // CreateMap<UserViewModel, ApplicationUser>();
         }
     }
 }

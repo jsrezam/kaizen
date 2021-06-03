@@ -44,6 +44,10 @@ export class ProductListComponent implements OnInit {
     this.populateProducts();
   }
 
+  getDefaultColumnSearch() {
+    return this.columns.find(c => c.defaultSearch);
+  }
+
   setPlaceholderSearch() {
     if (!this.searchOption) {
       var defaultColumnSearch = this.getDefaultColumnSearch();
@@ -56,10 +60,6 @@ export class ProductListComponent implements OnInit {
   filterSearchOptions() {
     this.setPlaceholderSearch();
     return this.columns.filter(c => c.searchable);
-  }
-
-  getDefaultColumnSearch() {
-    return this.columns.find(c => c.defaultSearch);
   }
 
   resetFilter() {

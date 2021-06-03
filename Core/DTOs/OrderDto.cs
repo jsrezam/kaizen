@@ -4,6 +4,7 @@ namespace Kaizen.Core.DTOs
 {
     public class OrderDto
     {
+        public int Id { get; set; }
         public int CampaignDetailId { get; set; }
         public CampaignDetailDto CampaignDetail { get; set; }
         public DateTime OrderDate { get; set; }

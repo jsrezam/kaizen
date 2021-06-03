@@ -76,6 +76,28 @@ namespace Kaizen.Infrastructure.Extensions
             return query;
         }
 
+        public static IQueryable<AgentCustomerViewModel> ApplyFiltering(this IQueryable<AgentCustomerViewModel> query, CustomerQuery queryObj)
+        {
+            if (!string.IsNullOrEmpty(queryObj.FirstName))
+                query = query.Where(c => c.Customer.FirstName.Contains(queryObj.FirstName.Trim()));
+            if (!string.IsNullOrEmpty(queryObj.LastName))
+                query = query.Where(c => c.Customer.LastName.Contains(queryObj.LastName.Trim()));
+            if (!string.IsNullOrEmpty(queryObj.CellPhone))
+                query = query.Where(c => c.Customer.CellPhone.Contains(queryObj.CellPhone.Trim()));
+            if (!string.IsNullOrEmpty(queryObj.IdentificationCard))
+                query = query.Where(c => c.Customer.IdentificationCard.Contains(queryObj.IdentificationCard.Trim()));
+            if (!string.IsNullOrEmpty(queryObj.Email))
+                query = query.Where(c => c.Customer.Email.Contains(queryObj.Email.Trim()));
+            if (!string.IsNullOrEmpty(queryObj.City))
+                query = query.Where(c => c.Customer.City.Contains(queryObj.City.Trim()));
+            if (!string.IsNullOrEmpty(queryObj.Region))
+                query = query.Where(c => c.Customer.Region.Contains(queryObj.Region.Trim()));
+            if (!string.IsNullOrEmpty(queryObj.Country))
+                query = query.Where(c => c.Customer.Country.Contains(queryObj.Country.Trim()));
+
+            return query;
+        }
+
         public static IQueryable<Campaign> ApplyFiltering(this IQueryable<Campaign> query, CampaignQuery queryObj)
         {
             if (queryObj.Id.HasValue)
@@ -103,6 +125,24 @@ namespace Kaizen.Infrastructure.Extensions
 
             if (!string.IsNullOrEmpty(queryObj.State))
                 query = query.Where(c => c.State.Contains(queryObj.State.Trim()));
+
+            return query;
+        }
+
+        public static IQueryable<Order> ApplyFiltering(this IQueryable<Order> query, OrderQuery queryObj)
+        {
+            if (queryObj.Id.HasValue)
+                query = query.Where(c => c.Id == queryObj.Id);
+            if (queryObj.CampaignId.HasValue)
+                query = query.Where(c => c.CampaignDetail.CampaignId == queryObj.CampaignId);
+            if (queryObj.CampaignDetailId.HasValue)
+                query = query.Where(c => c.CampaignDetailId == queryObj.CampaignDetailId);
+            if (!string.IsNullOrEmpty(queryObj.CustomerFirstName))
+                query = query.Where(c => c.CampaignDetail.Customer.FirstName.Contains(queryObj.CustomerFirstName.Trim()));
+            if (!string.IsNullOrEmpty(queryObj.CustomerLastName))
+                query = query.Where(c => c.CampaignDetail.Customer.LastName.Contains(queryObj.CustomerLastName.Trim()));
+            if (!string.IsNullOrEmpty(queryObj.CustomerCellPhone))
+                query = query.Where(c => c.CampaignDetail.Customer.CellPhone.Contains(queryObj.CustomerCellPhone.Trim()));
 
             return query;
         }

@@ -47,6 +47,10 @@ export class CustomerListComponent implements OnInit {
     this.populateCustomers();
   }
 
+  getDefaultColumnSearch() {
+    return this.columns.find(c => c.defaultSearch);
+  }
+
   setPlaceholderSearch() {
     if (!this.searchOption) {
       let defaultColumnSearch = this.getDefaultColumnSearch();
@@ -59,10 +63,6 @@ export class CustomerListComponent implements OnInit {
   filterSearchOptions() {
     this.setPlaceholderSearch();
     return this.columns.filter(c => c.searchable);
-  }
-
-  getDefaultColumnSearch() {
-    return this.columns.find(c => c.defaultSearch);
   }
 
   resetFilter() {

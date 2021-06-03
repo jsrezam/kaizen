@@ -90,12 +90,12 @@ namespace Kaizen.Controllers
         }
 
         [HttpGet("agents/valids")]
-        public async Task<IActionResult> GetAgentValidCampaignsAsync(CampaignQueryDto campaignQueryResource)
+        public async Task<IActionResult> GetAgentValidCampaignsAsync(CampaignQueryDto campaignQueryDto)
         {
             var loggedAgentEmail = HttpContext.User.Claims.FirstOrDefault(u => u.Type.Equals("email")).Value;
             var agent = await userService.GetUserByEmailAsync(loggedAgentEmail);
 
-            var campaignQuery = mapper.Map<CampaignQueryDto, CampaignQuery>(campaignQueryResource);
+            var campaignQuery = mapper.Map<CampaignQueryDto, CampaignQuery>(campaignQueryDto);
             var userCampaignsQuery = await campaignService.GetAgentValidCampaignsAsync(agent.Id, campaignQuery);
             var resultQuery = mapper.Map<QueryResult<Campaign>, QueryResultDto<CampaignDto>>(userCampaignsQuery);
 

@@ -55,6 +55,9 @@ namespace Kaizen
             services.AddTransient<IRegionService, RegionService>();
             services.AddTransient<ICityService, CityService>();
             services.AddTransient<ILocationService, LocationService>();
+            services.AddTransient<IOrderDetailService, OrderDetailService>();
+            services.AddTransient<IReportService, ReportService>();
+
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<KaizenDbContext>()

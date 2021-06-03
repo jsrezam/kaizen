@@ -60,9 +60,9 @@ namespace Kaizen.Core.Services
             await unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<CampaignDto>> AddProgressToCampaignsAsync(IEnumerable<CampaignDto> userCampaignsResource)
+        public async Task<IEnumerable<CampaignDto>> AddProgressToCampaignsAsync(IEnumerable<CampaignDto> userCampaignsDto)
         {
-            foreach (var userCampaign in userCampaignsResource)
+            foreach (var userCampaign in userCampaignsDto)
             {
                 userCampaign.Progress = decimal.Round((
                     await unitOfWork.CampaignDetailRepository
@@ -71,7 +71,7 @@ namespace Kaizen.Core.Services
                 .GetCustomersInCampaignNumberAsync(userCampaign.Id), 2);
             }
 
-            return userCampaignsResource;
+            return userCampaignsDto;
         }
 
     }
