@@ -1,11 +1,14 @@
+using System;
 using System.Threading.Tasks;
-using Kaizen.Core.Models;
-using Kaizen.Core.Models.ViewModels;
 
 namespace Kaizen.Core.Interfaces
 {
     public interface IReportService
     {
-        Task<QueryResult<SalesByProductReportViewModel>> GetSalesByProductReport();
+        Task<Object> GetTotalSalesByMonthAsync();
+        Task<Object> GetTotalSalesByAgentAsync();
+        Task<Object> GetTopCustomersAsync();
+        Task<Object> GetTopSellingProductsAsync();
+        Task<Object> GetTopAgentAsync();
     }
 }

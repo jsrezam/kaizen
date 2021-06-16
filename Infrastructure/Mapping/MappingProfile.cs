@@ -47,7 +47,6 @@ namespace Kaizen.Infrastructure.Mapping
             CreateMap<OrderDetail, OrderDetailDto>();
             CreateMap<ItemOrderDetailViewModel, ItemOrderDetailViewModelDto>();
             CreateMap<OrderViewModel, OrderViewModelDto>();
-            CreateMap<SalesByProductReportViewModel, SalesByProductReportViewModelDto>();
 
             // API Resource to Domain
             CreateMap<ProductDto, Product>()

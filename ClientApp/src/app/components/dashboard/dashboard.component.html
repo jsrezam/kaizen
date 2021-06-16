@@ -1,0 +1,83 @@
+<div class="card-deck mb-3 text-center">
+  <div class="card mb-4 box-shadow">
+    <div class="card-header">
+      <h5 class="card-title">Top Agent of the Month</h5>
+    </div>
+    <div class="card-body">
+      <div class="d-flex flex-column align-items-center text-center">
+        <img src="https://superherotar.framiq.com/assets/examples/superherotar02.png" alt="Admin" class="rounded-circle"
+          width="150">
+        <div class="mt-3">
+          <h4>{{topAgent.name}}</h4>
+          <h6>{{topAgent.email}}</h6>
+          <p class="text-secondary mb-1">Orders Generated: {{topAgent.ordersGenerated}}</p>
+          <p class="text-muted font-size-sm">Total Sold: ${{topAgent.totalSold}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card mb-4 box-shadow">
+    <div class="card-header">
+      <h5 class="card-title">Top-Selling Products of the Month</h5>
+    </div>
+    <div class="card-body">
+      <ul class="list-group mb-3">
+        <li class="list-group-item d-flex justify-content-between lh-condensed" *ngFor="let product of topProducts">
+          <div>
+            <h6 class="my-0">{{product.name}}</h6>
+            <small class="text-muted">Sold Units: {{product.soldUnits}}</small>
+          </div>
+          <span class="text-muted" data-toggle="tooltip" data-placement="center"
+            title="Total Sold">${{product.totalSold}}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="card mb-4 box-shadow">
+    <div class="card-header">
+      <h5 class="card-title">Top Customers of the Month</h5>
+    </div>
+    <div class="card-body">
+      <ul class="list-group mb-3">
+        <li class="list-group-item d-flex justify-content-between lh-condensed" *ngFor="let customer of topCustomers">
+          <div>
+            <h6 class="my-0">{{customer.name}}</h6>
+            <small class="text-muted">Orders: {{customer.ordersNumber}}</small>
+          </div>
+          <span class="text-muted" data-toggle="tooltip" data-placement="center"
+            title="Total Charged">${{customer.totalCharged}}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<hr class="mb-4">
+
+<div class="row">
+  <div class="col-md-6 order-md-2 mb-4">
+    <h4>
+      <span class="text-muted">Total Sales by Agent</span>
+    </h4>
+    <hr class="mb-4">
+    <div>
+      <div style="display: block">
+        <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType"
+          [colors]="pieChartColor"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 order-md-2 mb-4">
+    <h4>
+      <span class="text-muted">Total Sales by Month</span>
+    </h4>
+    <hr class="mb-4">
+    <div>
+      <div style="display: block">
+        <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+          [legend]="barChartLegend" [chartType]="barChartType">
+        </canvas>
+      </div>
+    </div>
+  </div>
+</div>

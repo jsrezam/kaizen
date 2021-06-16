@@ -1,11 +1,7 @@
-using System;
 using System.Threading.Tasks;
 using AutoMapper;
 using Kaizen.Controllers.Utilities;
-using Kaizen.Core.DTOs;
 using Kaizen.Core.Interfaces;
-using Kaizen.Core.Models;
-using Kaizen.Core.Models.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,12 +20,39 @@ namespace Kaizen.Controllers
             this.reportService = reportService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetSalesByProductReport()
+        [HttpGet("totalSalesByMonth")]
+        public async Task<IActionResult> GetTotalSalesByMonthAsync()
         {
-            var report = await reportService.GetSalesByProductReport();
-            var reportDto = mapper.Map<QueryResult<SalesByProductReportViewModel>, QueryResultDto<SalesByProductReportViewModelDto>>(report);
-            return Ok(reportDto);
+            var report = await reportService.GetTotalSalesByMonthAsync();
+            return Ok(report);
+        }
+
+        [HttpGet("totalSalesByAgent")]
+        public async Task<IActionResult> GetTotalSalesByAgentAsync()
+        {
+            var report = await reportService.GetTotalSalesByAgentAsync();
+            return Ok(report);
+        }
+
+        [HttpGet("topCustomers")]
+        public async Task<IActionResult> GetTopCustomersAsync()
+        {
+            var report = await reportService.GetTopCustomersAsync();
+            return Ok(report);
+        }
+
+        [HttpGet("topSellingProducts")]
+        public async Task<IActionResult> GetTopSellingProductsAsync()
+        {
+            var report = await reportService.GetTopSellingProductsAsync();
+            return Ok(report);
+        }
+
+        [HttpGet("topAgent")]
+        public async Task<IActionResult> GetTopAgentAsync()
+        {
+            var report = await reportService.GetTopAgentAsync();
+            return Ok(report);
         }
 
     }

@@ -10,6 +10,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ChartsModule } from 'ng2-charts';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
@@ -43,7 +44,7 @@ import { CustomerListComponent } from './components/customer-list/customer-list.
 import { UserListComponent } from './components/users-list/user-list.component';
 import { OrderListComponent } from './components/order-list/order-list.component';
 import { OrderDetailComponent } from './components/order-detail/order-detail.component';
-import { ReportsComponent } from './components/reports/reports.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -70,7 +71,7 @@ import { ReportsComponent } from './components/reports/reports.component';
     UserListComponent,
     OrderListComponent,
     OrderDetailComponent,
-    ReportsComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -78,6 +79,7 @@ import { ReportsComponent } from './components/reports/reports.component';
     FormsModule,
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot(), // ToastrModule added
+    ChartsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'categories', component: CategoryListComponent, canActivate: [AuthGuard] },
@@ -108,6 +110,8 @@ import { ReportsComponent } from './components/reports/reports.component';
       { path: 'orders', component: OrderListComponent },
       { path: 'orders/new', component: OrderFormComponent },
       { path: 'orders-detail/:id', component: OrderDetailComponent },
+
+      { path: 'dashboard', component: DashboardComponent },
 
 
 
