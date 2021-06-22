@@ -1,6 +1,7 @@
+import { AuthGuard } from './services/auth-guard.services';
 import { OrderService } from './services/order.service';
 import { LocationService } from './services/location.service';
-import { AuthGuard } from './services/auth-guard.service';
+import { AuthGuardAdmin } from './services/auth-guard-admin.service';
 import { AuthService } from './services/auth.service';
 import { CategoryService } from './services/category.service';
 import { BrowserModule } from '@angular/platform-browser';
@@ -46,6 +47,10 @@ import { OrderListComponent } from './components/order-list/order-list.component
 import { OrderDetailComponent } from './components/order-detail/order-detail.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 
+export function playerFactory() { // add this line
+  return import('lottie-web'); // add this line
+} // add this line
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -82,36 +87,36 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     ChartsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'categories', component: CategoryListComponent, canActivate: [AuthGuard] },
-      { path: 'categories/new', component: CategoryFormComponent, canActivate: [AuthGuard] },
-      { path: 'categories/edit/:id', component: CategoryFormComponent, canActivate: [AuthGuard] },
-      { path: 'products', component: ProductListComponent, canActivate: [AuthGuard] },
-      { path: 'products/new', component: ProductFormComponent, canActivate: [AuthGuard] },
-      { path: 'products/edit/:id', component: ProductFormComponent, canActivate: [AuthGuard] },
+      { path: 'categories', component: CategoryListComponent, canActivate: [AuthGuardAdmin] },
+      { path: 'categories/new', component: CategoryFormComponent, canActivate: [AuthGuardAdmin] },
+      { path: 'categories/edit/:id', component: CategoryFormComponent, canActivate: [AuthGuardAdmin] },
+      { path: 'products', component: ProductListComponent, canActivate: [AuthGuardAdmin] },
+      { path: 'products/new', component: ProductFormComponent, canActivate: [AuthGuardAdmin] },
+      { path: 'products/edit/:id', component: ProductFormComponent, canActivate: [AuthGuardAdmin] },
 
 
       { path: 'login', component: LoginComponent },
       { path: 'sign-up', component: SignupFormComponent },
-      { path: 'non-authorized', component: NonAuthorizedComponent },
+      { path: 'non-authorized', component: NonAuthorizedComponent, canActivate: [AuthGuard] },
 
-      { path: 'campaigns', component: CampaignListComponent, canActivate: [AuthGuard] },
-      { path: 'campaigns/new', component: CampaignFormComponent, canActivate: [AuthGuard] },
+      { path: 'campaigns', component: CampaignListComponent, canActivate: [AuthGuardAdmin] },
+      { path: 'campaigns/new', component: CampaignFormComponent, canActivate: [AuthGuardAdmin] },
       { path: 'campaigns-detail/:id', component: CampaignDetailComponent },
 
-      { path: 'agent-campaigns', component: AgentCampaignListComponent },
+      { path: 'agent-campaigns', component: AgentCampaignListComponent, canActivate: [AuthGuard] },
 
 
-      { path: 'customers', component: CustomerListComponent },
-      { path: 'customers/new', component: CustomerFormComponent },
-      { path: 'customers/edit/:id', component: CustomerFormComponent },
+      { path: 'customers', component: CustomerListComponent, canActivate: [AuthGuard] },
+      { path: 'customers/new', component: CustomerFormComponent, canActivate: [AuthGuard] },
+      { path: 'customers/edit/:id', component: CustomerFormComponent, canActivate: [AuthGuard] },
 
-      { path: 'users', component: UserListComponent, canActivate: [AuthGuard] },
+      { path: 'users', component: UserListComponent, canActivate: [AuthGuardAdmin] },
 
-      { path: 'orders', component: OrderListComponent },
-      { path: 'orders/new', component: OrderFormComponent },
-      { path: 'orders-detail/:id', component: OrderDetailComponent },
+      { path: 'orders', component: OrderListComponent, canActivate: [AuthGuard] },
+      { path: 'orders/new', component: OrderFormComponent, canActivate: [AuthGuard] },
+      { path: 'orders-detail/:id', component: OrderDetailComponent, canActivate: [AuthGuard] },
 
-      { path: 'dashboard', component: DashboardComponent },
+      { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardAdmin] },
 
 
 
@@ -123,6 +128,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     CustomerService,
     UserService,
     AuthService,
+    AuthGuardAdmin,
     AuthGuard,
     CampaignService,
     CampaignDetailService,

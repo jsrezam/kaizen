@@ -1,14 +1,52 @@
-<h1>Hello, world!</h1>
-<p>Welcome to your new single-page application, built with:</p>
-<ul>
-  <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
-  <li><a href='https://angular.io/'>Angular</a> and <a href='http://www.typescriptlang.org/'>TypeScript</a> for client-side code</li>
-  <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
-</ul>
-<p>To help you get started, we've also set up:</p>
-<ul>
-  <li><strong>Client-side navigation</strong>. For example, click <em>Counter</em> then <em>Back</em> to return here.</li>
-  <li><strong>Angular CLI integration</strong>. In development mode, there's no need to run <code>ng serve</code>. It runs in the background automatically, so your client-side resources are dynamically built on demand and the page refreshes when you modify any file.</li>
-  <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and your <code>dotnet publish</code> configuration automatically invokes <code>ng build</code> to produce minified, ahead-of-time compiled JavaScript files.</li>
-</ul>
-<p>The <code>ClientApp</code> subdirectory is a standard Angular CLI application. If you open a command prompt in that directory, you can run any <code>ng</code> command (e.g., <code>ng test</code>), or use <code>npm</code> to install extra packages into it.</p>
+<ngb-carousel #carousel [interval]="5000" [pauseOnHover]="pauseOnHover" (slide)="onSlide($event)">
+  <ng-template ngbSlide>
+    <div class="container col-xxl-8 px-4 py-5">
+      <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+        <div class="col-10 col-sm-8 col-lg-6">
+          <img class="d-block mx-lg-auto img-fluid" src="../assets/salesTracking.jpg" alt="" width="562" height="551">
+        </div>
+        <div class="col-lg-6">
+          <h1 class="display-5 fw-bold lh-1 mb-3">Sales Tracking</h1>
+          <p class="lead">
+            Kaizen helps you improve your sales tracking by campaigns strategy to sell your products.You can create and
+            assign sales campaigns to existing customers in the scope of the application which allows you to record the
+            sales orders achieved by the commercial agents.
+          </p>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template ngbSlide>
+    <div class="container col-xxl-8 px-4 py-5">
+      <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+        <div class="col-10 col-sm-8 col-lg-6">
+          <img class="d-block mx-lg-auto img-fluid" src="../assets/agentsTracking.jpg" alt="" width="430" height="547">
+        </div>
+        <div class="col-lg-6">
+          <h1 class="display-5 fw-bold lh-1 mb-3">Real Work Tracking</h1>
+          <p class="lead">
+            With Kaizen you can give the correct follow-up to your sales campaigns since through the follow-up that the
+            system applies to commercials you can be aware of their real performance.
+          </p>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template ngbSlide>
+    <div class="container col-xxl-8 px-4 py-5">
+      <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+        <div class="col-10 col-sm-8 col-lg-6">
+          <img class="d-block mx-lg-auto img-fluid" src="../assets/agents.jpg" alt="" width="428" height="578">
+        </div>
+        <div class="col-lg-6">
+          <h1 class="display-5 fw-bold lh-1 mb-3">Benefits</h1>
+          <p class="lead">
+            Kaizen manages the information that is generated in the execution of sales campaigns, reducing manual work
+            between the supervisor and the agent, providing an informative dashboard that shows key points of the
+            business.
+          </p>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</ngb-carousel>
