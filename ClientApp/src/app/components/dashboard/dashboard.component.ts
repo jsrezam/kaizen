@@ -1,7 +1,7 @@
 import { forkJoin } from 'rxjs';
 import { ReportService } from '../../services/report.service';
 import { Component, OnInit } from '@angular/core';
-import { generateColors } from 'src/app/Utilities/Utilities';
+import { generateColors } from 'src/app/common/common';
 
 @Component({
   selector: 'app-dashboard',

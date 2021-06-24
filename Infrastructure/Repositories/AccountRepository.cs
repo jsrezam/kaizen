@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Kaizen.Controllers.Utilities;
+using Kaizen.Controllers.Common;
 using Kaizen.Core.Interfaces;
 using Kaizen.Core.Models;
 using Kaizen.Infrastructure.Persistence;

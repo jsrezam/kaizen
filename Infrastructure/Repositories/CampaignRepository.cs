@@ -96,5 +96,9 @@ namespace Kaizen.Infrastructure.Repositories
 
             return result;
         }
+        public async Task<bool> IsOnCampaignInProgress(string agentId)
+        {
+            return await entities.Where(c => c.IsActive).CountAsync() > 0;
+        }
     }
 }

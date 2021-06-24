@@ -1,7 +1,7 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using Kaizen.Controllers.Utilities;
+using Kaizen.Controllers.Common;
 using Kaizen.Core.Interfaces;
 using Kaizen.Core.Models;
 using Kaizen.Core.Services;

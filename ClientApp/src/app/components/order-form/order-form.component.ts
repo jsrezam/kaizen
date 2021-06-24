@@ -4,7 +4,7 @@ import { ProductService } from 'src/app/services/product.service';
 import { CustomerService } from './../../services/customer.service';
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { parseErrorsAPI } from 'src/app/Utilities/Utilities';
+import { parseErrorsAPI } from 'src/app/common/common';
 
 
 @Component({

@@ -2,7 +2,7 @@ import { CustomerService } from './../../services/customer.service';
 import { LocationService } from './../../services/location.service';
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { parseErrorsAPI } from 'src/app/Utilities/Utilities';
+import { parseErrorsAPI } from 'src/app/common/common';
 import { ActivatedRoute, Router } from '@angular/router';
 
 

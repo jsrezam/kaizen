@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { forkJoin } from 'rxjs';
-import { parseErrorsAPI } from 'src/app/Utilities/Utilities';
+import { parseErrorsAPI } from 'src/app/common/common';
 
 @Component({
   selector: 'app-product-form',

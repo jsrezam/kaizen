@@ -1,4 +1,4 @@
-using Kaizen.Controllers.Utilities;
+using Kaizen.Controllers.Common;
 using Kaizen.Core.Interfaces;
 using Kaizen.Core.Models;
 using Kaizen.Core.Models.ViewModels;

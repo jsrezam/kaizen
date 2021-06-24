@@ -5,7 +5,8 @@ using Kaizen.Controllers.Enumerations;
 using Kaizen.Core.Models;
 using Kaizen.Core.Interfaces;
 using Kaizen.Core.DTOs;
-using Kaizen.Controllers.Utilities;
+using Kaizen.Controllers.Common;
+using System;
 
 namespace Kaizen.Core.Services
 {
@@ -74,5 +75,48 @@ namespace Kaizen.Core.Services
             return userCampaignsDto;
         }
 
+        public async Task<bool> IsOnCampaignInProgress(string agentId)
+        {
+            return await unitOfWork.CampaignRepository.IsOnCampaignInProgress(agentId);
+        }
+
+        public async Task CloseCampaignAsync(Campaign campaign)
+        {
+            var campaignDetail = await unitOfWork.CampaignDetailRepository
+            .GetCampaignDetailAsync(campaign.Id, new CampaignDetailQuery { ApplyPagingFromClient = true });
+
+            foreach (var item in from item in campaignDetail.Items
+                                 where !item.State.Equals(CampaignStatus.Earned.ToString())
+                                 select item)
+            {
+                item.State = CampaignStatus.Losted.ToString();
+                unitOfWork.CampaignDetailRepository.Update(item);
+            }
+
+            campaign.IsActive = false;
+            unitOfWork.CampaignRepository.Update(campaign);
+            await unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task OpenCampaignAsync(Campaign campaign)
+        {
+            var campaignDetail = await unitOfWork.CampaignDetailRepository
+            .GetCampaignDetailAsync(campaign.Id, new CampaignDetailQuery { ApplyPagingFromClient = true });
+
+            foreach (var item in campaignDetail.Items)
+            {
+                if (!item.State.Equals(CampaignStatus.Earned.ToString()))
+                {
+                    if (item.LastValidCallDate != DateTime.MinValue)
+                        item.State = CampaignStatus.Called.ToString();
+                    else
+                        item.State = CampaignStatus.Uncalled.ToString();
+                }
+            }
+
+            campaign.IsActive = true;
+            unitOfWork.CampaignRepository.Update(campaign);
+            await unitOfWork.SaveChangesAsync();
+        }
     }
 }

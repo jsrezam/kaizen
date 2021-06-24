@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Kaizen.Controllers.Utilities;
+using Kaizen.Controllers.Common;
 using Kaizen.Core.DTOs;
 using Kaizen.Core.Interfaces;
 using Kaizen.Core.Models;
@@ -33,6 +33,9 @@ namespace Kaizen.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            if (await campaignService.IsOnCampaignInProgress(campaignSaveDto.UserId))
+                return BadRequest("You can't create a new campaign, because this agent already have one in progress.");
 
             var campaign = mapper.Map<CampaignSaveDto, Campaign>(campaignSaveDto);
             await campaignService.CreateCampaignAsync(campaign);
@@ -121,6 +124,35 @@ namespace Kaizen.Controllers
             var result = mapper.Map<Campaign, CampaignDto>(campaign);
 
             return Ok(result);
+        }
+
+        [HttpPost("close")]
+        public async Task<IActionResult> CloseCampaignAsync([FromBody] CampaignDto campaignDto)
+        {
+            var campaign = await campaignService.GetCampaignAsync(campaignDto.Id);
+
+            if (campaign == null)
+                return NotFound();
+
+            await campaignService.CloseCampaignAsync(campaign);
+
+            return Ok();
+        }
+
+        [HttpPost("open")]
+        public async Task<IActionResult> OpenCampaignAsync([FromBody] CampaignDto campaignDto)
+        {
+            var campaign = await campaignService.GetCampaignAsync(campaignDto.Id);
+
+            if (campaign == null)
+                return NotFound();
+
+            if (await campaignService.IsOnCampaignInProgress(campaignDto.UserId))
+                return BadRequest("You can't open this campaign, because this agent already have one in progress.");
+
+            await campaignService.OpenCampaignAsync(campaign);
+
+            return Ok();
         }
     }
 }

@@ -95,6 +95,8 @@
         </p>
         <p>
           <button type="button" class="btn btn-primary" (click)="search(querySearch.value)">Search</button>
+          <button type="button" class="btn btn-warning" (click)="refreshDetail()"><i class="fa fa-refresh"
+              aria-hidden="true"></i> Refresh</button>
         </p>
       </div>
 
@@ -152,6 +154,9 @@
                 </div>
                 <div *ngIf="cd.state === 'Earned'" data-toggle="tooltip" data-placement="right" [title]="cd.state">
                   <p class="fa fa-handshake-o"></p>
+                </div>
+                <div *ngIf="cd.state === 'Losted'" data-toggle="tooltip" data-placement="right" [title]="cd.state">
+                  <p class="fa fa-thumbs-o-down"></p>
                 </div>
               </td>
               <td>

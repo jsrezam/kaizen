@@ -12,9 +12,9 @@ namespace Kaizen.Core.Services
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<QueryResult<CampaignDetail>> GetCampaignDetailByCampaignAsync(int campaignId, CampaignDetailQuery productQuery)
+        public async Task<QueryResult<CampaignDetail>> GetCampaignDetailByCampaignAsync(int campaignId, CampaignDetailQuery campaignDetailQuery)
         {
-            return await unitOfWork.CampaignDetailRepository.GetCampaignDetailAsync(campaignId, productQuery);
+            return await unitOfWork.CampaignDetailRepository.GetCampaignDetailAsync(campaignId, campaignDetailQuery);
         }
 
         public async Task<CampaignDetail> GetCampaignDetailItemAsync(int campaignDetailItemId)

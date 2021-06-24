@@ -4,7 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { AuthenticationResponse } from './../../models/authenticationResponse';
 import { UserCredentials } from './../../models/userCredentials';
 import { Component } from '@angular/core';
-import { parseErrorsAPI } from 'src/app/Utilities/Utilities';
+import { parseErrorsAPI } from 'src/app/common/common';
 import { ToastrService } from 'ngx-toastr';
 
 

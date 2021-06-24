@@ -14,5 +14,8 @@ namespace Kaizen.Core.Interfaces
         Task<Campaign> GetCampaignAsync(int campaignId);
         Task UpdateCampaignAsync(Campaign campaign);
         Task<IEnumerable<CampaignDto>> AddProgressToCampaignsAsync(IEnumerable<CampaignDto> userCampaignsResource);
+        Task<bool> IsOnCampaignInProgress(string agentId);
+        Task CloseCampaignAsync(Campaign campaign);
+        Task OpenCampaignAsync(Campaign campaign);
     }
 }

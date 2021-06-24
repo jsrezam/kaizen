@@ -31,11 +31,14 @@ namespace Kaizen.Core.Services
             var result = new QueryResult<Customer>();
 
             var customers = await unitOfWork.CustomerRepository.GetCustomersAsync(queryObj);
-            var campaignDetail = await unitOfWork.CampaignDetailRepository.GetCampaignDetailAsync(campaignId, new CampaignDetailQuery { ApplyPagingFromClient = true });
+            var campaignDetail = (await unitOfWork
+            .CampaignDetailRepository
+            .GetCampaignDetailAsync(campaignId, new CampaignDetailQuery { ApplyPagingFromClient = true }))
+            .Items.Where(cd => !cd.State.Equals(CampaignStatus.Earned.ToString()));
 
 
             var query = (from c in customers.Items
-                         join cd in campaignDetail.Items on c.Id equals cd.CustomerId into temp
+                         join cd in campaignDetail on c.Id equals cd.CustomerId into temp
                          from cd in temp.DefaultIfEmpty()
                          where cd == null
                          select new Customer

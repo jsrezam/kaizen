@@ -64,10 +64,14 @@ namespace Kaizen.Infrastructure.Mapping
             CreateMap<CampaignDto, Campaign>()
             .AfterMap((cd, c) =>
             {
-                c.FinishDate = new DateTime(
+                if (cd.ModelFinishDate != null)
+                {
+                    c.FinishDate = new DateTime(
                     cd.ModelFinishDate.Year,
                     cd.ModelFinishDate.Month,
                     cd.ModelFinishDate.Day);
+                }
+
             });
             CreateMap<CampaignQueryDto, CampaignQuery>();
             CreateMap<CampaignSaveDto, Campaign>();

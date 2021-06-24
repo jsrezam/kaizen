@@ -4,7 +4,7 @@ import { CustomerService } from 'src/app/services/customer.service';
 import { UserService } from 'src/app/services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { parseErrorsAPI } from 'src/app/Utilities/Utilities';
+import { parseErrorsAPI } from 'src/app/common/common';
 
 @Component({
   selector: 'app-campaign-form',
@@ -214,8 +214,11 @@ export class CampaignFormComponent implements OnInit {
       this.campaignService.createCampaign(this.campaignSave)
         .subscribe((result: any) => {
           this.toastrService.success("Data was successfully saved.", "Success");
+          this.router.navigate(['/campaigns/']);
+        }, err => {
+          this.errorMessages = parseErrorsAPI(err.error);
         });
-      this.router.navigate(['/campaigns/']);
+
     }
   }
 

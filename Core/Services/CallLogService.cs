@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Kaizen.Controllers.Enumerations;
-using Kaizen.Controllers.Utilities;
+using Kaizen.Controllers.Common;
 using Kaizen.Core.Interfaces;
 using Kaizen.Core.Models;
 

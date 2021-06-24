@@ -9,5 +9,6 @@ namespace Kaizen.Core.Interfaces
         Task<QueryResult<Campaign>> GetCampaignsAsync(CampaignQuery queryObj);
         Task<QueryResult<Campaign>> GetAgentCampaignsAsync(string userId, CampaignQuery queryObj);
         Task<QueryResult<Campaign>> GetAgentValidCampaignsAsync(string userId, CampaignQuery queryObj);
+        Task<bool> IsOnCampaignInProgress(string agentId);
     }
 }

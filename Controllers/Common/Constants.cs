@@ -1,4 +1,4 @@
-namespace Kaizen.Controllers.Utilities
+namespace Kaizen.Controllers.Common
 {
     public static class Constants
     {

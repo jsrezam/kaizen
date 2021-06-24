@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { toQueryString } from '../Utilities/Utilities';
+import { toQueryString } from '../common/common';
 
 @Injectable({ providedIn: 'root' })
 export class CampaignService {
@@ -42,6 +42,18 @@ export class CampaignService {
 
     updateCampaign(campaign) {
         return this.http.put(this.apiUri + campaign.id, campaign).pipe(
+            map(res => res)
+        );
+    }
+
+    closeCampaign(campaign) {
+        return this.http.post(this.apiUri + "close", campaign).pipe(
+            map(res => res)
+        );
+    }
+
+    openCampaign(campaign) {
+        return this.http.post(this.apiUri + "open", campaign).pipe(
             map(res => res)
         );
     }

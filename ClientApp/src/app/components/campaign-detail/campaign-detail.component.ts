@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { CampaignDetailService } from 'src/app/services/campaignDetail.service';
 import { CustomerService } from 'src/app/services/customer.service';
-import { formatDate, isExpiredDate, parseErrorsAPI } from 'src/app/Utilities/Utilities';
+import { formatDate, isExpiredDate, parseErrorsAPI } from 'src/app/common/common';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -334,21 +334,23 @@ export class CampaignDetailComponent implements OnInit {
     if (confirm("Are you sure to close the campaign?")) {
 
       if (this.authService.isInRole('admin')) {
-        this.campaign.isActive = !this.campaign.isActive;
-        this.campaignService.updateCampaign(this.campaign)
-          .subscribe(response => {
-            if (this.campaign.isActive) {
-              this.toastrService.success("Campaign was closed successfully.", "Success");
-            }
-            else
-              this.toastrService.success("Campaign was opened successfully.", "Success");
-            this.errorMessages = [];
-          });
+        let result$ = (this.campaign.isActive) ? this.campaignService.closeCampaign(this.campaign) : this.campaignService.openCampaign(this.campaign);
+
+        result$.subscribe(response => {
+          this.getCampaign();
+          this.populateCampaignDetails();
+          this.toastrService.success("Data was updated succesfully.", "Success")
+          this.errorMessages = [];
+        }, err => {
+          this.errorMessages = parseErrorsAPI(err.error);
+        });
       } else {
         if (this.isEnableToCloseCampaign()) {
           this.campaign.isActive = !this.campaign.isActive;
-          this.campaignService.updateCampaign(this.campaign)
+          this.campaignService.closeCampaign(this.campaign)
             .subscribe(response => {
+              this.getCampaign();
+              this.populateCampaignDetails();
               this.toastrService.success("Campaign was closed successfully.", "Success");
               this.errorMessages = [];
             });
@@ -364,6 +366,10 @@ export class CampaignDetailComponent implements OnInit {
   isEnableToCloseCampaign() {
     var campaignsOpen = this.campaignDetails.items.filter(cd => cd.state === 'Uncalled')
     return campaignsOpen.length === 0;
+  }
+
+  refreshDetail() {
+    this.populateCampaignDetails();
   }
 
 }

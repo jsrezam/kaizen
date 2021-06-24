@@ -2,7 +2,7 @@ import { environment } from './../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { toQueryString } from '../Utilities/Utilities';
+import { toQueryString } from '../common/common';
 
 @Injectable({ providedIn: 'root' })
 export class CampaignDetailService {
