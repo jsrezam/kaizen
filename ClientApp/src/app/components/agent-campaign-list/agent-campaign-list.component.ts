@@ -3,8 +3,7 @@ import { CampaignService } from 'src/app/services/campaign.service';
 
 @Component({
   selector: 'app-agent-campaign-list',
-  templateUrl: './agent-campaign-list.component.html',
-  styleUrls: ['./agent-campaign-list.component.css']
+  templateUrl: './agent-campaign-list.component.html'
 })
 export class AgentCampaignListComponent implements OnInit {
 

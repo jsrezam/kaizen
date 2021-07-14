@@ -12,14 +12,12 @@ namespace Kaizen.Infrastructure.Repositories
 {
     public class AccountRepository : IAccountRepository
     {
-        private readonly KaizenDbContext context;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
-        public AccountRepository(KaizenDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AccountRepository(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
-            this.context = context;
         }
 
         public async Task<IdentityResult> SignUpAsync(ApplicationUser user, string userPassword)

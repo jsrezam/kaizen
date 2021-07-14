@@ -5,8 +5,7 @@ import { OrderService } from 'src/app/services/order.service';
 
 @Component({
   selector: 'app-order-list',
-  templateUrl: './order-list.component.html',
-  styleUrls: ['./order-list.component.css']
+  templateUrl: './order-list.component.html'
 })
 export class OrderListComponent implements OnInit {
   private readonly PAGE_SIZE = 3;
@@ -77,10 +76,12 @@ export class OrderListComponent implements OnInit {
   setPlaceholderSearch() {
     if (!this.searchOption) {
       var defaultColumnSearch = this.getDefaultColumnSearch();
-      return this.searchPlaceholder = "Search by " + defaultColumnSearch.title;
+      this.searchPlaceholder = "Search by " + defaultColumnSearch.title;
+      return this.searchPlaceholder;
     }
     var columnSearch = this.columns.find(c => c.key === this.searchOption);
-    return this.searchPlaceholder = "Search by " + columnSearch.title;
+    this.searchPlaceholder = "Search by " + columnSearch.title;
+    return this.searchPlaceholder;
   }
 
   filterSearchOptions() {

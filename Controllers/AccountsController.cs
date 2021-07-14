@@ -26,38 +26,40 @@ namespace Kaizen.Controllers
         }
 
         [HttpPost("signUp")]
-        public async Task<IActionResult> SignUp([FromBody] UserCredentialsDto userCredentialsResource)
+        public async Task<IActionResult> SignUp([FromBody] UserCredentialsDto userCredentialsDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var newUser = mapper.Map<UserCredentialsDto, ApplicationUser>(userCredentialsResource);
+            var user = mapper.Map<UserCredentialsDto, ApplicationUser>(userCredentialsDto);
 
-            var response = await accountService.SignUpAsync(newUser, userCredentialsResource.Password);
+            var response = await accountService.SignUpAsync(user, userCredentialsDto.Password);
 
             if (!response.Succeeded)
                 return BadRequest(response.Errors);
 
-            return Ok(await accountService.BuildToken(userCredentialsResource, true));
+            var newUser = await userService.GetUserByEmailAsync(user.Email);
+
+            return Ok(await accountService.BuildToken(newUser, true));
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] UserCredentialsDto userCredentialsResource)
+        public async Task<IActionResult> Login([FromBody] UserCredentialsDto userCredentialsDto)
         {
             var response = await accountService
-            .PasswordSignInAsync(userCredentialsResource.Email
-            , userCredentialsResource.Password
+            .PasswordSignInAsync(userCredentialsDto.Email
+            , userCredentialsDto.Password
             , isPersistent: false
             , lockoutOnFailure: false
             );
 
             if (!response.Succeeded) return BadRequest("Invalid username and/or password.");
 
-            var userLogged = await userService.GetUserByEmailAsync(userCredentialsResource.Email);
+            var userLogged = await userService.GetUserByEmailAsync(userCredentialsDto.Email);
 
             if (!userLogged.IsActive) return BadRequest("Your username is inactive. Validate this problem with your system administrator.");
 
-            return Ok(await accountService.BuildToken(userCredentialsResource));
+            return Ok(await accountService.BuildToken(userLogged));
         }
 
         [HttpPost("makeAdmin")]

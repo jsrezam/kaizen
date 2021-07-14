@@ -11,7 +11,7 @@
           <h4>{{topAgent.name}}</h4>
           <h6>{{topAgent.email}}</h6>
           <p class="text-secondary mb-1">Orders Generated: {{topAgent.ordersGenerated}}</p>
-          <p class="text-muted font-size-sm">Total Sold: ${{topAgent.totalSold}}</p>
+          <p class="text-muted font-size-sm">Total Sold: ${{topAgent.totalSold | number : '1.0-2'}}</p>
         </div>
       </div>
     </div>
@@ -28,7 +28,7 @@
             <small class="text-muted">Sold Units: {{product.soldUnits}}</small>
           </div>
           <span class="text-muted" data-toggle="tooltip" data-placement="center"
-            title="Total Sold">${{product.totalSold}}</span>
+            title="Total Sold">${{product.totalSold | number : '1.0-2' }}</span>
         </li>
       </ul>
     </div>
@@ -45,7 +45,7 @@
             <small class="text-muted">Orders: {{customer.ordersNumber}}</small>
           </div>
           <span class="text-muted" data-toggle="tooltip" data-placement="center"
-            title="Total Charged">${{customer.totalCharged}}</span>
+            title="Total Charged">${{customer.totalCharged | number : '1.0-2'}}</span>
         </li>
       </ul>
     </div>

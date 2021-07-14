@@ -1,17 +1,53 @@
-<nav *ngIf="totalItems > pageSize">
-  <ul class="pagination">
-    <li class="page-item" [class.page-item.disabled]="currentPage == 1">
-      <a (click)="previous()" class="page-link">
-        Previous
-      </a>
-    </li>
-    <li class="page-item" [class.active]="currentPage == page" *ngFor="let page of pages" (click)="changePage(page)">
-      <a class="page-link">{{ page }}</a>
-    </li>
-    <li class="page-item" [class.page-item.disabled]="currentPage == pages.length">
-      <a (click)="next()" class="page-link">
-        Next
-      </a>
-    </li>
-  </ul>
-</nav>
+<div *ngIf="pages.length > 10">
+  <nav *ngIf="totalItems > pageSize" aria-label="pagination-menu">
+    <ul class="pagination">
+      <li class="page-item" [class.page-item.disabled]="currentPage == 1">
+        <a (click)="previous()" class="page-link">
+          Previous
+        </a>
+      </li>
+
+      <li class="page-item" [class.active]="currentPage == page"
+        (click)="changePage((pages.length +1) - pages.length )">
+        <a class="page-link">{{ (pages.length +1) - pages.length  }}</a>
+      </li>
+
+      <li *ngIf="currentPage !== (pages.length +1) - pages.length && currentPage !== pages.length" class="page-item"
+        [class.active]="currentPage == page" (click)="changePage(currentPage)">
+        <a class="page-link">{{ currentPage }}</a>
+      </li>
+
+      <li class="page-item" [class.active]="currentPage == page" (click)="changePage(pages.length)">
+        <a class="page-link">{{ pages.length }}</a>
+      </li>
+
+      <li class="page-item" [class.page-item.disabled]="currentPage == pages.length">
+        <a (click)="next()" class="page-link">
+          Next
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<div *ngIf="pages.length <= 10">
+  <nav *ngIf="totalItems > pageSize" aria-label="pagination-items-menu">
+    <ul class="pagination">
+      <li class="page-item" [class.page-item.disabled]="currentPage == 1">
+        <a (click)="previous()" class="page-link">
+          Previous
+        </a>
+      </li>
+
+      <li class="page-item" [class.active]="currentPage == page" *ngFor="let page of pages" (click)="changePage(page)">
+        <a class="page-link">{{ page }}</a>
+      </li>
+
+      <li class="page-item" [class.page-item.disabled]="currentPage == pages.length">
+        <a (click)="next()" class="page-link">
+          Next
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>

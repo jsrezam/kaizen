@@ -17,38 +17,37 @@ namespace Kaizen.Core.Services
         {
             this.unitOfWork = unitOfWork;
         }
+
         public async Task SynchronizeTodayCalls(string userId, IEnumerable<CallLog> callLogs)
         {
-            var queryResult = await unitOfWork.CampaignRepository.GetAgentValidCampaignsAsync(userId, new CampaignQuery());
+            var offers = await unitOfWork.CampaignDetailRepository.GetAgentOfersAsync(userId);
 
-            if (queryResult.TotalItems == 0)
+            if (offers == null)
                 return;
 
-            foreach (var userCampaign in queryResult.Items)
+            foreach (var offer in offers)
             {
-                foreach (var campaignDetail in userCampaign.CampaignDetails)
+                var matchCall = callLogs.FirstOrDefault(cd => cd.CallNumberFormatted.Equals(offer.Customer.CellPhone));
+
+                if (matchCall != null)
                 {
-                    var matchCall = callLogs.FirstOrDefault(cd => cd.CallNumberFormatted.Equals(campaignDetail.Customer.CellPhone));
+                    offer.TotalCallsNumber += GetCallsNumber(offer, matchCall);
 
-                    if (matchCall != null)
+                    var isValidCallByDuration = Convert.ToInt32(matchCall.CallDuration) > Constants.MinimunCallDurationValue;
+                    var isValidCallByCallsNumber = IsValidCallByCallsNumber(offer, matchCall);
+
+                    if (isValidCallByDuration || isValidCallByCallsNumber)
                     {
-                        campaignDetail.TotalCallsNumber += GetCallsNumber(campaignDetail, matchCall);
-
-                        var isValidCallByDuration = Convert.ToInt32(matchCall.CallDuration) > Constants.MinimunCallDurationValue;
-                        var isValidCallByCallsNumber = IsValidCallByCallsNumber(campaignDetail, matchCall);
-
-                        if (isValidCallByDuration || isValidCallByCallsNumber)
-                        {
-                            campaignDetail.LastValidCallDate = matchCall.CallDate;
-                            campaignDetail.LastValidCallDuration = matchCall.CallDurationFormat;
-                            campaignDetail.State = CampaignStatus.Called.ToString();
-                        }
-
-                        campaignDetail.LastCallDate = matchCall.CallDate;
-                        campaignDetail.LastCallDuration = matchCall.CallDurationFormat;
-
-                        unitOfWork.CampaignDetailRepository.Update(campaignDetail);
+                        offer.LastValidCallDate = matchCall.CallDate;
+                        offer.LastValidCallDuration = matchCall.CallDurationFormat;
+                        offer.State = CampaignStatus.Called.ToString();
                     }
+
+                    offer.LastCallDate = matchCall.CallDate;
+                    offer.LastCallDuration = matchCall.CallDurationFormat;
+                    offer.Customer = null;
+
+                    unitOfWork.CampaignDetailRepository.Update(offer);
                 }
             }
 
@@ -67,5 +66,6 @@ namespace Kaizen.Core.Services
             return (matchCall.CallDate > campaignDetail.LastCallDate) ?
                 matchCall.TotalCallsNumber - campaignDetail.TotalCallsNumber : 0;
         }
+
     }
 }

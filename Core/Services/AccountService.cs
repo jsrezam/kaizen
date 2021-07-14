@@ -29,15 +29,13 @@ namespace Kaizen.Core.Services
             return await unitOfWork.AccountRepository.SignUpAsync(user, userPassword);
         }
 
-        public async Task<ResponseAuthenticationDto> BuildToken(UserCredentialsDto userCredentialsResource, bool IsNew = false)
+        public async Task<ResponseAuthenticationDto> BuildToken(ApplicationUser user, bool IsNew = false)
         {
-            var user = await unitOfWork.UserRepository.GetUserByEmailAsync(userCredentialsResource.Email);
-
             if (IsNew)
             {
                 var claims = new List<Claim>()
                 {
-                    new Claim("email",userCredentialsResource.Email),
+                    new Claim("email",user.Email),
                     new Claim("role","agent")
                 };
 

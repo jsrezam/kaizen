@@ -5,8 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-user-list',
-  templateUrl: './user-list.component.html',
-  styleUrls: ['./user-list.component.css']
+  templateUrl: './user-list.component.html'
 })
 export class UserListComponent implements OnInit {
   private readonly PAGE_SIZE = 10;
@@ -48,10 +47,12 @@ export class UserListComponent implements OnInit {
   setPlaceholderSearch() {
     if (!this.searchOption) {
       var defaultColumnSearch = this.getDefaultColumnSearch();
-      return this.searchPlaceholder = "Search by " + defaultColumnSearch.title;
+      this.searchPlaceholder = "Search by " + defaultColumnSearch.title;
+      return this.searchPlaceholder;
     }
     var columnSearch = this.columns.find(c => c.key === this.searchOption);
-    return this.searchPlaceholder = "Search by " + columnSearch.title;
+    this.searchPlaceholder = "Search by " + columnSearch.title;
+    return this.searchPlaceholder;
   }
 
   filterSearchOptions() {

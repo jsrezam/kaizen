@@ -4,8 +4,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-campaign-list',
-  templateUrl: './campaign-list.component.html',
-  styleUrls: ['./campaign-list.component.css']
+  templateUrl: './campaign-list.component.html'
 })
 export class CampaignListComponent implements OnInit {
   private readonly PAGE_SIZE = 3;
@@ -59,10 +58,12 @@ export class CampaignListComponent implements OnInit {
   setPlaceholderSearch() {
     if (!this.searchOption) {
       let defaultColumnSearch = this.getDefaultColumnSearch();
-      return this.searchPlaceholder = "Search by " + defaultColumnSearch.title;
+      this.searchPlaceholder = "Search by " + defaultColumnSearch.title;
+      return this.searchPlaceholder;
     }
     let columnSearch = this.columns.find(c => c.key === this.searchOption);
-    return this.searchPlaceholder = "Search by " + columnSearch.title;
+    this.searchPlaceholder = "Search by " + columnSearch.title;
+    return this.searchPlaceholder;
   }
 
   filterSearchOptions() {

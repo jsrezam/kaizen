@@ -1,15 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-non-authorized',
-  templateUrl: './non-authorized.component.html',
-  styleUrls: ['./non-authorized.component.css']
+  templateUrl: './non-authorized.component.html'
 })
-export class NonAuthorizedComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
-}
+export class NonAuthorizedComponent { }

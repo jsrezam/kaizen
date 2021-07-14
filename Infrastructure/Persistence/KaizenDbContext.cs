@@ -12,13 +12,21 @@ namespace Kaizen.Infrastructure.Persistence
 
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(builder);
 
-            modelBuilder.Entity<Customer>()
+            builder.Entity<Customer>()
             .HasIndex(u => u.CellPhone)
             .IsUnique();
+
+            builder.Entity<Campaign>()
+            .HasIndex(c => c.FinishDate);
+            builder.Entity<Campaign>()
+            .HasIndex(c => c.IsActive);
+
+            builder.Entity<Order>()
+            .HasIndex(o => o.OrderDate);
         }
 
 

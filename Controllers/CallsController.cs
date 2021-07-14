@@ -32,7 +32,7 @@ namespace Kaizen.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var loggedAgentEmail = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("email")).Value;
+            var loggedAgentEmail = HttpContext.User.Claims.First(c => c.Type.Equals("email")).Value;
             var agent = await userService.GetUserByEmailAsync(loggedAgentEmail);
 
             var calls = mapper.Map<IEnumerable<CallLogDto>, IEnumerable<CallLog>>(callLogResources);

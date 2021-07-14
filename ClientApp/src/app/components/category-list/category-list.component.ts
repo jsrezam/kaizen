@@ -42,10 +42,12 @@ export class CategoryListComponent implements OnInit {
   setPlaceholderSearch() {
     if (!this.searchOption) {
       var defaultColumnSearch = this.getDefaultColumnSearch();
-      return this.searchPlaceholder = "Search by " + defaultColumnSearch.title;
+      this.searchPlaceholder = "Search by " + defaultColumnSearch.title;
+      return this.searchPlaceholder;
     }
     var columnSearch = this.columns.find(c => c.key === this.searchOption);
-    return this.searchPlaceholder = "Search by " + columnSearch.title;
+    this.searchPlaceholder = "Search by " + columnSearch.title;
+    return this.searchPlaceholder;
   }
 
   filterSearchOptions() {

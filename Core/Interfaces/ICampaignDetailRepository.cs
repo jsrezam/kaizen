@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Kaizen.Core.Models;
 
@@ -8,5 +9,7 @@ namespace Kaizen.Core.Interfaces
         Task<QueryResult<CampaignDetail>> GetCampaignDetailAsync(int campaignId, CampaignDetailQuery queryObj);
         Task<decimal> GetCustomersInCampaignNumberAsync(int campaignId);
         Task<decimal> GetCalledCustomerNumberInCampaignAsync(int campaignId);
+
+        Task<IEnumerable<CampaignDetail>> GetAgentOfersAsync(string agentId);
     }
 }

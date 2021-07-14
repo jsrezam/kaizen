@@ -6,7 +6,7 @@ namespace Kaizen.Core.Interfaces
 {
     public interface IOrderService
     {
-        Task CreateOrderAsync(Order order);
+        Task<bool> CreateOrderAsync(Order order);
         Task<QueryResult<Order>> GetOrdersAsync(OrderQuery queryObj);
         Task<QueryResult<Order>> GetAgentOrdersAsync(string userId, OrderQuery queryObj);
         Task<OrderViewModel> GetOrderDetailAsync(int orderId);

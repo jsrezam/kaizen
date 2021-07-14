@@ -54,7 +54,7 @@
                 ngbDatepicker #finishDate="ngbDatepicker">
               <div class="input-group-append">
                 <button class="btn btn-outline-secondary calendar" (click)="finishDate.toggle()" type="button">
-                  <i class="fas fa-calendar-alt fa-fw"></i>
+                  <em class="fas fa-calendar-alt fa-fw"></em>
                 </button>
               </div>
             </div>
@@ -112,7 +112,9 @@
             </div>
           </div>
           <div class="text-success">
-            <small>Max Range available : {{queryResult.totalItems}} customers </small>
+            <small *ngIf="queryResult.items.length > 0">Max Range available : {{queryResult.totalItems}} customers
+            </small>
+            <small *ngIf="queryResult.items.length === 0">Max Range available : 0 customers </small>
           </div>
         </div>
 
@@ -121,61 +123,56 @@
       <div *ngIf="!queryResult.items">
         <loading></loading>
       </div>
-      <div *ngIf="queryResult.items">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th *ngFor="let c of columns" aria-labelledby="tableLabel" class="text-center">
-                <div *ngIf="c.isSortable" (click)="sortBy(c.key)">
-                  {{c.title}}
-                  <i *ngIf="query.sortBy === c.key" class="fa" [class.fa-sort-asc]="query.isSortAscending"
-                    [class.fa-sort-desc]="!query.isSortAscending"></i>
+      <div class="table-responsive">
+        <div *ngIf="queryResult.items">
+          <table class="table align-middle" aria-describedby="campaign-form-table">
+            <thead>
+              <tr>
+                <th scope="col" *ngFor="let c of columns" aria-labelledby="tableLabel" class="text-center">
+                  <div *ngIf="c.isSortable" (click)="sortBy(c.key)">
+                    {{c.title}}
+                    <em *ngIf="query.sortBy === c.key" class="fa" [class.fa-sort-asc]="query.isSortAscending"
+                      [class.fa-sort-desc]="!query.isSortAscending"></em>
+                  </div>
+                  <div *ngIf="!c.isSortable">
+                    {{c.title}}
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let c of filteredCustomers | slice: (this.query.page-1) * query.pageSize : this.query.page * query.pageSize">
+                <td>
+                  <input style="text-align: center; vertical-align: middle; margin-left:auto; margin-right:auto;"
+                    type="checkbox" class="form-check-input" [(ngModel)]="c.isSelected"
+                    [ngModelOptions]="{standalone: true}" #isChecked="ngModel" name="isChecked" [disabled]="!c.state">
+                </td>
+                <td class="text-center">{{ c.firstName }}</td>
+                <td class="text-center">{{ c.lastName }}</td>
+                <td class="text-center">{{ c.identificationCard }}</td>
+                <td class="text-center">{{ c.email }}</td>
+                <td class="text-center">{{ c.cellPhone }}</td>
+                <td class="text-center">{{ c.homePhone }}</td>
+                <td class="text-center">{{ c.country }}</td>
+                <td class="text-center">{{ c.region }}</td>
+                <td class="text-center">{{ c.city }}</td>
+                <td class="text-center">{{ c.postalCode }}</td>
+                <td class="text-center">{{ c.address }}</td>
+                <div *ngIf="c.state">
+                  <td class="text-center">Active</td>
                 </div>
-                <div *ngIf="!c.isSortable">
-                  {{c.title}}
+                <div *ngIf="!c.state">
+                  <td class="text-center">Inactive</td>
                 </div>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let c of filteredCustomers | slice: (this.query.page-1) * query.pageSize : this.query.page * query.pageSize">
-              <td>
-                <input style="text-align: center; vertical-align: middle; margin-left:auto; margin-right:auto;"
-                  type="checkbox" class="form-check-input" [(ngModel)]="c.isSelected"
-                  [ngModelOptions]="{standalone: true}" #isChecked="ngModel" name="isChecked" [disabled]="!c.state">
-              </td>
-              <td class="text-center">{{ c.firstName }}</td>
-              <td class="text-center">{{ c.lastName }}</td>
-              <td class="text-center">{{ c.identificationCard }}</td>
-              <td class="text-center">{{ c.email }}</td>
-              <td class="text-center">{{ c.cellPhone }}</td>
-              <td class="text-center">{{ c.homePhone }}</td>
-              <td class="text-center">{{ c.country }}</td>
-              <td class="text-center">{{ c.region }}</td>
-              <td class="text-center">{{ c.city }}</td>
-              <td class="text-center">{{ c.postalCode }}</td>
-              <td class="text-center">{{ c.address }}</td>
-              <div *ngIf="c.state">
-                <td class="text-center">Active</td>
-              </div>
-              <div *ngIf="!c.state">
-                <td class="text-center">Inactive</td>
-              </div>
-            </tr>
-          </tbody>
-        </table>
-        <pagination [total-items]="totalItems" [page-size]="query.pageSize" (page-changed)="onPageChage($event)">
-        </pagination>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-
-
+      <hr class="my-4">
+      <pagination [total-items]="totalItems" [page-size]="query.pageSize" (page-changed)="onPageChage($event)">
+      </pagination>
     </form>
-
-
-
-
-
-
   </div>
 </div>

@@ -32,14 +32,14 @@
   <loading></loading>
 </div>
 <div *ngIf="queryResult.items">
-  <table class="table table-striped">
+  <table class="table table-striped" aria-describedby="product-list-table">
     <thead>
       <tr>
-        <th *ngFor="let c of columns" aria-labelledby="tableLabel" class="text-center">
+        <th scope="col" *ngFor="let c of columns" aria-labelledby="tableLabel" class="text-center">
           <div *ngIf="c.isSortable" (click)="sortBy(c.key)">
             {{c.title}}
-            <i *ngIf="query.sortBy === c.key" class="fa" [class.fa-sort-asc]="query.isSortAscending"
-              [class.fa-sort-desc]="!query.isSortAscending"></i>
+            <em *ngIf="query.sortBy === c.key" class="fa" [class.fa-sort-asc]="query.isSortAscending"
+              [class.fa-sort-desc]="!query.isSortAscending"></em>
           </div>
           <div *ngIf="!c.isSortable">
             {{c.title}}

@@ -65,11 +65,10 @@ namespace Kaizen.Core.Services
         {
             foreach (var userCampaign in userCampaignsDto)
             {
-                userCampaign.Progress = decimal.Round((
-                    await unitOfWork.CampaignDetailRepository
-                    .GetCalledCustomerNumberInCampaignAsync(userCampaign.Id)
-                * 100) / await unitOfWork.CampaignDetailRepository
-                .GetCustomersInCampaignNumberAsync(userCampaign.Id), 2);
+                var customerServed = await unitOfWork.CampaignDetailRepository.GetCalledCustomerNumberInCampaignAsync(userCampaign.Id);
+                var customersInCampaign = await unitOfWork.CampaignDetailRepository.GetCustomersInCampaignNumberAsync(userCampaign.Id);
+
+                userCampaign.Progress = decimal.Round((customerServed * 100) / customersInCampaign, 2);
             }
 
             return userCampaignsDto;
@@ -118,5 +117,6 @@ namespace Kaizen.Core.Services
             unitOfWork.CampaignRepository.Update(campaign);
             await unitOfWork.SaveChangesAsync();
         }
+
     }
 }

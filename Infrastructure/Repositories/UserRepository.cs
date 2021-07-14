@@ -23,6 +23,12 @@ namespace Kaizen.Core
             this.userManager = userManager;
             this.context = context;
         }
+        public async Task<bool> isUniqueCellphone(string cellPhone)
+        {
+            var user = await context.Users
+            .SingleOrDefaultAsync(u => u.PhoneNumber.Equals(cellPhone));
+            return user == null;
+        }
 
         public async Task<IEnumerable<ApplicationUser>> GetActiveAgentsAsync()
         {

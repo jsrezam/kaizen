@@ -28,6 +28,12 @@ export class CustomerService {
         );
     }
 
+    getAgentAvailableCustomers(agent) {
+        return this.http.get(this.apiUri + 'availables/' + agent.id).pipe(
+            map(res => res)
+        );
+    }
+
     getNoInCampaignCustomersAsync(filter, campaignId) {
         return this.http.get(this.apiUri + 'noInCampaign/' + campaignId + '?' + toQueryString(filter)).pipe(
             map(res => res)
@@ -46,8 +52,8 @@ export class CustomerService {
         );
     }
 
-    getRandomCustomers(maxRange) {
-        return this.http.get(this.apiUri + 'random/' + maxRange).pipe(
+    getRandomCustomers(maxRange, filter) {
+        return this.http.get(this.apiUri + 'random/' + maxRange + '?' + toQueryString(filter)).pipe(
             map(res => res)
         );
     }

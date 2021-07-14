@@ -1,8 +1,7 @@
 import { OrderService } from './../../services/order.service';
-import { CategoryService } from './../../services/category.service';
 import { ProductService } from 'src/app/services/product.service';
 import { CustomerService } from './../../services/customer.service';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { parseErrorsAPI } from 'src/app/common/common';
 
@@ -12,7 +11,7 @@ import { parseErrorsAPI } from 'src/app/common/common';
   templateUrl: './order-form.component.html',
   styleUrls: ['./order-form.component.css']
 })
-export class OrderFormComponent implements OnInit {
+export class OrderFormComponent {
   private readonly PAGE_SIZE = 3;
 
   customerColumns = [
@@ -62,8 +61,6 @@ export class OrderFormComponent implements OnInit {
     private orderService: OrderService,
     private toastrService: ToastrService) { }
 
-  ngOnInit(): void { }
-
   //Customer configuration
 
   populateUserCustomers() {
@@ -85,10 +82,12 @@ export class OrderFormComponent implements OnInit {
   setCustomerPlaceholderSearch() {
     if (!this.searchCustomerOption) {
       let defaultColumnSearch = this.getCustomerDefaultColumnSearch();
-      return this.searchCustomerPlaceholder = "Search by " + defaultColumnSearch.title;
+      this.searchCustomerPlaceholder = "Search by " + defaultColumnSearch.title;
+      return this.searchCustomerPlaceholder;
     }
     let columnSearch = this.customerColumns.find(c => c.key === this.searchCustomerOption);
-    return this.searchCustomerPlaceholder = "Search by " + columnSearch.title;
+    this.searchCustomerPlaceholder = "Search by " + columnSearch.title;
+    return this.searchCustomerPlaceholder;
   }
 
   filterCustomerSearchOptions() {
@@ -159,10 +158,12 @@ export class OrderFormComponent implements OnInit {
   setProductPlaceholderSearch() {
     if (!this.searchProductOption) {
       var defaultColumnSearch = this.getProductDefaultColumnSearch();
-      return this.searchProductPlaceholder = "Search by " + defaultColumnSearch.title;
+      this.searchProductPlaceholder = "Search by " + defaultColumnSearch.title;
+      return this.searchProductPlaceholder;
     }
     var columnSearch = this.productColumns.find(c => c.key === this.searchProductOption);
-    return this.searchProductPlaceholder = "Search by " + columnSearch.title;
+    this.searchProductPlaceholder = "Search by " + columnSearch.title;
+    return this.searchProductPlaceholder;
   }
 
   filterProductSearchOptions() {
@@ -285,13 +286,14 @@ export class OrderFormComponent implements OnInit {
   getTotalOrderPrice() {
     if (this.cart.length === 0)
       return 0;
-    return this.cart.map(item => item.totalPrice).reduce((prev, next) => { return prev + next });
+    return (this.cart.map(item => item.totalPrice).reduce((prev, next) => { return prev + next })).toFixed(2);
   }
 
   creatOrder() {
     if (confirm("Are you sure?")) {
       this.order.campaignDetailId = this.customer.campaignDetailId;
       this.order.orderDetails = this.cart;
+      console.log(this.order);
       this.orderService.createOrder(this.order)
         .subscribe(response => {
           this.toastrService.success("Data was successfully saved.", "Success");

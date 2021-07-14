@@ -8,8 +8,7 @@ import { parseErrorsAPI } from 'src/app/common/common';
 
 @Component({
   selector: 'app-product-form',
-  templateUrl: './product-form.component.html',
-  styleUrls: ['./product-form.component.css']
+  templateUrl: './product-form.component.html'
 })
 export class ProductFormComponent implements OnInit {
 

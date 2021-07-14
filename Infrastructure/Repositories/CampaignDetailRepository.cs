@@ -47,16 +47,37 @@ namespace Kaizen.Infrastructure.Repositories
         }
         public async Task<decimal> GetCustomersInCampaignNumberAsync(int campaignId)
         {
-            return await entities
+            return await entities.AsNoTracking()
             .Where(cd => cd.CampaignId == campaignId).CountAsync();
         }
         public async Task<decimal> GetCalledCustomerNumberInCampaignAsync(int campaignId)
         {
-            return await entities
+            var response = await entities.AsNoTracking()
             .Where(cd => cd.CampaignId == campaignId &&
             (cd.State.Equals(CampaignStatus.Called.ToString()) ||
             cd.State.Equals(CampaignStatus.Earned.ToString())))
             .CountAsync();
+
+            return response;
+        }
+
+        public async Task<IEnumerable<CampaignDetail>> GetAgentOfersAsync(string agentId)
+        {
+            return await entities
+            .Where(cd => cd.Campaign.UserId.Equals(agentId))
+            .Select(cd => new CampaignDetail
+            {
+                Id = cd.Id,
+                CampaignId = cd.CampaignId,
+                CustomerId = cd.CustomerId,
+                Customer = new Customer { CellPhone = cd.Customer.CellPhone },
+                LastCallDate = cd.LastCallDate,
+                LastCallDuration = cd.LastCallDuration,
+                LastValidCallDate = cd.LastValidCallDate,
+                LastValidCallDuration = cd.LastValidCallDuration,
+                TotalCallsNumber = cd.TotalCallsNumber,
+                State = cd.State
+            }).ToListAsync();
         }
     }
 }

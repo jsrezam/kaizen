@@ -8,8 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-customer-form',
-  templateUrl: './customer-form.component.html',
-  styleUrls: ['./customer-form.component.css']
+  templateUrl: './customer-form.component.html'
 })
 export class CustomerFormComponent implements OnInit {
 
@@ -37,17 +36,17 @@ export class CustomerFormComponent implements OnInit {
     if (this.customer.id) {
 
       this.customerService.getCustomer(this.customer.id)
-        .subscribe(response => {
-          this.customer = response;
+        .subscribe(customer => {
+          this.customer = customer;
 
           this.locationService.GetRegionsByCountry(this.customer.countryId)
-            .subscribe(response => {
-              this.regions = response;
+            .subscribe(regions => {
+              this.regions = regions;
             });
 
           this.locationService.GetCitiesByRegion(this.customer.regionId)
-            .subscribe(response => {
-              this.cities = response;
+            .subscribe(cities => {
+              this.cities = cities;
             });
         });
     }

@@ -109,10 +109,12 @@ export class CampaignDetailComponent implements OnInit {
   setCustomersPlaceholderSearch() {
     if (!this.customerSearchOption) {
       var defaultColumnSearch = this.getDefaultCustomersColumnSearch();
-      return this.customerSearchPlaceholder = "Search by " + defaultColumnSearch.title;
+      this.customerSearchPlaceholder = "Search by " + defaultColumnSearch.title;
+      return this.customerSearchPlaceholder;
     }
     var columnSearch = this.customersColumns.find(c => c.key === this.customerSearchOption);
-    return this.customerSearchPlaceholder = "Search by " + columnSearch.title;
+    this.customerSearchPlaceholder = "Search by " + columnSearch.title;
+    return this.customerSearchPlaceholder;
   }
 
   filterCustomersSearchOptions() {
@@ -195,10 +197,12 @@ export class CampaignDetailComponent implements OnInit {
   setPlaceholderSearch() {
     if (!this.searchOption) {
       let defaultColumnSearch = this.getDefaultColumnSearch();
-      return this.searchPlaceholder = "Search by " + defaultColumnSearch.title;
+      this.searchPlaceholder = "Search by " + defaultColumnSearch.title;
+      return this.searchPlaceholder;
     }
     let columnSearch = this.campaignDetailsColumns.find(c => c.key === this.searchOption);
-    return this.searchPlaceholder = "Search by " + columnSearch.title;
+    this.searchPlaceholder = "Search by " + columnSearch.title;
+    return this.searchPlaceholder;
   }
 
   filterSearchOptions() {

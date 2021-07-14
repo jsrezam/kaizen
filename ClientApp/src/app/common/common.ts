@@ -34,8 +34,9 @@ export function toQueryString(obj) {
 }
 
 export function isExpiredDate(modelDate: any) {
-    let date = new Date(`${modelDate.year}-${modelDate.month}-${modelDate.day}`);
-    if (date <= new Date())
+    let date = (new Date(new Date(modelDate.year, modelDate.month - 1, modelDate.day)));
+
+    if (date <= (new Date(new Date())))
         return true
     return false;
 }

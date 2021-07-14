@@ -13,5 +13,6 @@ namespace Kaizen.Core.Interfaces
         Task<QueryResult<UserViewModel>> GetUsersViewAsync(ApplicationUserQuery queryObj);
         Task<UserViewModel> GetUserViewAsync(string userId);
         void ChangeUserState(ApplicationUser user);
+        Task<bool> isUniqueCellphone(string cellPhone);
     }
 }

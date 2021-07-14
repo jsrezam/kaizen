@@ -2,8 +2,7 @@ import { Component, OnChanges, Input, Output, EventEmitter, SimpleChanges } from
 
 @Component({
   selector: 'pagination',
-  templateUrl: './pagination.component.html',
-  styleUrls: ['./pagination.component.css']
+  templateUrl: './pagination.component.html'
 })
 export class PaginationComponent implements OnChanges {
 

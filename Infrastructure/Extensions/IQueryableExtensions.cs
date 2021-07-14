@@ -169,7 +169,9 @@ namespace Kaizen.Infrastructure.Extensions
             if (queryObj.PageSize <= 0)
                 queryObj.PageSize = 10;
 
-            return query = query.Skip((queryObj.Page - 1) * queryObj.PageSize).Take(queryObj.PageSize);
+            query = query.Skip((queryObj.Page - 1) * queryObj.PageSize).Take(queryObj.PageSize);
+
+            return query;
         }
     }
 }

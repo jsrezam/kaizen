@@ -21,12 +21,19 @@ namespace Kaizen.Core.Services
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task CreateOrderAsync(Order order)
+        public async Task<bool> CreateOrderAsync(Order order)
         {
+            var response = await unitOfWork.CampaignDetailRepository.GetByIdAsync(order.CampaignDetailId);
+
+            if (response.State.Equals(CampaignStatus.Earned))
+                return false;
+
             await unitOfWork.OrderRepository.AddAsync(order);
             await UpdateCampaignDetailOrderAsync(order.CampaignDetailId);
             await UpdateOrderProductsStockAsync(order.OrderDetails);
             await unitOfWork.SaveChangesAsync();
+
+            return true;
         }
 
         private async Task UpdateCampaignDetailOrderAsync(int campaignDetailOrderId)
@@ -78,7 +85,7 @@ namespace Kaizen.Core.Services
                                             Quantity = od.Quantity,
                                             Import = (od.UnitPrice * od.Quantity),
                                             Discount = od.Discount,
-                                        }).ToList(),
+                                        }).ToList()
             };
         }
     }

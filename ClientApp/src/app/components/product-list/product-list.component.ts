@@ -3,8 +3,7 @@ import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-product-list',
-  templateUrl: './product-list.component.html',
-  styleUrls: ['./product-list.component.css']
+  templateUrl: './product-list.component.html'
 })
 export class ProductListComponent implements OnInit {
   private readonly PAGE_SIZE = 3;
@@ -51,10 +50,12 @@ export class ProductListComponent implements OnInit {
   setPlaceholderSearch() {
     if (!this.searchOption) {
       var defaultColumnSearch = this.getDefaultColumnSearch();
-      return this.searchPlaceholder = "Search by " + defaultColumnSearch.title;
+      this.searchPlaceholder = "Search by " + defaultColumnSearch.title;
+      return this.searchPlaceholder;
     }
     var columnSearch = this.columns.find(c => c.key === this.searchOption);
-    return this.searchPlaceholder = "Search by " + columnSearch.title;
+    this.searchPlaceholder = "Search by " + columnSearch.title;
+    return this.searchPlaceholder;
   }
 
   filterSearchOptions() {

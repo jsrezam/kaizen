@@ -120,6 +120,10 @@ namespace Kaizen.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("FinishDate");
+
+                    b.HasIndex("IsActive");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Campaigns");
@@ -301,6 +305,8 @@ namespace Kaizen.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CampaignDetailId");
+
+                    b.HasIndex("OrderDate");
 
                     b.ToTable("Orders");
                 });

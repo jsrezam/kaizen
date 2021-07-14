@@ -4,8 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-order-detail',
-  templateUrl: './order-detail.component.html',
-  styleUrls: ['./order-detail.component.css']
+  templateUrl: './order-detail.component.html'
 })
 export class OrderDetailComponent implements OnInit {
 
@@ -36,7 +35,7 @@ export class OrderDetailComponent implements OnInit {
   getTotalOrderPrice() {
     if (this.orderDetail.length === 0)
       return 0;
-    return this.orderDetail.map(item => item.import).reduce((prev, next) => { return prev + next });
+    return (this.orderDetail.map(item => item.import).reduce((prev, next) => { return prev + next })).toFixed(2);
   }
 
 }

@@ -38,6 +38,11 @@ namespace Kaizen.Infrastructure.Repositories
             return await entities.ToListAsync();
         }
 
+        public async Task<IEnumerable<T>> GetAllNoTracking()
+        {
+            return await entities.AsNoTracking().ToListAsync();
+        }
+
         public async Task<T> GetByIdAsync(int id)
         {
             return await entities.FindAsync(id);

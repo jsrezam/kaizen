@@ -5,8 +5,7 @@ import { generateColors } from 'src/app/common/common';
 
 @Component({
   selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent implements OnInit {
 
@@ -15,7 +14,7 @@ export class DashboardComponent implements OnInit {
   public pieChartType = 'pie';
   pieChartColor: any = [
     {
-      backgroundColor: [] = []
+      backgroundColor: []
     }
   ]
 
@@ -53,11 +52,11 @@ export class DashboardComponent implements OnInit {
         this.pieChartColor[0].backgroundColor = (generateColors(data[0].length));
         data[0].forEach(element => {
           this.pieChartLabels.push(element.agentName);
-          this.pieChartData.push(element.totalSales);
+          this.pieChartData.push(element.totalSales.toFixed(2));
         });
         data[1].forEach(element => {
           this.barChartLabels.push(element.month);
-          this.barChartData[0].data.push(element.totalSales)
+          this.barChartData[0].data.push(element.totalSales.toFixed(2))
         });
         this.topCustomers = data[2];
         this.topProducts = data[3];

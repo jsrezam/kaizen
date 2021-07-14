@@ -10,11 +10,9 @@ namespace Kaizen.Core.Services
     public class UserService : IUserService
     {
         private readonly IUnitOfWork unitOfWork;
-        private readonly IConfiguration configuration;
 
-        public UserService(IUnitOfWork unitOfWork, IConfiguration configuration)
+        public UserService(IUnitOfWork unitOfWork)
         {
-            this.configuration = configuration;
             this.unitOfWork = unitOfWork;
         }
 

@@ -1,12 +1,11 @@
 import { CustomerService } from './../../services/customer.service';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-customer-list',
-  templateUrl: './customer-list.component.html',
-  styleUrls: ['./customer-list.component.css']
+  templateUrl: './customer-list.component.html'
 })
-export class CustomerListComponent implements OnInit {
+export class CustomerListComponent {
   private readonly PAGE_SIZE = 3;
 
   columns = [
@@ -33,8 +32,6 @@ export class CustomerListComponent implements OnInit {
 
   constructor(private customerService: CustomerService) { }
 
-  ngOnInit(): void { }
-
   populateCustomers() {
     this.customerService.getCustomers(this.query)
       .subscribe(response => {
@@ -54,10 +51,12 @@ export class CustomerListComponent implements OnInit {
   setPlaceholderSearch() {
     if (!this.searchOption) {
       let defaultColumnSearch = this.getDefaultColumnSearch();
-      return this.searchPlaceholder = "Search by " + defaultColumnSearch.title;
+      this.searchPlaceholder = "Search by " + defaultColumnSearch.title;
+      return this.searchPlaceholder;
     }
     let columnSearch = this.columns.find(c => c.key === this.searchOption);
-    return this.searchPlaceholder = "Search by " + columnSearch.title;
+    this.searchPlaceholder = "Search by " + columnSearch.title;
+    return this.searchPlaceholder;
   }
 
   filterSearchOptions() {

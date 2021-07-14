@@ -19,7 +19,7 @@ namespace Kaizen.Infrastructure.Repositories
         {
             var result = new QueryResult<Category>();
 
-            var query = entities.Include(c => c.Products).AsQueryable();
+            var query = entities.Where(c => c.State).AsQueryable();
 
             query = query.ApplyFiltering(queryObj);
 

@@ -35,7 +35,7 @@ namespace Kaizen.Controllers
             var response = await customerService.isUniqueCellphone(customerDto.CellPhone);
 
             if (!response)
-                return BadRequest("The cellphone is already taken");
+                return BadRequest("The cellphone is already taken by another customer or agent");
 
             customerDto = await customerService.GetLocationNames(customerDto);
 
@@ -68,6 +68,14 @@ namespace Kaizen.Controllers
             return Ok(resultQuery);
         }
 
+        [HttpGet("availables/{agentId}")]
+        public async Task<IActionResult> GetAgentAvailableCustomersAsync(string agentId)
+        {
+            var queryResult = await customerService.GetAgentAvailableCustomersAsync(agentId);
+            var resultQuery = mapper.Map<QueryResult<Customer>, QueryResultDto<CustomerDto>>(queryResult);
+            return Ok(resultQuery);
+        }
+
         [HttpGet("noInCampaign/{campaignId}")]
         public async Task<IActionResult> GetNoInCampaignCustomersAsync(int campaignId, CustomerQueryDto customerQueryResource)
         {
@@ -82,6 +90,8 @@ namespace Kaizen.Controllers
         {
             var loggedAgentEmail = HttpContext.User.Claims.FirstOrDefault(x => x.Type.Equals("email")).Value;
             var agent = await userService.GetUserByEmailAsync(loggedAgentEmail);
+
+            if (agent == null) return NotFound();
 
             var customerQuery = mapper.Map<CustomerQueryDto, CustomerQuery>(customerQueryResource);
             var queryResult = await customerService.GetAgentCustomersAsync(agent.Id, customerQuery);
@@ -105,7 +115,7 @@ namespace Kaizen.Controllers
                 var response = await customerService.isUniqueCellphone(customerDto.CellPhone);
 
                 if (!response)
-                    return BadRequest("The cellphone is already taken");
+                    return BadRequest("The cellphone is already taken by another customer or agent");
             }
 
             customerDto = await customerService.GetLocationNames(customerDto);
@@ -121,9 +131,9 @@ namespace Kaizen.Controllers
         }
 
         [HttpGet("random/{maxRange}")]
-        public async Task<IActionResult> GetRandomCustomersAsync(int maxRange)
+        public async Task<IActionResult> GetRandomCustomersAsync(int maxRange, ApplicationUserQueryDto applicationUserQueryDto)
         {
-            var queryResult = await customerService.GetRandomCustomersAsync(maxRange);
+            var queryResult = await customerService.GetRandomCustomersAsync(maxRange, applicationUserQueryDto);
             var resultQuery = mapper.Map<QueryResult<Customer>, QueryResultDto<CustomerDto>>(queryResult);
             return Ok(resultQuery);
         }

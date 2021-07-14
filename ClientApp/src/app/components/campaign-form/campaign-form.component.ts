@@ -58,7 +58,6 @@ export class CampaignFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.populateActiveAgents();
-    this.populateCustomers();
   }
 
   private populateActiveAgents() {
@@ -69,7 +68,7 @@ export class CampaignFormComponent implements OnInit {
   }
 
   populateCustomers() {
-    this.customerService.getCustomers({ ApplyPagingFromClient: true })
+    this.customerService.getAgentAvailableCustomers(this.agent)
       .subscribe((result: any) => {
         this.queryResult = result;
         this.filteredCustomers = this.queryResult.items;
@@ -84,10 +83,12 @@ export class CampaignFormComponent implements OnInit {
   setPlaceholderSearch() {
     if (!this.searchOption) {
       var defaultColumnSearch = this.getDefaultColumnSearch();
-      return this.searchPlaceholder = "Search by " + defaultColumnSearch.title;
+      this.searchPlaceholder = "Search by " + defaultColumnSearch.title;
+      return this.searchPlaceholder;
     }
     var columnSearch = this.columns.find(c => c.key === this.searchOption);
-    return this.searchPlaceholder = "Search by " + columnSearch.title;
+    this.searchPlaceholder = "Search by " + columnSearch.title;
+    return this.searchPlaceholder;
   }
 
   filterSearchOptions() {
@@ -183,15 +184,18 @@ export class CampaignFormComponent implements OnInit {
 
   onAgentFilterChange() {
     this.agent = this.agents.find(a => a.id == this.campaignSave.userId);
+    this.populateCustomers();
   }
 
   getRandomCampaign(maxRange) {
     this.resetFilter();
 
-    if (!maxRange)
+    if (!maxRange || !this.agent.id)
       return;
 
-    this.customerService.getRandomCustomers(maxRange)
+    this.query.id = this.agent.id;
+
+    this.customerService.getRandomCustomers(maxRange, this.query)
       .subscribe((response: any) => {
         this.filteredCustomers = response.items;
         this.totalItems = response.totalItems;

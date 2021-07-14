@@ -18,6 +18,7 @@ export class LoginComponent {
     , private router: Router) { }
 
   logIn() {
+    this.authenticationResponse.errorMessage = '';
     this.authService.logIn(this.userCredentials)
       .subscribe((response: any) => {
         this.authService.saveToken(response)

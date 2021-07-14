@@ -1,3 +1,4 @@
+import { AuthGuardAgent } from './services/auth-guard-agent.service';
 import { AuthGuard } from './services/auth-guard.services';
 import { OrderService } from './services/order.service';
 import { LocationService } from './services/location.service';
@@ -113,7 +114,7 @@ export function playerFactory() { // add this line
       { path: 'users', component: UserListComponent, canActivate: [AuthGuardAdmin] },
 
       { path: 'orders', component: OrderListComponent, canActivate: [AuthGuard] },
-      { path: 'orders/new', component: OrderFormComponent, canActivate: [AuthGuard] },
+      { path: 'orders/new', component: OrderFormComponent, canActivate: [AuthGuardAgent] },
       { path: 'orders-detail/:id', component: OrderDetailComponent, canActivate: [AuthGuard] },
 
       { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardAdmin] },
@@ -129,6 +130,7 @@ export function playerFactory() { // add this line
     UserService,
     AuthService,
     AuthGuardAdmin,
+    AuthGuardAgent,
     AuthGuard,
     CampaignService,
     CampaignDetailService,

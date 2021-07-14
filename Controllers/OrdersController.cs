@@ -36,9 +36,11 @@ namespace Kaizen.Controllers
 
             var order = mapper.Map<OrderSaveDto, Order>(orderSaveDto);
 
-            await orderService.CreateOrderAsync(order);
+            var response = await orderService.CreateOrderAsync(order);
 
-            return Ok();
+            if (!response) return BadRequest();
+
+            return Ok(response);
         }
 
         [HttpGet("{agentId}")]

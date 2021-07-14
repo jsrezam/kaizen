@@ -41,22 +41,7 @@ namespace Kaizen.Core.Services
                          join cd in campaignDetail on c.Id equals cd.CustomerId into temp
                          from cd in temp.DefaultIfEmpty()
                          where cd == null
-                         select new Customer
-                         {
-                             Id = c.Id,
-                             FirstName = c.FirstName,
-                             LastName = c.LastName,
-                             Email = c.Email,
-                             Address = c.Address,
-                             CellPhone = c.CellPhone,
-                             City = c.City,
-                             Region = c.Region,
-                             Country = c.Country,
-                             HomePhone = c.HomePhone,
-                             IdentificationCard = c.IdentificationCard,
-                             PostalCode = c.PostalCode,
-                             State = c.State
-                         }).AsQueryable();
+                         select c).AsQueryable();
 
             result.TotalItems = query.Count();
             result.Items = query.ToList();
@@ -66,43 +51,17 @@ namespace Kaizen.Core.Services
 
         public async Task<QueryResult<AgentCustomerViewModel>> GetAgentCustomersAsync(string agentId, CustomerQuery queryObj)
         {
-            var result = new QueryResult<AgentCustomerViewModel>();
+            var campaigns = await unitOfWork.CampaignRepository.GetAgentValidCampaignsAsync(agentId, new CampaignQuery());
 
-            var userCampaigns = await unitOfWork.CampaignRepository.GetAgentValidCampaignsAsync(agentId, new CampaignQuery());
-
-            var query = (from userCampaign in userCampaigns.Items
-                         from CampaignDetail in userCampaign.CampaignDetails
-                         select new AgentCustomerViewModel
-                         {
-                             Customer = CampaignDetail.Customer,
-                             CampaignDetailId = CampaignDetail.Id,
-                             CampaignId = CampaignDetail.CampaignId
-                         }).AsQueryable();
-
-            query = query.ApplyFiltering(queryObj);
-
-            var columnsMap = new Dictionary<string, Expression<Func<AgentCustomerViewModel, object>>>()
-            {
-                ["customer.firstName"] = c => c.Customer.FirstName,
-                ["customer.lastName"] = c => c.Customer.LastName,
-                ["customer.identificationCard"] = c => c.Customer.IdentificationCard,
-                ["customer.email"] = c => c.Customer.Email,
-                ["customer.cellPhone"] = c => c.Customer.CellPhone,
-                ["customer.city"] = c => c.Customer.City,
-                ["customer.region"] = c => c.Customer.Region,
-                ["customer.country"] = c => c.Customer.Country,
-            };
-            query = query.ApplyOrdering(queryObj, columnsMap);
-
-            result.TotalItems = query.Count();
-            query = query.ApplyPaging(queryObj);
-            result.Items = query.ToList();
-            return result;
+            return unitOfWork.CustomerRepository.GetAgentCustomers(campaigns, queryObj);
         }
 
         public async Task<bool> isUniqueCellphone(string cellPhone)
         {
-            return await unitOfWork.CustomerRepository.isUniqueCellphone(cellPhone);
+            var customerResponse = await unitOfWork.CustomerRepository.isUniqueCellphone(cellPhone);
+            var userResponse = await unitOfWork.UserRepository.isUniqueCellphone(cellPhone);
+
+            return customerResponse && userResponse;
         }
 
         public async Task CreateCustomer(Customer customer)
@@ -140,41 +99,39 @@ namespace Kaizen.Core.Services
             await unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<QueryResult<Customer>> GetRandomCustomersAsync(int maxRange)
+        public async Task<QueryResult<Customer>> GetRandomCustomersAsync(int maxRange, ApplicationUserQueryDto querObj)
         {
             var result = new QueryResult<Customer>();
-            var customersIds = new List<int>();
-            var randomCustomers = new List<Customer>();
-            int count = 0;
 
-            var customers = await GetCustomersAsync(new CustomerQuery { ApplyPagingFromClient = true });
+            var query = (await GetAgentAvailableCustomersAsync(querObj.Id)).Items
+            .OrderBy(r => (new Random()).Next())
+            .Take(maxRange);
 
-            if (maxRange >= customers.TotalItems)
-                maxRange = customers.TotalItems;
-
-            customersIds.AddRange(
-                from customer in customers.Items
-                select customer.Id
-            );
-
-            while (count < maxRange)
-            {
-                var randomNumber = (new Random()).Next(customersIds.Count);
-                var randomCustomer = customers.Items.FirstOrDefault(c => c.Id == customersIds[randomNumber]);
-
-                if (randomCustomers.FindIndex(cr => cr.Id == randomCustomer.Id) == -1)
-                {
-                    randomCustomers.Add(randomCustomer);
-                    customersIds.RemoveAt(randomNumber);
-                    count++;
-                }
-            }
-
-            result.TotalItems = randomCustomers.Count();
-            result.Items = randomCustomers;
+            result.TotalItems = query.Count();
+            result.Items = query;
 
             return result;
         }
 
+        public async Task<QueryResult<Customer>> GetAgentAvailableCustomersAsync(string agentId)
+        {
+            var result = new QueryResult<Customer>();
+
+            var customersInProgressCampaign = await unitOfWork.CustomerRepository.GetCustomersInProgressCampaign(agentId);
+
+            var query = (
+                            from cus in await unitOfWork.CustomerRepository.GetAllNoTracking()
+                            join cipc in customersInProgressCampaign.Items
+                                on cus.Id equals cipc.Id into temp
+                            from cipc in temp.DefaultIfEmpty()
+                            where cipc == null && cus.State
+                            select cus
+                        );
+
+            result.TotalItems = query.Count();
+            result.Items = query.ToList();
+
+            return result;
+        }
     }
 }

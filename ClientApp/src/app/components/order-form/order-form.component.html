@@ -65,15 +65,15 @@
       </div>
 
       <div *ngIf="customers.totalItems > 0">
-        <table class="table table-striped">
+        <table class="table table-striped" aria-describedby="order-customers-table">
           <thead>
             <tr>
-              <th *ngFor="let c of customerColumns" aria-labelledby="tableLabel" class="text-center">
+              <th scope="col" *ngFor="let c of customerColumns" aria-labelledby="tableLabel" class="text-center">
                 <div *ngIf="c.isSortable" (click)="sortCustomerBy(c.key)">
                   {{c.title}}
-                  <i *ngIf="customerQuery.sortProductBy === c.key" class="fa"
+                  <em *ngIf="customerQuery.sortProductBy === c.key" class="fa"
                     [class.fa-sort-asc]="customerQuery.isSortAscending"
-                    [class.fa-sort-desc]="!customerQuery.isSortAscending"></i>
+                    [class.fa-sort-desc]="!customerQuery.isSortAscending"></em>
                 </div>
                 <div *ngIf="!c.isSortable">
                   {{c.title}}
@@ -120,7 +120,7 @@
                   <div class="d-flex flex-column"> <span class="showCampaign">Campaign</span>
                     <span class="number1">{{customer.campaignId}}</span>
                   </div>
-                  <div class="d-flex flex-column"> <span class="showCampaignDetail">Campaign Detail</span>
+                  <div class="d-flex flex-column"> <span class="showCampaignDetail">Offer</span>
                     <span class="number2">{{customer.campaignDetailId}}</span>
                   </div>
                 </div>
@@ -189,15 +189,15 @@
   </div>
 
   <div *ngIf="products.totalItems > 0">
-    <table class="table table-striped">
+    <table class="table table-striped" aria-describedby="order-products-table">
       <thead>
         <tr>
-          <th *ngFor="let c of productColumns" aria-labelledby="tableLabel" class="text-center">
+          <th scope="col" *ngFor="let c of productColumns" aria-labelledby="tableLabel" class="text-center">
             <div *ngIf="c.isSortable" (click)="sortProductBy(c.key)">
               {{c.title}}
-              <i *ngIf="productQuery.sortProductBy === c.key" class="fa"
+              <em *ngIf="productQuery.sortProductBy === c.key" class="fa"
                 [class.fa-sort-asc]="productQuery.isSortAscending"
-                [class.fa-sort-desc]="!productQuery.isSortAscending"></i>
+                [class.fa-sort-desc]="!productQuery.isSortAscending"></em>
             </div>
             <div *ngIf="!c.isSortable">
               {{c.title}}

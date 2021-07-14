@@ -33,6 +33,8 @@ namespace Kaizen
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
+
             services.AddDbContext<KaizenDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Default"))
             );
@@ -53,7 +55,6 @@ namespace Kaizen
             services.AddTransient<IRegionService, RegionService>();
             services.AddTransient<ICityService, CityService>();
             services.AddTransient<ILocationService, LocationService>();
-            services.AddTransient<IOrderDetailService, OrderDetailService>();
             services.AddTransient<IReportService, ReportService>();
 
 
@@ -84,7 +85,11 @@ namespace Kaizen
                 options.AddPolicy(Policies.AdminRoleValue, policy => policy.RequireClaim("role", "admin"));
             });
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
+
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -106,7 +111,6 @@ namespace Kaizen
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
             if (!env.IsDevelopment())
             {

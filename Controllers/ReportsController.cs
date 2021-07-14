@@ -13,10 +13,9 @@ namespace Kaizen.Controllers
     public class ReportsController : Controller
     {
         private readonly IReportService reportService;
-        private readonly IMapper mapper;
-        public ReportsController(IMapper mapper, IReportService reportService)
+
+        public ReportsController(IReportService reportService)
         {
-            this.mapper = mapper;
             this.reportService = reportService;
         }
 
@@ -35,16 +34,16 @@ namespace Kaizen.Controllers
         }
 
         [HttpGet("topCustomers")]
-        public async Task<IActionResult> GetTopCustomersAsync()
+        public async Task<IActionResult> GetTopCustomersByMonthAsync()
         {
-            var report = await reportService.GetTopCustomersAsync();
+            var report = await reportService.GetTopCustomersByMonthAsync();
             return Ok(report);
         }
 
         [HttpGet("topSellingProducts")]
         public async Task<IActionResult> GetTopSellingProductsAsync()
         {
-            var report = await reportService.GetTopSellingProductsAsync();
+            var report = await reportService.GetTopSellingProductsByMonthAsync();
             return Ok(report);
         }
 

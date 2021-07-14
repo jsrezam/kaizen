@@ -7,8 +7,8 @@ namespace Kaizen.Core.Interfaces
     {
         Task<Object> GetTotalSalesByMonthAsync();
         Task<Object> GetTotalSalesByAgentAsync();
-        Task<Object> GetTopCustomersAsync();
-        Task<Object> GetTopSellingProductsAsync();
+        Task<Object> GetTopCustomersByMonthAsync();
+        Task<Object> GetTopSellingProductsByMonthAsync();
         Task<Object> GetTopAgentAsync();
     }
 }

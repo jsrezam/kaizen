@@ -9,19 +9,19 @@ namespace Kaizen.Infrastructure.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
-        public ICategoryRepository _categoryRepository;
-        public IProductRepository _productRepository;
-        public ICustomerRepository _customerRepository;
-        public ICampaignRepository _campaignRepository;
-        public ICampaignDetailRepository _campaignDetailRepository;
-        public ICallLogRepository _callLogRepository;
-        public IOrderRepository _orderRepository;
-        public IOrderDetailRepository _orderDetailRepository;
-        public IUserRepository _userRepository;
-        public IAccountRepository _accountRepository;
-        public ICountryRepository _countryRepository;
-        public IRegionRepository _regionRepository;
-        public ICityRepository _cityRepository;
+        private ICategoryRepository _categoryRepository;
+        private IProductRepository _productRepository;
+        private ICustomerRepository _customerRepository;
+        private ICampaignRepository _campaignRepository;
+        private ICampaignDetailRepository _campaignDetailRepository;
+        private ICallLogRepository _callLogRepository;
+        private IOrderRepository _orderRepository;
+        private IOrderDetailRepository _orderDetailRepository;
+        private IUserRepository _userRepository;
+        private IAccountRepository _accountRepository;
+        private ICountryRepository _countryRepository;
+        private IRegionRepository _regionRepository;
+        private ICityRepository _cityRepository;
 
 
         private readonly KaizenDbContext context;
@@ -44,7 +44,7 @@ namespace Kaizen.Infrastructure.Repositories
         public IOrderRepository OrderRepository => _orderRepository ?? new OrderRepository(context);
         public IOrderDetailRepository OrderDetailRepository => _orderDetailRepository ?? new OrderDetailRepository(context);
         public IUserRepository UserRepository => _userRepository ?? new UserRepository(context, userManager);
-        public IAccountRepository AccountRepository => _accountRepository ?? new AccountRepository(context, userManager, signInManager);
+        public IAccountRepository AccountRepository => _accountRepository ?? new AccountRepository(userManager, signInManager);
         public ICountryRepository CountryRepository => _countryRepository ?? new CountryRepository(context);
         public IRegionRepository RegionRepository => _regionRepository ?? new RegionRepository(context);
         public ICityRepository CityRepository => _cityRepository ?? new CityRepository(context);

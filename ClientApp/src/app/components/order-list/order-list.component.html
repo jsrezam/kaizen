@@ -55,14 +55,14 @@
 </div>
 
 <div *ngIf="orders.totalItems > 0">
-  <table class="table table-striped">
+  <table class="table table-striped" aria-describedby="order-list-table">
     <thead>
       <tr>
-        <th *ngFor="let c of columns" aria-labelledby="tableLabel" class="text-center">
+        <th scope="col" *ngFor="let c of columns" aria-labelledby="tableLabel" class="text-center">
           <div *ngIf="c.isSortable" (click)="sortBy(c.key)">
             {{c.title}}
-            <i *ngIf="query.sortBy === c.key" class="fa" [class.fa-sort-asc]="query.isSortAscending"
-              [class.fa-sort-desc]="!query.isSortAscending"></i>
+            <em *ngIf="query.sortBy === c.key" class="fa" [class.fa-sort-asc]="query.isSortAscending"
+              [class.fa-sort-desc]="!query.isSortAscending"></em>
           </div>
           <div *ngIf="!c.isSortable">
             {{c.title}}
@@ -74,7 +74,7 @@
       <tr *ngFor="let o of orders.items">
         <td class="text-center">{{ o.id }}</td>
         <td class="text-center">{{ o.campaignDetail.campaignId }}</td>
-        <td class="text-center">{{ o.campaignDetailId }}</td>
+        <td class="text-center">{{ o.campaignDetail.id }}</td>
         <td class="text-center">{{ o.campaignDetail.customer.firstName }}</td>
         <td class="text-center">{{ o.campaignDetail.customer.lastName }}</td>
         <td class="text-center">{{ o.campaignDetail.customer.cellPhone }}</td>
